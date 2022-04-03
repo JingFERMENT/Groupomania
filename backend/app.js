@@ -1,13 +1,13 @@
-// ------------------------LOGIQUE GLOBALE DE L'APP------------------------------
-
 const express = require("express"); //pour créer les applis web avec node
 const app = express(); //faire appel au module "Express" avec sa fonction
 
 // sécuriser les en-tête http de l'application express
 const helmet = require("helmet");
 
-//parcours des utilisateurs
-const userRoutes = require("./routes/user");
+//routes
+//const userRoutes = require("./routes/user");
+
+require("./config/db.connexion");
 
 // middleware global, transforme le corps de la requete en objet javascript utilisable
 app.use(express.json());
@@ -32,6 +32,6 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 //----------------------CONFIGURATION DES ROUTES API----------------------------
 
 //enregistrement des routes
-app.use("/api/auth", userRoutes);
+//app.use("/api/auth", userRoutes);
 
 module.exports = app;

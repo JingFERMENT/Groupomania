@@ -23,6 +23,7 @@ const normalizePort = (val) => {
   return false;
 };
 
+const port = normalizePort(process.env.PORT ||'3000');
 //sur quel port le serveur tourne
 app.set("port", port);
 
