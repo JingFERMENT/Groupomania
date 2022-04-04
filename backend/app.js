@@ -4,10 +4,16 @@ const app = express(); //faire appel au module "Express" avec sa fonction
 // sécuriser les en-tête http de l'application express
 const helmet = require("helmet");
 
-//routes
-//const userRoutes = require("./routes/user");
+//base des données (DB)
+const db = require("./config/database");
 
-require("./config/db.connexion");
+// test DB
+try {
+  db.authenticate();
+  console.log('Connecté à la base de données MySQL!');
+} catch (error) {
+  console.error('Impossible de se connecter, erreur suivante :', error);
+}
 
 // middleware global, transforme le corps de la requete en objet javascript utilisable
 app.use(express.json());
@@ -29,7 +35,8 @@ app.use((req, res, next) => {
 //protèger l'appli de certaines vulnerabilités en configurant les en-têtes
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
-//----------------------CONFIGURATION DES ROUTES API----------------------------
+// user routes
+// const userRoutes = require("./routes/user");
 
 //enregistrement des routes
 //app.use("/api/auth", userRoutes);

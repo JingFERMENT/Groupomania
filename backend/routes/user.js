@@ -1,11 +1,9 @@
-// ------------------------LOGIQUE DES UTILISATEURS------------------------------
-
 const express = require("express"); //pour créer les applis web avec node
+const router = express.Router(); // permet de créer du router
 const userCtrl = require("../controllers/user"); //import du controlleur "user"
 
-const router = express.Router(); // permet de créer du router
 
-//---------CREATION DES ROUTES --------------
+//---------ROUTES DE CONNEXIONS --------------
 router.post ("/signup", userCtrl.signup); //créer un compte
 router.post ("/login", userCtrl.login); //se connecter sur un compte déjà créé
 
