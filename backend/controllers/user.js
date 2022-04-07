@@ -1,14 +1,13 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const db = require("../config/database");
-const { Sequelize } = require("sequelize");
 const User = require("../models/user");
+const fs = require("fs");
 
-//--------------MIDDLEWARE POUR L'INSCRIPTION DES UTILISATEURS----------------
+//--------------INSCRIPTION DES UTILISATEURS----------------
 exports.signup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
-    .then(hash => {
+    .then((hash) => {
       User.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -21,40 +20,107 @@ exports.signup = (req, res, next) => {
         .then((User) =>
           res.status(201).json({ message: "Utilisateur créé et sauvegardé !" })
         )
-        .catch((error) =>  {console.log(error);res.status(500).json({ error })});
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error });
+        });
     })
-    .catch((error) =>  {console.log(error);res.status(500).json({ error })});
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ error });
+    });
 };
 
-//------------MIDDLEWARE POUR CONNECTER LES UTILISATEURS EXISTANTS------------
+//------------CONNECTER LES UTILISATEURS EXISTANTS------------
 exports.login = (req, res, next) => {
-  
-    //vérifier que l'email entré par l'utilisateur correspond à un utilisateur existant de la base de données
-    User.findOne({ 
-        where:  { email: req.body.email } })
+  //vérifier que l'email entré par l'utilisateur correspond à un utilisateur existant de la base de données
+  User.findOne({
+    where: { email: req.body.email },
+  })
+    .then((user) => {
+      if (!user) {
+        return res.status(401).json({ message: "Utilisateur non trouvé !" });
+      }
+      //comparer le mot de passe entré par l'utilisateur avec le hash enregistré dans la base de données
+      bcrypt
+        .compare(req.body.password, user.password)
+        .then((valid) => {
+          if (!valid) {
+            return res
+              .status(401)
+              .json({ message: "Mot de passe incorrect !" });
+          }
+          res.status(200).json({
+            userId: user.id,
+            token: jwt.sign({ userId: user.id }, process.env.SECRET_TOKEN, {
+              expiresIn: "24h",
+            }),
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+          res.status(500).json({ error });
+        });
+    })
+    .catch((error) => {
+      console.log(error);
+      res.status(500).json({ error });
+    });
+};
+
+//------------AFFICHER LE PROFILE D'UN UTILISATEUR------------
+exports.getOneUser = (req, res, next) => {
+  User.findOne({ where: { id: req.params.id } })
+    .then((user) => res.status(200).json(user))
+    .catch((error) => res.status(404).json({ error }));
+};
+
+//------------AFFICHER LE PROFILE D'UN UTILISATEUR------------
+exports.modifyUser = (req, res, next) => {
+
+  //s'il y a une modification de fichier, supprimer l'ancien fichier d'abord.
+  if (req.file) {
+    User.findOne({ where: { id: req.params.id } })
       .then((user) => {
-        if (!user) {
-          return res.status(401).json({ message: "Utilisateur non trouvé !" });
-        }
-        //comparer le mot de passe entré par l'utilisateur avec le hash enregistré dans la base de données
-        bcrypt
-          .compare(req.body.password, user.password)
-          .then((valid) => {
-            if (!valid) {
-              return res
-                .status(401)
-                .json({ message: "Mot de passe incorrect !" });
-            }
-            res.status(200).json({
-              userId: user._id,
-              token: jwt.sign(
-                { userId: user._id },
-                process.env.SECRET_TOKEN,
-                { expiresIn: "24h" }
-              ),
-            });
-          })
-          .catch((error) => {console.log(error);res.status(500).json({ error })});
+        const filename = user.photoUrl.split("/images/")[1];
+        fs.unlink(`images/${filename}`, (error) => {
+          if (error) {
+            throw new Error(error);
+          }
+        });
       })
-      .catch((error) =>  {console.log(error);res.status(500).json({ error })});
-  };
+      .catch((error) => res.status(400).json({ error: error.message }));
+  }
+  
+  User.findOne({ where: { id: req.params.id } }).then((user) => {
+    const userObject = req.file
+      ? {
+          // Si le fichier image existe, on traite les strings et la nouvelle image
+          ...JSON.parse(req.body.user),
+          photoUrl: `${req.protocol}://${req.get("host")}/images/${
+            req.file.filename
+          }`,
+        } // si pas de fichier image, on traite les autres élements du corps de la requête
+      : { ...req.body };
+
+    if (!user) {
+      return res.status(404).json({ error: "Utilisateur non trouvé !" });
+    }
+
+    // Si l'userId de l'utilisateur modifiée est le même que l'userId de l'utilisateur avant modification
+    if (userObject.id && userObject.id !== User.id) {
+      res.status(401).json({ error: "Modification non autorisée !" });
+    }
+
+    User.update(
+      { ...userObject, id: req.params.id }, 
+      { where: { id: req.params.id } },
+    )
+      .then((sauce) =>
+
+      User.findOne({ where: { id: req.params.id } }).then((user) => {
+        res.status(200).json({ message: "Profile bien modifié !", user });
+      })
+      .catch((error) => res.status(400).json(error)));
+  });
+};

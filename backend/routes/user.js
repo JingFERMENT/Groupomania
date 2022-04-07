@@ -1,11 +1,16 @@
 const express = require("express"); //pour créer les applis web avec node
 const router = express.Router(); // permet de créer du router
 const userCtrl = require("../controllers/user"); //import du controlleur "user"
+const multer = require("../middleware/multer-config")
 
 
 //---------ROUTES DE CONNEXIONS --------------
 router.post ("/signup", userCtrl.signup); //créer un compte
 router.post ("/login", userCtrl.login); //se connecter sur un compte déjà créé
 
-// ----------EXPORT------------------
-module.exports = router; //exporter ce module "router" pour le réutiliser ailleurs
+//---------ROUTES DE PROFILE UTILISATEUR--------------
+router.get ("/profile/:id", userCtrl.getOneUser); //afficher un profil
+router.put ("/profile/:id", multer, userCtrl.modifyUser); //modifier un profil
+//router.delete ("/profile/:id", userCtrl.deleteUser); //supprimer un profil
+
+module.exports = router;

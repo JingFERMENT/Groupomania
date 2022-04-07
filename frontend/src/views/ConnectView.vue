@@ -1,41 +1,63 @@
 <template>
   <div class="card">
-    <img id="logo" alt="Logo de l'entreprise Groupomania" src="../assets/logo.png" />
-    <!-- Titre : se connecter -->
+    <img
+      id="logo"
+      alt="Logo de l'entreprise Groupomania"
+      src="../assets/logo.png"
+    />
     <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
-    <!-- Titre: inscription -->
     <h1 class="card__title" v-else>Inscription</h1>
-    <!-- Sous-titre: se connecter -->
     <p class="card__subtitle" v-if="mode == 'login'">
       Vous n’avez pas de compte ?
-      <span
-        class="card__action"
-        @click="switchToCreateAccount()"
-      >Inscrivez-vous</span>
+      <span class="card__action" @click="switchToCreateAccount()"
+        >Inscrivez-vous</span
+      >
     </p>
-    <!-- Sous-titre: inscription -->
     <p class="card__subtitle" v-else>
       Vous avez déjà un compte ?
       <span class="card__action" @click="switchToLogin()">Se connecter</span>
     </p>
-    <!-- Eror message: se connecter -->
     <div
       class="errorMessage"
       v-if="mode == 'login' && errorStatus == 'error_login'"
-    >Email et/ou mot de passe invalide</div>
+    >
+      Email et/ou mot de passe invalide
+    </div>
     <div
       class="errorMessage"
       v-if="mode == 'create' && errorStatus == 'error_create'"
-    >Email déjà utilisé</div>
+    >
+      Email déjà utilisé
+    </div>
     <div class="form-row">
-      <input v-model="email" class="form-row__input" type="text" placeholder="Email" />
+      <input
+        v-model="email"
+        class="form-row__input"
+        type="text"
+        placeholder="Email"
+      />
     </div>
     <div class="form-row" v-if="mode == 'create'">
-      <input v-model="prenom" class="form-row__input" type="text" placeholder="Prénom" />
-      <input v-model="nom" class="form-row__input" type="text" placeholder="Nom" />
+      <input
+        v-model="prenom"
+        class="form-row__input"
+        type="text"
+        placeholder="Prénom"
+      />
+      <input
+        v-model="nom"
+        class="form-row__input"
+        type="text"
+        placeholder="Nom"
+      />
     </div>
     <div class="form-row">
-      <input v-model="password" class="form-row__input" type="password" placeholder="Mot de passe" />
+      <input
+        v-model="password"
+        class="form-row__input"
+        type="password"
+        placeholder="Mot de passe"
+      />
     </div>
     <div class="form-row">
       <button
@@ -60,7 +82,7 @@
 
 <script>
 export default {
-  name: "LogIn",
+  name: "ConnectView",
   data: function () {
     return {
       mode: "login",
@@ -68,6 +90,8 @@ export default {
       prenom: "",
       nom: "",
       password: "",
+      photoUrl: "",
+      jobTitle: "",
       errorStatus: "",
     };
   },
@@ -97,61 +121,66 @@ export default {
     switchToCreateAccount: function () {
       this.mode = "create";
     },
+
     switchToLogin: function () {
       this.mode = "login";
     },
+
     login: function () {
-      
       const data = {
-          'email': this.email,
-          'password': this.password,
-        };
+        email: this.email,
+        password: this.password,
+      };
+
       const options = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       };
 
       fetch("http://localhost:3000/api/auth/login", options)
-    .then((response) => {
-      if (response.status == 401) {
-        this.errorStatus = 'error_login';
-      }
-    })
-    .catch(function () {
-      alert(
-        "Le serveur ne répond pas. Si le problème persiste, contactez-nous par email : support@name.com."
-      );
-    });
+        .then((response) => {
+          if (response.status == 401) {
+            this.errorStatus = "error_login";
+          }
+
+          this.$router.push("/profile");
+        })
+        .catch(function () {
+          alert(
+            "Le serveur ne répond pas. Si le problème persiste, contactez-nous par email : support@groupomania.com."
+          );
+        });
     },
     createAccount: function () {
       const data = {
-          'email': this.email,
-          'password': this.password,
-          'firstName': this.prenom,
-          'lastName': this.nom
-        };
+        email: this.email,
+        password: this.password,
+        firstName: this.prenom,
+        lastName: this.nom,
+      };
       const options = {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       };
 
       fetch("http://localhost:3000/api/auth/signup", options)
-      .then((response) => {
-      if (response.status == 500) {
-        this.errorStatus = 'error_create';
-      }
-    })
-    .catch(function () {
-      alert(
-        "Le serveur ne répond pas. Si le problème persiste, contactez-nous par email : support@name.com."
-      );
-    });
+        .then((response) => {
+          if (response.status == 500) {
+            this.errorStatus = "error_create";
+          }
+          this.login();
+        })
+        .catch(function () {
+          alert(
+            "Le serveur ne répond pas. Si le problème persiste, contactez-nous par email : support@groupomania.com."
+          );
+        });
     },
   },
 };

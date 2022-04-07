@@ -21,7 +21,7 @@ export default {
   max-width: 100%;
 }
 body {
-  background-image: linear-gradient(62deg, #fbab7e 100%, #f7ce68 30%);
+  background-image: linear-gradient(62deg, #fbab7e 100%, #f7ce68 10%);
   display: flex;
   align-items: center;
   justify-content: center;
