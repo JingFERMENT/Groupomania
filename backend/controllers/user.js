@@ -116,7 +116,7 @@ exports.modifyUser = (req, res, next) => {
       { ...userObject, id: req.params.id }, 
       { where: { id: req.params.id } },
     )
-      .then((sauce) =>
+      .then((user) =>
 
       User.findOne({ where: { id: req.params.id } }).then((user) => {
         res.status(200).json({ message: "Profile bien modifié !", user });

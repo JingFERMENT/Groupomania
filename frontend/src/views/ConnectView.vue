@@ -19,6 +19,12 @@
     </p>
     <div
       class="errorMessage"
+      v-if="mode == 'login' && validEmail == false"
+    >
+      Merci de respecter le format email.
+    </div>
+    <div
+      class="errorMessage"
       v-if="mode == 'login' && errorStatus == 'error_login'"
     >
       Email et/ou mot de passe invalide
@@ -63,7 +69,7 @@
       <button
         @click="login()"
         class="button"
-        :class="{ 'button--disabled': !validatedFields }"
+        :class="{ 'button--disabled': !validFields||!validEmail }"
         v-if="mode == 'login'"
       >
         <span>Se connecter</span>
@@ -71,7 +77,7 @@
       <button
         @click="createAccount()"
         class="button"
-        :class="{ 'button--disabled': !validatedFields }"
+        :class="{ 'button--disabled': !validFields||!validEmail }"
         v-else
       >
         <span>Créer mon compte</span>
@@ -90,13 +96,27 @@ export default {
       prenom: "",
       nom: "",
       password: "",
-      photoUrl: "",
-      jobTitle: "",
       errorStatus: "",
     };
   },
   computed: {
-    validatedFields: function () {
+    validEmail : function() {
+
+      if (this.email == '') {
+        return true;
+      }
+
+      const emailRegExp = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$", "g");
+      return emailRegExp.test(this.email);
+    },
+
+    validFirstName: function (){
+      const firstNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
+      return firstNameRegExp.test(this.prenom);
+    },
+
+
+    validFields: function () {
       if (this.mode == "create") {
         if (
           this.email != "" &&
@@ -144,15 +164,14 @@ export default {
         .then((response) => {
           if (response.status == 401) {
             this.errorStatus = "error_login";
+          } else {
+            response.json().then(data => {
+              localStorage.setItem("data", JSON.stringify(data));
+              this.$router.push("/profile");
+            });
           }
-
-          this.$router.push("/profile");
         })
-        .catch(function () {
-          alert(
-            "Le serveur ne répond pas. Si le problème persiste, contactez-nous par email : support@groupomania.com."
-          );
-        });
+        .catch(error=>console.log(error));
     },
     createAccount: function () {
       const data = {
@@ -173,14 +192,11 @@ export default {
         .then((response) => {
           if (response.status == 500) {
             this.errorStatus = "error_create";
+          } else {
+            this.login();
           }
-          this.login();
         })
-        .catch(function () {
-          alert(
-            "Le serveur ne répond pas. Si le problème persiste, contactez-nous par email : support@groupomania.com."
-          );
-        });
+        .catch(error=>console.log(error));
     },
   },
 };
