@@ -17,11 +17,21 @@
       Vous avez déjà un compte ?
       <span class="card__action" @click="switchToLogin()">Se connecter</span>
     </p>
+    <div class="errorMessage" v-if="validEmail == false">
+      Merci de respecter le format email.
+    </div>
     <div
       class="errorMessage"
-      v-if="mode == 'login' && validEmail == false"
+      v-if="mode == 'create' && validFirstName == false"
     >
-      Merci de respecter le format email.
+      Votre prénom doit avoir minimum 2 caractères, lettres uniquement.
+    </div>
+    <div class="errorMessage" v-if="validLastName == false">
+      Votre nom doit avoir minimum 2 caractères, lettres uniquement.
+    </div>
+    <div class="errorMessage" v-if="validPassword == false">
+      Votre mot de passe doit avoir au moins : 8 caractères, 1 majuscule, 1
+      minuscule, 1 chiffre et 1 caractère spécial.
     </div>
     <div
       class="errorMessage"
@@ -69,7 +79,9 @@
       <button
         @click="login()"
         class="button"
-        :class="{ 'button--disabled': !validFields||!validEmail }"
+        :class="{
+          'button--disabled': !validFields || !validEmail || !validPassword,
+        }"
         v-if="mode == 'login'"
       >
         <span>Se connecter</span>
@@ -77,7 +89,9 @@
       <button
         @click="createAccount()"
         class="button"
-        :class="{ 'button--disabled': !validFields||!validEmail }"
+        :class="{
+          'button--disabled': !validFields || !validEmail || !validPassword,
+        }"
         v-else
       >
         <span>Créer mon compte</span>
@@ -100,21 +114,47 @@ export default {
     };
   },
   computed: {
-    validEmail : function() {
-
-      if (this.email == '') {
+    validEmail: function () {
+      if (this.email == "") {
         return true;
       }
 
-      const emailRegExp = new RegExp("^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$", "g");
+      const emailRegExp = new RegExp(
+        "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$",
+        "g"
+      );
       return emailRegExp.test(this.email);
     },
 
-    validFirstName: function (){
+    validFirstName: function () {
+      if (this.prenom == "") {
+        return true;
+      }
+
       const firstNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
       return firstNameRegExp.test(this.prenom);
     },
 
+    validLastName: function () {
+      if (this.nom == "") {
+        return true;
+      }
+
+      const lastNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
+      return lastNameRegExp.test(this.nom);
+    },
+
+    validPassword: function () {
+      if (this.password == "") {
+        return true;
+      }
+
+      const passwordRegExp = new RegExp(
+        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
+        "g"
+      );
+      return passwordRegExp.test(this.password);
+    },
 
     validFields: function () {
       if (this.mode == "create") {
@@ -165,13 +205,13 @@ export default {
           if (response.status == 401) {
             this.errorStatus = "error_login";
           } else {
-            response.json().then(data => {
+            response.json().then((data) => {
               localStorage.setItem("data", JSON.stringify(data));
               this.$router.push("/profile");
             });
           }
         })
-        .catch(error=>console.log(error));
+        .catch((error) => console.log(error));
     },
     createAccount: function () {
       const data = {
@@ -196,7 +236,7 @@ export default {
             this.login();
           }
         })
-        .catch(error=>console.log(error));
+        .catch((error) => console.log(error));
     },
   },
 };
