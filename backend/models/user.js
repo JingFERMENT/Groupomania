@@ -29,7 +29,7 @@ const User = db.define("user", {
   photoUrl: {
     type: Sequelize.STRING,
     allowNull: true,
-    defaultValue: "http:///localhost:3000/assets/avatar.png"
+    defaultValue: "http:///localhost:3000/images/avatar.png"
   },
 
   jobtitle: Sequelize.STRING,

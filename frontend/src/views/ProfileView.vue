@@ -1,7 +1,24 @@
 <template>
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
-    <p class="card__subtitle">Mon photo de profil</p>
+    <div
+      class="errorMessage"
+      v-if="status == 'error_saveUserInfo'"
+    >
+      Une erreur est survenue !
+    </div>
+    <div
+      class="succesMessage"
+      v-if="status == 'sucess_saveUserInfo'"
+    >
+      Enregistrement avec succès !
+    </div>
+    <div
+      class="succesMessage"
+      v-if="status == 'sucess_addUserPhoto'"
+    >
+      Photo ajoutée avec succès !
+    </div>
     <img
       class="photo_default"
       :src="photoUrl"
@@ -10,7 +27,7 @@
     <!-- ajout bonton "choisir une photo" -->
     <input type="file" name="photo_profil" @change="onFileSelected($event)" />
     <div class="form-row">
-    <!-- ajout bonton "ajouter une photo" -->
+      <!-- ajout bonton "ajouter une photo" -->
       <button @click="onUpload()" class="button">Ajouter une photo</button>
     </div>
     <div class="form-row">
@@ -37,8 +54,10 @@
     </div>
 
     <div class="form-row">
-      <button @click="logout()" class="button">Enregister</button>
-      <p class="card__subtitle--delete">Supprimer le compte</p>
+      <button @click="saveUserInfo()" class="button">Enregister</button>
+      <span class="card__action--delete" @click="deleteAccount()"
+        >Supprimer le compte</span
+      >
     </div>
   </div>
 </template>
@@ -53,19 +72,32 @@ export default {
       prenom: "",
       nom: "",
       photoUrl: photoDefaultUrl,
-      photoUrlToUpload: '',
+      photoUrlToUpload: "",
       jobtitle: "",
+      status: "",
     };
   },
 
   mounted: function () {
     const localStorageData = JSON.parse(localStorage.getItem("data"));
-    const userId = localStorageData.userId;
-    fetch(`http://localhost:3000/api/auth/profile/${userId}`)
+  // pour éviter la faille de sécurité: l'utilisateur ajouter "/profile" sans se connecter
+    if (localStorageData === null) {
+      this.$router.push("/");
+      return;
+    }
+
+    let userId = localStorageData.userId;
+    const options = {
+      headers: {'Authorization': 'Bearer ' + localStorageData.token}
+    };
+
+    fetch(`http://localhost:3000/api/auth/profile/${userId}`, options)
       .then((response) => {
         response.json().then((data) => {
           this.prenom = data.firstName;
           this.nom = data.lastName;
+          this.photoUrl = data.photoUrl;
+          this.jobtitle = data.jobtitle;
         });
       })
       .catch((error) => console.log(error));
@@ -80,22 +112,66 @@ export default {
       const formData = new FormData();
       formData.append("photo_profil", this.photoUrlToUpload);
 
-     const options = {
+      const options = {
         method: "POST",
         body: formData,
       };
 
       const localStorageData = JSON.parse(localStorage.getItem("data"));
       const userId = localStorageData.userId;
+      
       fetch(`http://localhost:3000/api/auth/profile/${userId}/photo`, options)
         .then((response) => {
-          response.json().then((data) => {
-            this.photoUrl = data.user.photoUrl;
-            this.photoUrlToUpload = '';
-           });
+          response.json().then((formData) => {
+            this.photoUrl = formData.user.photoUrl;
+            this.photoUrlToUpload = "";
+            this.status = "sucess_addUserPhoto";
+            localStorage.setItem(
+              "photoUrl",
+              JSON.stringify(formData.user.photoUrl)
+            );
+          });
         })
         .catch((error) => console.log(error));
     },
+
+    saveUserInfo: function () {
+      const UserInfodata = {
+        firstName: this.prenom,
+        lastName: this.nom,
+        jobtitle: this.jobtitle,
+      };
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(UserInfodata),
+      };
+
+      const localStorageData = JSON.parse(localStorage.getItem("data"));
+      const userId = localStorageData.userId;
+      
+      fetch(`http://localhost:3000/api/auth/profile/${userId}`, options)
+        .then((response) => {
+          if (response.status == 401) {
+            this.status = "error_saveUserInfo";
+          } else {
+            this.status = "sucess_saveUserInfo";
+            localStorage.setItem(
+              "jobtitle",
+              JSON.stringify(UserInfodata.jobtitle)
+            );
+            //this.$router.push("/post");
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+
+    //deleteAccount: function () {
+
+    //},
   },
 };
 </script>
@@ -132,7 +208,11 @@ export default {
   color: red;
 }
 
-.card__subtitle--delete {
+.succesMessage {
+  color: green;
+}
+
+.card__action--delete {
   color: red;
   text-decoration: underline;
   font-style: italic;

@@ -77,9 +77,10 @@ exports.getOneUser = (req, res, next) => {
 
 //------------MOFIFIER LA PHOTO D'UN UTILISATEUR------------
 exports.modifyPhoto = (req, res, next) => {
-
   User.findOne({ where: { id: req.params.id } }).then((user) => {
-    const photoUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+    const photoUrl = `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`;
 
     User.update(
       { photoUrl: photoUrl, id: req.params.id },
@@ -92,46 +93,22 @@ exports.modifyPhoto = (req, res, next) => {
         .catch((error) => res.status(400).json(error))
     );
   });
-}
+};
 
 //------------MOFIFIER LE PROFILE D'UN UTILISATEUR------------
 exports.modifyUser = (req, res, next) => {
-  //s'il y a une modification de fichier, supprimer l'ancien fichier d'abord.
-  if (req.file) {
-    User.findOne({ where: { id: req.params.id } })
-      .then((user) => {
-        const filename = user.photoUrl.split("/images/")[1];
-        fs.unlink(`images/${filename}`, (error) => {
-          if (error) {
-            throw new Error(error);
-          }
-        });
-      })
-      .catch((error) => res.status(400).json({ error: error.message }));
-  }
-
   User.findOne({ where: { id: req.params.id } }).then((user) => {
-    const userObject = req.file
-      ? {
-          // Si le fichier image existe, on traite les strings et la nouvelle image
-          ...JSON.parse(req.body.user),
-          photoUrl: `${req.protocol}://${req.get("host")}/images/${
-            req.file.filename
-          }`,
-        } // si pas de fichier image, on traite les autres élements du corps de la requête
-      : { ...req.body };
-
     if (!user) {
       return res.status(404).json({ error: "Utilisateur non trouvé !" });
     }
 
     // Si l'userId de l'utilisateur modifiée est le même que l'userId de l'utilisateur avant modification
-    if (userObject.id && userObject.id !== User.id) {
+    if (req.params.id && req.params.id !== User.id) {
       res.status(401).json({ error: "Modification non autorisée !" });
     }
 
     User.update(
-      { ...userObject, id: req.params.id },
+      { ...req.body, id: req.params.id },
       { where: { id: req.params.id } }
     ).then((user) =>
       User.findOne({ where: { id: req.params.id } })
@@ -142,3 +119,31 @@ exports.modifyUser = (req, res, next) => {
     );
   });
 };
+
+//------------SUPPRIMER LE PROFILE D'UN UTILISATEUR------------
+//exports.deleteUser = (req, res, next) => {
+  /*User.findOne({ where: { id: req.params.id } })
+    .then((user) => {
+      if (!user) {
+        return res.status(404).json({ error: "User non trouvée !" });
+      }
+
+      if (user.userId && user.userId !== req.userId) {
+        return res.status(403).json({ error: "Requête non autorisée !" });
+      }
+
+      const filename = user.imageUrl.split("/images/")[1];
+
+      // 1er arg: chemin du fichier, 2e arg: la callback=ce qu'il faut faire une fois le fichier supprimé
+      fs.unlink(`images/${filename}`, () => {
+        // on supprime la sauce de la base de donnée en indiquant son id
+        User.deleteOne({ where: { id: req.params.id } })
+          .then((user) =>
+            res.status(200).json({ message: "Utilisateur supprimée !" })
+          )
+          .catch((error) => res.status(400).json({ error }));
+      });
+    })
+
+    .catch((error) => res.status(400).json({ error }));*/
+//};
