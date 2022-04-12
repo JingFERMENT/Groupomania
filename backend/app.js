@@ -4,6 +4,9 @@ const app = express(); //faire appel au module "Express" avec sa fonction
 // sécuriser les en-tête http de l'application express
 const helmet = require("helmet");
 
+//donner accès au chemin de fichiers
+const path = require("path");
+
 //base des données (DB)
 const db = require("./config/database");
 
@@ -37,6 +40,9 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
 // user routes
 const userRoutes = require("./routes/user");
+
+//gérer la ressource "images" de manière statique à chaque fois qu'elle reçoit une requête vers la route /images.
+app.use("/images", express.static(path.join(__dirname, "images")));
 
 //enregistrement des routes
 app.use("/api/auth", userRoutes);

@@ -1,14 +1,17 @@
 <template>
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
-    <p class="card__subtitle">Editer mon profil</p>
+    <p class="card__subtitle">Mon photo de profil</p>
     <img
-        class="image_default"
-        :src="photoUrl"
-        alt="image par défaut d'un utilisateur"
+      class="photo_default"
+      :src="photoUrl"
+      alt="image de profil d'un utilisateur"
     />
+    <!-- ajout bonton "choisir une photo" -->
+    <input type="file" name="photo_profil" @change="onFileSelected($event)" />
     <div class="form-row">
-      <button @click="addProfileImage()" class="button">Ajouter une image</button>
+    <!-- ajout bonton "ajouter une photo" -->
+      <button @click="onUpload()" class="button">Ajouter une photo</button>
     </div>
     <div class="form-row">
       <input
@@ -32,10 +35,10 @@
         placeholder="Profession"
       />
     </div>
-    
+
     <div class="form-row">
       <button @click="logout()" class="button">Enregister</button>
-      <p class="card__subtitle">Supprimer le compte</p>
+      <p class="card__subtitle--delete">Supprimer le compte</p>
     </div>
   </div>
 </template>
@@ -50,6 +53,7 @@ export default {
       prenom: "",
       nom: "",
       photoUrl: photoDefaultUrl,
+      photoUrlToUpload: '',
       jobtitle: "",
     };
   },
@@ -60,22 +64,46 @@ export default {
     fetch(`http://localhost:3000/api/auth/profile/${userId}`)
       .then((response) => {
         response.json().then((data) => {
-          this.user.prenom = data.firstName;
+          this.prenom = data.firstName;
+          this.nom = data.lastName;
         });
       })
-      .catch(function () {
-        alert(
-          "Le serveur ne répond pas. Si le problème persiste, contactez-nous par email : support@groupomania.com."
-        );
-      });
+      .catch((error) => console.log(error));
+  },
+
+  methods: {
+    onFileSelected: function (event) {
+      this.photoUrlToUpload = event.target.files[0];
+    },
+
+    onUpload: function () {
+      const formData = new FormData();
+      formData.append("photo_profil", this.photoUrlToUpload);
+
+     const options = {
+        method: "POST",
+        body: formData,
+      };
+
+      const localStorageData = JSON.parse(localStorage.getItem("data"));
+      const userId = localStorageData.userId;
+      fetch(`http://localhost:3000/api/auth/profile/${userId}/photo`, options)
+        .then((response) => {
+          response.json().then((data) => {
+            this.photoUrl = data.user.photoUrl;
+            this.photoUrlToUpload = '';
+           });
+        })
+        .catch((error) => console.log(error));
+    },
   },
 };
 </script>
 
 <style scoped>
-.image_default {
+.photo_default {
   width: 40%;
-  margin-left:auto;
+  margin-left: auto;
   margin-right: auto;
 }
 
@@ -104,4 +132,9 @@ export default {
   color: red;
 }
 
+.card__subtitle--delete {
+  color: red;
+  text-decoration: underline;
+  font-style: italic;
+}
 </style>

@@ -9,7 +9,7 @@
     <h1 class="card__title" v-else>Inscription</h1>
     <p class="card__subtitle" v-if="mode == 'login'">
       Vous n’avez pas de compte ?
-      <span class="card__action" @click="switchToCreateAccount()"
+      <span class="card__action" @click="switchToSignUp()"
         >Inscrivez-vous</span
       >
     </p>
@@ -17,19 +17,16 @@
       Vous avez déjà un compte ?
       <span class="card__action" @click="switchToLogin()">Se connecter</span>
     </p>
-    <div class="errorMessage" v-if="validEmail == false">
+    <div class="errorMessage" v-if="!validEmail">
       Merci de respecter le format email.
     </div>
-    <div
-      class="errorMessage"
-      v-if="mode == 'create' && validFirstName == false"
-    >
+    <div class="errorMessage" v-if="mode == 'signUp' && !validFirstName">
       Votre prénom doit avoir minimum 2 caractères, lettres uniquement.
     </div>
-    <div class="errorMessage" v-if="validLastName == false">
+    <div class="errorMessage" v-if="!validLastName">
       Votre nom doit avoir minimum 2 caractères, lettres uniquement.
     </div>
-    <div class="errorMessage" v-if="validPassword == false">
+    <div class="errorMessage" v-if="!validPassword">
       Votre mot de passe doit avoir au moins : 8 caractères, 1 majuscule, 1
       minuscule, 1 chiffre et 1 caractère spécial.
     </div>
@@ -41,7 +38,7 @@
     </div>
     <div
       class="errorMessage"
-      v-if="mode == 'create' && errorStatus == 'error_create'"
+      v-if="mode == 'signUp' && errorStatus == 'error_signUp'"
     >
       Email déjà utilisé
     </div>
@@ -53,7 +50,7 @@
         placeholder="Email"
       />
     </div>
-    <div class="form-row" v-if="mode == 'create'">
+    <div class="form-row" v-if="mode == 'signUp'">
       <input
         v-model="prenom"
         class="form-row__input"
@@ -80,17 +77,17 @@
         @click="login()"
         class="button"
         :class="{
-          'button--disabled': !validFields || !validEmail || !validPassword,
+          'button--disabled': !validFields || !validPassword,
         }"
         v-if="mode == 'login'"
       >
         <span>Se connecter</span>
       </button>
       <button
-        @click="createAccount()"
+        @click="signUp() && !validEmail"
         class="button"
         :class="{
-          'button--disabled': !validFields || !validEmail || !validPassword,
+          'button--disabled': !validFields || !validPassword,
         }"
         v-else
       >
@@ -157,7 +154,7 @@ export default {
     },
 
     validFields: function () {
-      if (this.mode == "create") {
+      if (this.mode == "signUp") {
         if (
           this.email != "" &&
           this.prenom != "" &&
@@ -178,8 +175,8 @@ export default {
     },
   },
   methods: {
-    switchToCreateAccount: function () {
-      this.mode = "create";
+    switchToSignUp: function () {
+      this.mode = "signUp";
     },
 
     switchToLogin: function () {
@@ -213,7 +210,7 @@ export default {
         })
         .catch((error) => console.log(error));
     },
-    createAccount: function () {
+    signUp: function () {
       const data = {
         email: this.email,
         password: this.password,
@@ -230,8 +227,8 @@ export default {
 
       fetch("http://localhost:3000/api/auth/signup", options)
         .then((response) => {
-          if (response.status == 500) {
-            this.errorStatus = "error_create";
+          if (response.status == 401) {
+            this.errorStatus = "error_signUp";
           } else {
             this.login();
           }

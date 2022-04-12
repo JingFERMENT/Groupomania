@@ -75,9 +75,27 @@ exports.getOneUser = (req, res, next) => {
     .catch((error) => res.status(404).json({ error }));
 };
 
-//------------AFFICHER LE PROFILE D'UN UTILISATEUR------------
-exports.modifyUser = (req, res, next) => {
+//------------MOFIFIER LA PHOTO D'UN UTILISATEUR------------
+exports.modifyPhoto = (req, res, next) => {
 
+  User.findOne({ where: { id: req.params.id } }).then((user) => {
+    const photoUrl = `${req.protocol}://${req.get("host")}/images/${req.file.filename}`;
+
+    User.update(
+      { photoUrl: photoUrl, id: req.params.id },
+      { where: { id: req.params.id } }
+    ).then((user) =>
+      User.findOne({ where: { id: req.params.id } })
+        .then((user) => {
+          res.status(200).json({ message: "Photo mise a jour !", user });
+        })
+        .catch((error) => res.status(400).json(error))
+    );
+  });
+}
+
+//------------MOFIFIER LE PROFILE D'UN UTILISATEUR------------
+exports.modifyUser = (req, res, next) => {
   //s'il y a une modification de fichier, supprimer l'ancien fichier d'abord.
   if (req.file) {
     User.findOne({ where: { id: req.params.id } })
@@ -91,7 +109,7 @@ exports.modifyUser = (req, res, next) => {
       })
       .catch((error) => res.status(400).json({ error: error.message }));
   }
-  
+
   User.findOne({ where: { id: req.params.id } }).then((user) => {
     const userObject = req.file
       ? {
@@ -113,14 +131,14 @@ exports.modifyUser = (req, res, next) => {
     }
 
     User.update(
-      { ...userObject, id: req.params.id }, 
-      { where: { id: req.params.id } },
-    )
-      .then((user) =>
-
-      User.findOne({ where: { id: req.params.id } }).then((user) => {
-        res.status(200).json({ message: "Profile bien modifié !", user });
-      })
-      .catch((error) => res.status(400).json(error)));
+      { ...userObject, id: req.params.id },
+      { where: { id: req.params.id } }
+    ).then((user) =>
+      User.findOne({ where: { id: req.params.id } })
+        .then((user) => {
+          res.status(200).json({ message: "Profile bien modifié !", user });
+        })
+        .catch((error) => res.status(400).json(error))
+    );
   });
 };
