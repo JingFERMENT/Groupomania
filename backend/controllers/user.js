@@ -103,7 +103,7 @@ exports.modifyUser = (req, res, next) => {
     }
 
     // Si l'userId de l'utilisateur modifiée est le même que l'userId de l'utilisateur avant modification
-    if (req.params.id && req.params.id !== User.id) {
+    if (req.body.id && req.body.id !== User.id) {
       res.status(401).json({ error: "Modification non autorisée !" });
     }
 
@@ -121,8 +121,8 @@ exports.modifyUser = (req, res, next) => {
 };
 
 //------------SUPPRIMER LE PROFILE D'UN UTILISATEUR------------
-//exports.deleteUser = (req, res, next) => {
-  /*User.findOne({ where: { id: req.params.id } })
+exports.deleteUser = (req, res, next) => {
+  User.findOne({ where: { id: req.params.id } })
     .then((user) => {
       if (!user) {
         return res.status(404).json({ error: "User non trouvée !" });
@@ -132,12 +132,12 @@ exports.modifyUser = (req, res, next) => {
         return res.status(403).json({ error: "Requête non autorisée !" });
       }
 
-      const filename = user.imageUrl.split("/images/")[1];
+      const filename = user.photoUrl.split("/images/")[1];
 
-      // 1er arg: chemin du fichier, 2e arg: la callback=ce qu'il faut faire une fois le fichier supprimé
+      // 1er arg: chemin du fichier, 2e arg: la callback=ce qu'il faut faire une fois la photo supprimée
       fs.unlink(`images/${filename}`, () => {
-        // on supprime la sauce de la base de donnée en indiquant son id
-        User.deleteOne({ where: { id: req.params.id } })
+        // on supprime l'utilisateur de la base de donnée en indiquant son id
+        User.destroy({ where: { id: req.params.id } })
           .then((user) =>
             res.status(200).json({ message: "Utilisateur supprimée !" })
           )
@@ -145,5 +145,5 @@ exports.modifyUser = (req, res, next) => {
       });
     })
 
-    .catch((error) => res.status(400).json({ error }));*/
-//};
+    .catch((error) => res.status(400).json({ error }));
+};
