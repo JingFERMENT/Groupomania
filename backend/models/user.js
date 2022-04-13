@@ -32,7 +32,7 @@ const User = db.define("user", {
     defaultValue: "http:///localhost:3000/images/avatar.png"
   },
 
-  jobtitle: Sequelize.STRING,
+  jobtitle: Sequelize.TEXT,
 });
 
 module.exports = User;

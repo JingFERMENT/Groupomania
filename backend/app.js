@@ -41,6 +41,9 @@ app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 // user routes
 const userRoutes = require("./routes/user");
 
+//post routes
+//const postRoutes = require("./routes/post");
+
 //gérer la ressource "images" de manière statique à chaque fois qu'elle reçoit une requête vers la route /images.
 app.use("/images", express.static(path.join(__dirname, "images")));
 

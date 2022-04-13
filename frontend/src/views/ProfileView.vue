@@ -179,7 +179,7 @@ export default {
           } else {
             localStorage.clear();
             alert("votre compte a bien été supprimé !")
-            //this.$router.push("/post");
+            this.$router.push("/");
           }
         })
         .catch((error) => console.log(error));
