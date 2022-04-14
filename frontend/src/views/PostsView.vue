@@ -13,7 +13,7 @@
               </div>
               <a class="card-link" href="#">
                 <h5 class="card-title">
-                  Ecrit par {{ post.authorName }}
+                 {{ post.title }}
                 </h5>
               </a>
               <p class="card-text">
@@ -37,14 +37,14 @@ export default {
           'id': 1,
           'infos': 'Mon premier post',
           'createdAt': '2022-04-12',
-          'authorName': 'Jing Zhang',
+          'title': 'Il fait beau :)',
           'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
         },
         {
           'id': 2,
           'infos': 'Mon deuxieme post',
           'createdAt': '2022-04-10',
-          'authorName': 'Mathieu Ferment',
+          'title': 'Apéro ce soir !',
           'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
         }
       ]

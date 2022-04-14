@@ -16,7 +16,7 @@
       alt="image de profil d'un utilisateur"
     />
     <!-- ajout bonton "choisir une photo" -->
-    <input type="file" name="photo_profil" @change="onFileSelected($event)" />
+    <input type="file" name="image" @change="onFileSelected($event)" />
     <div class="form-row">
       <!-- ajout bonton "ajouter une photo" -->
       <button @click="onUpload()" class="button">Modifier la photo</button>
@@ -103,7 +103,7 @@ export default {
 
     onUpload: function () {
       const formData = new FormData();
-      formData.append("photo_profil", this.photoUrlToUpload);
+      formData.append("image", this.photoUrlToUpload);
 
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 

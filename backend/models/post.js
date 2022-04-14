@@ -1,11 +1,16 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/database");
-const User = require("./user");
+const User = require("../models/user");
 
 const Post = db.define("post", {
   userId: {
     type: Sequelize.INTEGER,
-    allowNull: true,
+    allowNull: false,
+  },
+
+  title: {
+    type: Sequelize.STRING,
+    allowNull: false,
   },
 
   description: {
@@ -18,7 +23,5 @@ const Post = db.define("post", {
     allowNull: true,
   },
 });
-
-Post.belongsTo(User, { foreignKey: "userId" }, { onDelete: "cascade" });
 
 module.exports = Post;

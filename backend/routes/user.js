@@ -1,5 +1,5 @@
-const express = require("express"); //pour créer les applis web avec node
-const router = express.Router(); // permet de créer du router
+const express = require("express");
+const router = express.Router(); 
 const userCtrl = require("../controllers/user"); //import du controlleur "user"
 const multer = require("../middleware/multer-config");
 const auth = require("../middleware/auth");

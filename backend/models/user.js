@@ -1,5 +1,6 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/database");
+const Post = require("../models/post");
 
 const User = db.define("user", {
   firstName: {
@@ -34,5 +35,7 @@ const User = db.define("user", {
 
   jobtitle: Sequelize.TEXT,
 });
+
+User.hasMany(Post, { foreignKey: "userId" , onDelete: "cascade" });
 
 module.exports = User;

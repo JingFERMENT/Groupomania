@@ -30,4 +30,4 @@ module.exports = multer({
   storage,
   fileFilter,
   limits: { fileSize: 500000 },
-}).single("photo_profil");
+}).single("image");
