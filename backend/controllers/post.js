@@ -29,3 +29,5 @@ exports.createPost = (req, res, next) => {
   }
  
 };
+
+// -----MIDDLEWARE pour afficher un post ------------

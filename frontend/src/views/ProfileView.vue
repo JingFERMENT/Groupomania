@@ -108,7 +108,7 @@ export default {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
       const options = {
-        method: "POST",
+        method: "PUT",
         body: formData,
         headers: { Authorization: "Bearer " + localStorageData.token },
       };
@@ -136,7 +136,7 @@ export default {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
       const options = {
-        method: "POST",
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
           Authorization: "Bearer " + localStorageData.token,

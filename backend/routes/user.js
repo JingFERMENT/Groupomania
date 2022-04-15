@@ -10,8 +10,8 @@ router.post("/login", userCtrl.login); //se connecter sur un compte déjà cré�
 
 //---------ROUTES DU PROFIL UTILISATEUR--------------
 router.get("/profile/:id", auth, userCtrl.getOneUser); //afficher un profil
-router.post("/profile/:id", auth, userCtrl.modifyUser); //modifier un profil
-router.post("/profile/:id/photo", auth, multer, userCtrl.modifyPhoto) //modifer la photo profile
+router.put("/profile/:id", auth, userCtrl.modifyUser); //modifier un profil
+router.put("/profile/:id/photo", auth, multer, userCtrl.modifyPhoto) //modifer la photo profile
 router.delete ("/profile/:id", auth, userCtrl.deleteUser); //supprimer un profil
 
 module.exports = router;
