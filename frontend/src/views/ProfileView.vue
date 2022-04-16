@@ -16,11 +16,20 @@
       alt="image de profil d'un utilisateur"
     />
     <!-- ajout bonton "choisir une photo" -->
-    <input type="file" name="image" @change="onFileSelected($event)" />
-    <div class="form-row">
-      <!-- ajout bonton "ajouter une photo" -->
-      <button @click="onUpload()" class="button">Modifier la photo</button>
-    </div>
+    <label for="file-upload" class="custom-file-upload" @click="onUpload()" >
+      Ajouter une photo
+      <input
+        id="file-upload"
+        type="file"
+        name="image"
+        @change="onFileSelected($event)"
+      />
+      <i class="fa-solid fa-camera"></i>
+    </label>
+    <!--<div class="form-row">-->
+    <!-- ajout bonton "ajouter une photo" -->
+    <!--<button class="button">Modifier la photo</button>-->
+    <!--</div>-->
     <div class="form-row">
       <input
         v-model="prenom"
@@ -178,7 +187,7 @@ export default {
             this.status = "error_saveUserInfo";
           } else {
             localStorage.clear();
-            alert("votre compte a bien été supprimé !")
+            alert("votre compte a bien été supprimé !");
             this.$router.push("/");
           }
         })
@@ -232,5 +241,24 @@ export default {
 
 .card__action--delete:hover {
   cursor: pointer;
+}
+
+#file-upload {
+  display: none;
+}
+.custom-file-upload {
+  background:#2196f3;
+  margin-left: auto;
+  margin-right:auto;
+  border-radius: 8px;
+  padding: 6px 12px;
+  cursor: pointer;
+  margin-top: 15px;
+  color:white;
+}
+
+.custom-file-upload:hover {
+  cursor: pointer;
+  background:  #1976d2;
 }
 </style>

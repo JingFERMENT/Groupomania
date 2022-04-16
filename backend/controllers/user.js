@@ -103,8 +103,8 @@ exports.modifyUser = (req, res, next) => {
     }
 
     // Si l'userId de l'utilisateur modifiée est le même que l'userId de l'utilisateur avant modification
-    if (req.body.id && req.body.id !== User.id) {
-      res.status(401).json({ error: "Modification non autorisée !" });
+    if (req.body.userId && req.body.userId !== user.id) {
+      return res.status(401).json({ error: "Modification non autorisée !" });
     }
 
     User.update(

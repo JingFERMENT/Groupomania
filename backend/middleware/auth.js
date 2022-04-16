@@ -10,7 +10,7 @@ module.exports = (req, res, next) => {
     req.auth = { userId: tokenUserId };
 
     // Recuperer le userId de la requete
-    requestUserId = req.body.id;
+    requestUserId = req.body.userId;
 
     // Comparer l'userId de la requête avec celui du token
     if (requestUserId && !(requestUserId == tokenUserId)) {

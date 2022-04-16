@@ -1,6 +1,4 @@
 // CONNEXTION l'API A LA BASE DES DONNEES SQL
-
-const { Sequelize } = require("sequelize");
 const db = require("./sequelize");
 const User = require ("../models/user");
 const Post = require("../models/post");
