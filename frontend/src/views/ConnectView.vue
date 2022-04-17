@@ -227,7 +227,7 @@ export default {
 
       fetch("http://localhost:3000/api/auth/signup", options)
         .then((response) => {
-          if (response.status == 401) {
+          if (response.status == 401 || response.status == 500 ) {
             this.errorStatus = "error_signUp";
           } else {
             this.login();

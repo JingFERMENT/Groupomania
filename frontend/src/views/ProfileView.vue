@@ -4,32 +4,24 @@
     <div class="errorMessage" v-if="status == 'error_saveUserInfo'">
       Une erreur est survenue !
     </div>
-    <div class="succesMessage" v-if="status == 'sucess_saveUserInfo'">
-      Enregistrement avec succès !
-    </div>
-    <div class="succesMessage" v-if="status == 'sucess_addUserPhoto'">
-      Photo ajoutée avec succès !
+    <div class="successMessage" v-if="status == 'success_saveUserInfo'">
+      Profile bien à jour !
     </div>
     <img
       class="photo_default"
       :src="photoUrl"
-      alt="image de profil d'un utilisateur"
+      alt="Image du profil d'un utilisateur"
     />
-    <!-- ajout bonton "choisir une photo" -->
-    <label for="file-upload" class="custom-file-upload" @click="onUpload()" >
-      Ajouter une photo
+    <!-- personnalisé le bouton "ajouter une photo" -->
+    <label for="file-upload" class="custom-file-upload">
+      Ajouter une photo ...
       <input
         id="file-upload"
         type="file"
         name="image"
         @change="onFileSelected($event)"
       />
-      <i class="fa-solid fa-camera"></i>
     </label>
-    <!--<div class="form-row">-->
-    <!-- ajout bonton "ajouter une photo" -->
-    <!--<button class="button">Modifier la photo</button>-->
-    <!--</div>-->
     <div class="form-row">
       <input
         v-model="prenom"
@@ -46,7 +38,7 @@
     </div>
     <div class="form-row">
       <input
-        v-model="jobtitle"
+        v-model="jobTitle"
         class="form-row__input"
         type="text"
         placeholder="Profession"
@@ -73,7 +65,7 @@ export default {
       nom: "",
       photoUrl: photoDefaultUrl,
       photoUrlToUpload: "",
-      jobtitle: "",
+      jobTitle: "",
       status: "",
     };
   },
@@ -99,7 +91,7 @@ export default {
           this.prenom = data.firstName;
           this.nom = data.lastName;
           this.photoUrl = data.photoUrl;
-          this.jobtitle = data.jobtitle;
+          this.jobTitle = data.jobTitle;
         });
       })
       .catch((error) => console.log(error));
@@ -110,9 +102,12 @@ export default {
       this.photoUrlToUpload = event.target.files[0];
     },
 
-    onUpload: function () {
+    saveUserInfo: function () {
       const formData = new FormData();
       formData.append("image", this.photoUrlToUpload);
+      formData.append("firstName", this.prenom);
+      formData.append("lastName", this.nom);
+      formData.append("jobTitle", this.jobTitle);
 
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
@@ -124,44 +119,16 @@ export default {
 
       const userId = localStorageData.userId;
 
-      fetch(`http://localhost:3000/api/auth/profile/${userId}/photo`, options)
-        .then((response) => {
-          response.json().then((formData) => {
-            this.photoUrl = formData.user.photoUrl;
-            this.photoUrlToUpload = "";
-            this.status = "sucess_addUserPhoto";
-          });
-        })
-        .catch((error) => console.log(error));
-    },
-
-    saveUserInfo: function () {
-      const UserInfodata = {
-        firstName: this.prenom,
-        lastName: this.nom,
-        jobtitle: this.jobtitle,
-      };
-
-      const localStorageData = JSON.parse(localStorage.getItem("data"));
-
-      const options = {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: "Bearer " + localStorageData.token,
-        },
-        body: JSON.stringify(UserInfodata),
-      };
-
-      const userId = localStorageData.userId;
-
       fetch(`http://localhost:3000/api/auth/profile/${userId}`, options)
         .then((response) => {
           if (response.status == 401) {
             this.status = "error_saveUserInfo";
           } else {
-            this.status = "sucess_saveUserInfo";
-            //this.$router.push("/post");
+            response.json().then((formData) => {
+              this.photoUrl = formData.user.photoUrl;
+              this.photoUrlToUpload = "";
+              this.status = "success_saveUserInfo";
+            });
           }
         })
         .catch((error) => console.log(error));
@@ -229,7 +196,7 @@ export default {
   color: red;
 }
 
-.succesMessage {
+.successMessage {
   color: green;
 }
 
@@ -247,18 +214,18 @@ export default {
   display: none;
 }
 .custom-file-upload {
-  background:#2196f3;
+  background: #2196f3;
   margin-left: auto;
-  margin-right:auto;
+  margin-right: auto;
   border-radius: 8px;
   padding: 6px 12px;
   cursor: pointer;
   margin-top: 15px;
-  color:white;
+  color: white;
 }
 
 .custom-file-upload:hover {
   cursor: pointer;
-  background:  #1976d2;
+  background: #1976d2;
 }
 </style>

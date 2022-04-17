@@ -1,9 +1,6 @@
-//const bcrypt = require("bcrypt");
-//const jwt = require("jsonwebtoken");
-
 const Post = require("../models/post");
 const User = require("../models/user");
-//const fs = require("fs");
+const fs = require("fs");
 
 // -----MIDDLEWARE pour créer un post ------------
 exports.createPost = (req, res, next) => {
@@ -14,8 +11,7 @@ exports.createPost = (req, res, next) => {
       req.file.filename
     }`;
   }
-  // si le userId de post est le même que celui du token de connexion
-  if (req.body.userId == req.auth.userId) {
+  
     Post.create({
       title: req.body.title,
       userId: req.body.userId,
@@ -26,9 +22,7 @@ exports.createPost = (req, res, next) => {
         res.status(201).json({ message: "Création enregistrée!" })
       )
       .catch((error) => res.status(400).json({ error }));
-  } else {
-    res.status(403).json({ error: "Création non autorisée !" });
-  }
+  
 };
 
 // -----MIDDLEWARE pour afficher un post ------------
@@ -68,7 +62,7 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 // -----MIDDLEWARE pour afficher tous les posts d'un utilisateur------------
-exports.getAllPostsbyUser = (req, res, next) => {
+exports.getAllPostsByUser = (req, res, next) => {
   Post.findAll({
     where: { userId: req.params.id },
     include: {
@@ -85,15 +79,6 @@ exports.getAllPostsbyUser = (req, res, next) => {
 // -----MIDDLEWARE pour modifier un post -----------
 exports.modifyPost = (req, res, next) => {
 
-  const messageObject = req.file
-    ? {
-        ...req.body.message,
-        messageUrl: `${req.protocol}://${req.get("host")}/images/${
-          req.file.filename
-        }`,
-      }
-    : { ...req.body };
-
   Post.findOne({ where: { id: req.params.id } }).then((post) => {
     if (!post) {
       return res.status(404).json({ error: "Post non trouvé !" });
@@ -104,7 +89,7 @@ exports.modifyPost = (req, res, next) => {
     }
   
     Post.update(
-      { ...messageObject},
+      { ...req.body},
       { where: { id: req.params.id } }
     ).then((post) =>
       Post.findOne({ where: { id: req.params.id } })
@@ -115,3 +100,46 @@ exports.modifyPost = (req, res, next) => {
     );
   });
 };
+
+// -----MIDDLEWARE pour modifier la photo d'un post -----------
+exports.modifyPhotoPost = (req, res, next) => {
+  Post.findOne({ where: { id: req.params.id } }).then((post) => {
+    const imageUrl = `${req.protocol}://${req.get("host")}/images/${
+      req.file.filename
+    }`;
+
+    Post.update(
+      { imageUrl: imageUrl, id: req.params.id },
+      { where: { id: req.params.id } }
+    ).then((post) =>
+      Post.findOne({ where: { id: req.params.id } })
+        .then((post) => {
+          res.status(200).json({ message: "Image mise à jour !", post });
+        })
+        .catch((error) => res.status(400).json(error))
+    );
+  });
+}
+
+// -----MIDDLEWARE pour supprimer un post -----------
+exports.deletePost = (req, res, next) => { 
+  Post.findOne({ where: { id: req.params.id } })
+  .then((post) => {
+    if (!post) {
+      return res.status(404).json({ error: "Post non trouvée !" });
+    }
+
+    const filename = post.imageUrl.split("/images/")[1];
+    console.log(filename)
+
+    fs.unlink(`images/${filename}`, () => {
+      Post.destroy({ where: { id: req.params.id } })
+        .then((user) =>
+          res.status(200).json({ message: "Post supprimé !" })
+        )
+        .catch((error) => res.status(400).json({ error }));
+    });
+  })
+
+  .catch((error) => res.status(400).json({ error }));
+}

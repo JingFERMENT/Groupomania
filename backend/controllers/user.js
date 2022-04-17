@@ -13,7 +13,7 @@ exports.signup = (req, res, next) => {
         lastName: req.body.lastName,
         email: req.body.email,
         photoUrl: req.body.photoUrl,
-        jobtitle: req.body.jobtitle,
+        jobTitle: req.body.jobTitle,
         password: hash,
       })
 
@@ -75,49 +75,39 @@ exports.getOneUser = (req, res, next) => {
     .catch((error) => res.status(404).json({ error }));
 };
 
-//------------MOFIFIER LA PHOTO D'UN UTILISATEUR------------
-exports.modifyPhoto = (req, res, next) => {
-  User.findOne({ where: { id: req.params.id } }).then((user) => {
-    const photoUrl = `${req.protocol}://${req.get("host")}/images/${
-      req.file.filename
-    }`;
-
-    User.update(
-      { photoUrl: photoUrl, id: req.params.id },
-      { where: { id: req.params.id } }
-    ).then((user) =>
-      User.findOne({ where: { id: req.params.id } })
-        .then((user) => {
-          res.status(200).json({ message: "Photo mise a jour !", user });
-        })
-        .catch((error) => res.status(400).json(error))
-    );
-  });
-};
-
-//------------MOFIFIER LE PROFILE D'UN UTILISATEUR------------
+//------------MODIFIER LE PROFILE D'UN UTILISATEUR------------
 exports.modifyUser = (req, res, next) => {
-  User.findOne({ where: { id: req.params.id } }).then((user) => {
-    if (!user) {
-      return res.status(404).json({ error: "Utilisateur non trouvé !" });
-    }
+  const userObject = req.file
+    ? {
+        ...req.body,
+        photoUrl: `${req.protocol}://${req.get("host")}/images/${
+          req.file.filename
+        }`,
+      }
+    : { ...req.body };
 
-    // Si l'userId de l'utilisateur modifiée est le même que l'userId de l'utilisateur avant modification
-    if (req.body.userId && req.body.userId !== user.id) {
-      return res.status(401).json({ error: "Modification non autorisée !" });
-    }
+  User.findOne({ where: { id: req.params.id } })
+    .then((user) => {
+      const oldFilename = user.photoUrl.split("/images/")[1];
+      fs.unlink(`images/${oldFilename}`, (error) => {
+        console.log(error);
+      });
+    })
+    .catch((error) => res.status(400).json({ error }));
 
-    User.update(
-      { ...req.body, id: req.params.id },
-      { where: { id: req.params.id } }
-    ).then((user) =>
-      User.findOne({ where: { id: req.params.id } })
-        .then((user) => {
-          res.status(200).json({ message: "Profile bien modifié !", user });
-        })
-        .catch((error) => res.status(400).json(error))
-    );
-  });
+  // METTRE A JOUR BASE DE DONNEES
+  User.update(
+    { ...userObject, id: req.params.id },
+    { where: { id: req.params.id } }
+  ).then((user) =>
+    // SI ENREGISTREMENT REUSSI
+    User.findOne({ where: { id: req.params.id } })
+      .then((user) => {
+        // RECUPERE USER A JOUR
+        res.status(200).json({ message: "Profile bien à jour !", user });
+      })
+      .catch((error) => res.status(400).json(error))
+  );
 };
 
 //------------SUPPRIMER LE PROFILE D'UN UTILISATEUR------------
@@ -126,10 +116,6 @@ exports.deleteUser = (req, res, next) => {
     .then((user) => {
       if (!user) {
         return res.status(404).json({ error: "User non trouvée !" });
-      }
-
-      if (user.userId && user.userId !== req.userId) {
-        return res.status(403).json({ error: "Requête non autorisée !" });
       }
 
       const filename = user.photoUrl.split("/images/")[1];
