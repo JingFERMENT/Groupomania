@@ -1,0 +1,91 @@
+<template>
+  <NavBar />
+
+  <div class="card">
+    <h1 class="card__title">Quoi de neuf ?</h1>
+
+    <div class="container-fluid gedf-wrapper">
+      <div class="row">
+        <div class=" gedf-main">
+          <div class="card gedf-card" v-for="post in posts" :key="post.id">
+            <div class="card-header">{{ post.infos }}</div>
+            <div class="card-body">
+              <div class="text-muted h7 mb-2">
+                <i class="fa fa-clock-o"></i> {{ post.createdAt }}
+              </div>
+              <a class="card-link" href="#">
+                <h5 class="card-title">
+                 {{ post.title }}
+                </h5>
+              </a>
+              <p class="card-text">
+                {{ post.description }}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import NavBar from '../components/NavBar.vue';
+
+export default {
+  name: "ListOfPostsView",
+    components: {
+    NavBar,
+  },
+  data: function () {
+    return {
+      posts: [
+        {
+          'id': 1,
+          'infos': 'Mon premier post',
+          'createdAt': '2022-04-12',
+          'title': 'Il fait beau :)',
+          'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+        },
+        {
+          'id': 2,
+          'infos': 'Mon deuxieme post',
+          'createdAt': '2022-04-10',
+          'title': 'Apéro ce soir !',
+          'description': 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+        }
+      ]
+    };
+  },
+};
+</script>
+
+<style scoped>
+body {
+  background-color: #eeeeee;
+}
+
+.h7 {
+  font-size: 0.8rem;
+}
+
+.gedf-wrapper {
+  margin-top: 0.97rem;
+}
+
+@media (min-width: 992px) {
+  .gedf-main {
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
+  .gedf-card {
+    margin-bottom: 2.77rem;
+  }
+}
+
+/**Reset Bootstrap*/
+.dropdown-toggle::after {
+  content: none;
+  display: none;
+}
+</style>

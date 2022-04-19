@@ -1,7 +1,8 @@
 import { createWebHistory, createRouter } from "vue-router";
 import ConnectView from "@/views/ConnectView.vue";
 import ProfileView from "@/views/ProfileView.vue";
-import PostView from "@/views/PostView.vue";
+import MyPostView from "@/views/MyPostView.vue";
+import ListOfPostsView from "@/views/ListOfPostsView.vue";
 
 const routes = [
   { 
@@ -19,7 +20,13 @@ const routes = [
   { 
     name: 'post',
     path: '/post', 
-    component: PostView,
+    component: MyPostView,
+  },
+
+  { 
+    name: 'list',
+    path: '/list', 
+    component: ListOfPostsView,
   }
 ]
 

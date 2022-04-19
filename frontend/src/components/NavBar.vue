@@ -4,13 +4,13 @@
       <router-link to="/post" class="nav-link">Créer un post</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/posts" title="Liste des posts" class="nav-link">Liste des posts</router-link>
+      <router-link to="/list" title="Liste des posts" class="nav-link">Liste des posts</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/profile" title="Mon compte" class="nav-link">Mon profile</router-link>
+      <router-link to="/profile" title="Mon profile" class="nav-link">Mon profile</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/logout" title="Mon compte" class="nav-link">Déconnexion</router-link>
+      <router-link to="/logout" title="Déconnexion" class="nav-link">Déconnexion</router-link>
     </li>
   </ul>
 </template>

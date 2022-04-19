@@ -18,8 +18,8 @@ exports.createPost = (req, res, next) => {
       description: req.body.description,
       imageUrl: imageUrl,
     })
-      .then((Post) =>
-        res.status(201).json({ message: "Création enregistrée!" })
+      .then((post) =>
+        res.status(201).json({ message: "Création enregistrée!", post })
       )
       .catch((error) => res.status(400).json({ error }));
   

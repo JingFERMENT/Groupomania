@@ -3,10 +3,10 @@
   <NavBar />
   <div class="card">
     <h1 class="card__title">Quoi de neuf ?</h1>
-    <div class="errorMessage" v-if="status =='error_sendPost'">
+    <div class="errorMessage" v-if="status == 'error_sendPost'">
       Une erreur est survenue !
     </div>
-    <div class="successMessage" v-if="status =='success_sendPost'">
+    <div class="successMessage" v-if="status == 'success_sendPost'">
       Publication réussie !
     </div>
     <div class="form-row">
@@ -16,7 +16,7 @@
       <textarea v-model="description" class="form-row__input" type="text" placeholder="Ecrivez quelques choses ..."
         name="description"></textarea>
     </div>
-    <img class="image_post" :src="imageToUpload" />
+    <img class="image_post" :src="imageUrl" />
     <!-- personnalisé le bouton "ajouter une photo" -->
     <label for="file-upload" class="custom-file-upload">
       Ajouter une image ...
@@ -30,7 +30,7 @@
 import NavBar from '../components/NavBar.vue';
 
 export default {
-  name: "PostView",
+  name: "MyPostView",
   components: {
     NavBar,
   },
@@ -39,6 +39,7 @@ export default {
       userId: "",
       title: "",
       description: "",
+      imageUrl: "",
       imageToUpload: "",
       status: ""
     };
@@ -50,19 +51,18 @@ export default {
     },
 
     sendPost: function () {
+      const localStorageData = JSON.parse(localStorage.getItem("data"));
+
       const formData = new FormData();
       formData.append("image", this.imageToUpload);
       formData.append("title", this.title);
       formData.append("description", this.description);
-      
-
-      const localStorageData = JSON.parse(localStorage.getItem("data"));
       formData.append("userId", localStorageData.userId);
 
       const options = {
         method: "POST",
         body: formData,
-        headers: { Authorization: "Bearer " + localStorageData.token},
+        headers: { Authorization: "Bearer " + localStorageData.token },
       };
 
       fetch("http://localhost:3000/api/post/", options)
@@ -70,22 +70,17 @@ export default {
           if (response.status == 401 || response.status == 400 || response.status == 404) {
             this.status = "error_sendPost";
           } else {
-            response.json().then(() => {
-              this.userId = "",
-              this.imageToUpload = "",
-              this.description = "",
-              this.title = "",
-              this.status = "success_sendPost";
+            response.json().then((formData) => {
+              this.imageUrl = formData.post.imageUrl,
+                this.imageToUpload = "",
+                this.status = "success_sendPost";
+              this.$router.push("/list")
+
             });
           }
         })
         .catch((error) => console.log(error));
     },
-    
-    
-
-
-
   }
 };
 </script>
