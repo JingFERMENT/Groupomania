@@ -1,4 +1,5 @@
 <template>
+  <NavBar />
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
     <div class="errorMessage" v-if="status == 'error_saveUserInfo'">
@@ -7,58 +8,36 @@
     <div class="successMessage" v-if="status == 'success_saveUserInfo'">
       Profile bien à jour !
     </div>
-    <img
-      class="photo_default"
-      :src="photoUrl"
-      alt="Image du profil d'un utilisateur"
-    />
+    <img class="photo_default" :src="photoUrl" alt="Image du profil d'un utilisateur" />
     <!-- personnalisé le bouton "ajouter une photo" -->
     <label for="file-upload" class="custom-file-upload">
       Ajouter une photo ...
-      <input
-        id="file-upload"
-        type="file"
-        name="image"
-        @change="onFileSelected($event)"
-      />
+      <input id="file-upload" type="file" name="image" @change="onFileSelected($event)" />
     </label>
     <div class="form-row">
-      <input
-        v-model="prenom"
-        class="form-row__input"
-        type="text"
-        placeholder="Prénom"
-      />
-      <input
-        v-model="nom"
-        class="form-row__input"
-        type="text"
-        placeholder="Nom"
-      />
+      <input v-model="prenom" class="form-row__input" type="text" placeholder="Prénom" />
+      <input v-model="nom" class="form-row__input" type="text" placeholder="Nom" />
     </div>
     <div class="form-row">
-      <input
-        v-model="jobTitle"
-        class="form-row__input"
-        type="text"
-        placeholder="Profession"
-      />
+      <input v-model="jobTitle" class="form-row__input" type="text" placeholder="Profession" />
     </div>
 
     <div class="form-row">
       <button @click="saveUserInfo()" class="button">Enregister</button>
-      <span class="card__action--delete" @click="deleteAccount()"
-        >Supprimer le compte</span
-      >
+      <span class="card__action--delete" @click="deleteAccount()">Supprimer le compte</span>
     </div>
   </div>
 </template>
 
 <script>
 import photoDefaultUrl from "../assets/avatar.png";
+import NavBar from '../components/NavBar.vue';
 
 export default {
   name: "ProfileView",
+  components: {
+    NavBar,
+  },
   data: function () {
     return {
       prenom: "",
@@ -90,7 +69,9 @@ export default {
         response.json().then((data) => {
           this.prenom = data.firstName;
           this.nom = data.lastName;
-          this.photoUrl = data.photoUrl;
+          if (!data.photoUrl) {
+            this.photoUrl = data.photoUrl;
+          }
           this.jobTitle = data.jobTitle;
         });
       })
@@ -177,6 +158,7 @@ export default {
   gap: 16px;
   flex-wrap: wrap;
 }
+
 .form-row__input {
   padding: 8px;
   border: none;
@@ -188,6 +170,7 @@ export default {
   min-width: 100px;
   color: black;
 }
+
 .form-row__input::placeholder {
   color: #aaaaaa;
 }
@@ -213,19 +196,17 @@ export default {
 #file-upload {
   display: none;
 }
+
 .custom-file-upload {
-  background: #2196f3;
-  margin-left: auto;
-  margin-right: auto;
   border-radius: 8px;
+  border: 1px solid grey;
   padding: 6px 12px;
-  cursor: pointer;
-  margin-top: 15px;
-  color: white;
+  margin: 15px auto 0px auto;
 }
 
 .custom-file-upload:hover {
   cursor: pointer;
-  background: #1976d2;
+  background: grey;
+  color: white;
 }
 </style>
