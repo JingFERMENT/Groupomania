@@ -57,7 +57,7 @@ exports.getAllPosts = (req, res, next) => {
       }
     },
   })
-    .then((post) =>res.status(200).json(post))
+    .then((post) => res.status(200).json(post))
     .catch((error) => res.status(404).json({ error }));
 };
 

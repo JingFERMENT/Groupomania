@@ -1,0 +1,1 @@
+<button @click="logoutSession" class="accountbutton">Se déconnecter</button> 

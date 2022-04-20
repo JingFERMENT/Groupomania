@@ -10,7 +10,7 @@
       Publication réussie !
     </div>
     <div class="form-row">
-      <input v-model="title" class="form-row__input" type="text" name="title" placeholder="Title" />
+      <input v-model="title" class="form-row__input" type="text" name="title" placeholder="Titre" />
     </div>
     <div class="form-row">
       <textarea v-model="description" class="form-row__input" type="text" placeholder="Ecrivez quelques choses ..."

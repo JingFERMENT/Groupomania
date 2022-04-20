@@ -47,7 +47,7 @@ img {
 
 .card__title {
   text-align: center;
-  font-weight: 800;
+  font-weight: 600;
 }
 
 .card__subtitle {
