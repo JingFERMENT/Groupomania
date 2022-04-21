@@ -175,14 +175,6 @@ export default {
   color: #aaaaaa;
 }
 
-.errorMessage {
-  color: red;
-}
-
-.successMessage {
-  color: green;
-}
-
 .card__action--delete {
   color: red;
   text-decoration: underline;

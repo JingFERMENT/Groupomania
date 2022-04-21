@@ -91,4 +91,12 @@ img {
   cursor: not-allowed;
   background: #cecece;
 }
+
+.errorMessage {
+  color: red;
+}
+
+.successMessage {
+  color: green;
+}
 </style>

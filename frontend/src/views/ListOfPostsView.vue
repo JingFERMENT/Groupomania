@@ -2,22 +2,32 @@
   <NavBar />
   <div class="card">
     <h1 class="card__title">Dernières publications</h1>
+    <!-- message d'erreur-->
     <div class="errorMessage" v-if="status == 'error_post'">
       Une erreur est survenue !
     </div>
+    <!-- message prise en compte des suppressions-->
+    <div class="successMessage" v-if="status == 'success_delete'">
+      Post bien supprimé !
+    </div>
     <div class="card gedf-card" v-for="post in posts" :key="post.id">
-      <div class="card-header">{{ post.title }}</div>
+      <div class="card-header">{{ post.title }}
+      </div>
       <div class="card-body">
         <div class="text-muted h7 mb-2">
-          Créé par {{ post.prenom }} {{ post.nom }}, le {{ post.createdAt }}
+          Créé par {{ post.firstName }} {{ post.lastName }}, le {{ post.createdAt }}
         </div>
         <!-- quand il n'y a pas d'image-->
         <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
         <p class="card-text">{{ post.description }}</p>
+        <router-link class="button" :to="{ name: 'modifyPost', params: { id: post.id } }">
+          Modifier
+        </router-link>
+        <button @click="deletePost(post.id)" class="button">Supprimer</button>
       </div>
     </div>
     <!-- quand il n'y a pas de post-->
-    <div v-if="noMessage">
+    <div v-show="noMessage">
       <p class="no-message-text">Pas de publication pour le moment.</p>
     </div>
   </div>
@@ -34,14 +44,13 @@ export default {
   data: function () {
     return {
       noMessage: false,
-      errorStatus: "",
+      status: "",
       posts: [],
     };
   },
 
   mounted: function () {
     const localStorageData = JSON.parse(localStorage.getItem("data"));
-    // pour éviter la faille de sécurité: l'utilisateur ajouter "/profile" sans se connecter
     if (localStorageData === null) {
       this.$router.push("/");
       return;
@@ -52,13 +61,11 @@ export default {
       headers: { Authorization: "Bearer " + localStorageData.token },
     };
 
-    let userId = localStorageData.userId;
-    this.userId = userId;
     fetch("http://localhost:3000/api/post/", options)
       .then((response) => {
         //dans le cas des erreurs 
         if (response.status == 401 || response.status == 500) {
-          this.errorStatus = "error_post";
+          this.status = "error_post";
         } else {
           response.json().then((data) => {
             //dans le cas où il n'y pas de poste
@@ -67,9 +74,10 @@ export default {
             }
             for (let i = 0; i < data.length; i++) {
               this.posts.push({
-                titre: data[i].title,
-                prenom: data[i].user.firstName,
-                nom: data[i].user.lastName,
+                id: data[i].id,
+                title: data[i].title,
+                firstName: data[i].user.firstName,
+                lastName: data[i].user.lastName,
                 createdAt: data[i].createdAt.split("T")[0],
                 description: data[i].description,
                 imageUrl: data[i].imageUrl,
@@ -80,6 +88,30 @@ export default {
       })
       .catch((error) => console.log(error));
   },
+
+  methods: {
+    deletePost: function (postId) {
+      const localStorageData = JSON.parse(localStorage.getItem("data"));
+
+      const options = {
+        method: "delete",
+        headers: { Authorization: "Bearer " + localStorageData.token },
+      };
+
+      fetch(`http://localhost:3000/api/post/${postId}`, options)
+        .then((response) => {
+          if (response.status == 401 || response.status == 400 || response.status == 404) {
+            this.status = "error_post";
+          } else {
+            console.log(response);
+            this.status = "success_delete";
+            window.location.reload();
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+  }
+
 };
 </script>
 
@@ -107,5 +139,19 @@ body {
 
 .no-message-text {
   text-align: center;
+}
+
+.image_post {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%
+}
+
+.button {
+  font-weight: 500;
+  font-size: 12px;
+  width: 20%;
+  padding: 2px;
 }
 </style>

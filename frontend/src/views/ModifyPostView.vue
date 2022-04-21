@@ -1,41 +1,35 @@
 <template>
-  <!-- créer un post-->
-  <NavBar />
+  <!-- modifier un post-->
   <div class="card">
-    <h1 class="card__title">Quoi de neuf ?</h1>
-    <div class="errorMessage" v-if="status == 'error_sendPost'">
+    <h1 class="card__title">Modifier le post</h1>
+    <div class="errorMessage" v-if="status == 'error_post'">
       Une erreur est survenue !
     </div>
-    <div class="successMessage" v-if="status == 'success_sendPost'">
-      Publication réussie !
+    <div class="successMessage" v-if="status == 'success_post'">
+      Mise à jour réussie !
     </div>
     <div class="form-row">
-      <input v-model="title" class="form-row__input" type="text" name="title" placeholder="Titre" />
+      <input v-model="title" class="form-row__input" type="text" name="title" />
     </div>
     <div class="form-row">
-      <textarea v-model="description" class="form-row__input" type="text" placeholder="Ecrivez quelques choses ..."
-        name="description"></textarea>
+      <textarea v-model="description" class="form-row__input" type="text" name="description"></textarea>
     </div>
-    <img class="image_post" :src="imageUrl" />
+    <img v-if="imageUrl != ''" class="image_post" :src="imageUrl" alt="image d'un post" />
     <!-- personnalisé le bouton "ajouter une photo" -->
     <label for="file-upload" class="custom-file-upload">
-      Ajouter une image ...
+      Modifier l'image ...
       <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
     </label>
-    <button @click="sendPost()" class="button" :class="{
+    <button @click="modifyPost()" class="button" :class="{
       'button--disabled': !validFields,
-    }">Publier le post</button>
+    }">Modifier le post</button>
   </div>
 </template>
 
 <script>
-import NavBar from '../components/NavBar.vue';
 
 export default {
-  name: "MyPostView",
-  components: {
-    NavBar,
-  },
+  name: "ModifyPostView",
   data: function () {
     return {
       userId: "",
@@ -43,12 +37,12 @@ export default {
       description: "",
       imageUrl: "",
       imageToUpload: "",
-      status: ""
+      status: "",
+      post: ""
     };
   },
 
   computed: {
-
     validFields: function () {
       if (
         this.title != "" &&
@@ -61,37 +55,65 @@ export default {
     }
   },
 
+  mounted: function () {
+    const localStorageData = JSON.parse(localStorage.getItem("data"));
+    if (localStorageData === null) {
+      this.$router.push("/");
+      return;
+    }
+
+    const options = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + localStorageData.token },
+    };
+
+    let postId = this.$route.params.id
+    fetch(`http://localhost:3000/api/post/${postId}`, options)
+      .then((response) => {
+        //dans le cas des erreurs 
+        if (response.status == 401 || response.status == 500) {
+          this.status = "error_post";
+        } else {
+          response.json().then((data) => {
+            this.title = data.title,
+            this.description = data.description,
+            this.imageUrl = data.imageUrl
+          });
+        }
+      })
+      .catch((error) => console.log(error));
+  },
+
   methods: {
     onFileSelected: function (event) {
       this.imageToUpload = event.target.files[0];
     },
 
-    sendPost: function () {
+    modifyPost: function () {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
       const formData = new FormData();
       formData.append("image", this.imageToUpload);
       formData.append("title", this.title);
       formData.append("description", this.description);
-      formData.append("userId", localStorageData.userId);
 
       const options = {
-        method: "POST",
+        method: "PUT",
         body: formData,
         headers: { Authorization: "Bearer " + localStorageData.token },
       };
 
-      fetch("http://localhost:3000/api/post/", options)
+      let postId = this.$route.params.id
+      fetch(`http://localhost:3000/api/post/${postId}`, options)
         .then((response) => {
           if (response.status == 401 || response.status == 400 || response.status == 404) {
             this.status = "error_sendPost";
           } else {
             response.json().then((formData) => {
               this.imageUrl = formData.post.imageUrl,
-                this.imageToUpload = "",
-                this.status = "success_sendPost";
+              this.imageToUpload = "",
+              this.status = "success_post";
               this.$router.push("/list")
-
             });
           }
         })
