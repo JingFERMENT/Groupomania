@@ -69,10 +69,10 @@ export default {
         response.json().then((data) => {
           this.prenom = data.firstName;
           this.nom = data.lastName;
-          if (!data.photoUrl) {
+          this.jobTitle = data.jobTitle;
+          if (data.photoUrl != "") {
             this.photoUrl = data.photoUrl;
           }
-          this.jobTitle = data.jobTitle;
         });
       })
       .catch((error) => console.log(error));
@@ -106,8 +106,10 @@ export default {
             this.status = "error_saveUserInfo";
           } else {
             response.json().then((formData) => {
-              this.photoUrl = formData.user.photoUrl;
-              this.photoUrlToUpload = "";
+              if (formData.user.photoUrl != "") {
+                this.photoUrl = formData.user.photoUrl;
+                this.photoUrlToUpload = "";
+              }
               this.status = "success_saveUserInfo";
             });
           }
@@ -135,7 +137,7 @@ export default {
             this.status = "error_saveUserInfo";
           } else {
             localStorage.clear();
-            alert("votre compte a bien été supprimé !");
+            alert("Votre compte a bien été supprimé !");
             this.$router.push("/");
           }
         })
@@ -147,7 +149,7 @@ export default {
 
 <style scoped>
 .photo_default {
-  width: 40%;
+  width: 30%;
   margin-left: auto;
   margin-right: auto;
 }

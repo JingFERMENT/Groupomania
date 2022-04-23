@@ -88,12 +88,15 @@ exports.modifyUser = (req, res, next) => {
 
   User.findOne({ where: { id: req.params.id } })
     .then((user) => {
-      const oldFilename = user.photoUrl.split("/images/")[1];
-      fs.unlink(`images/${oldFilename}`, (error) => {
-        console.log(error);
-      });
+      if (req.file) {
+        const oldFilename = user.photoUrl.split("/images/")[1];
+        fs.unlink(`images/${oldFilename}`, (error) => {
+          console.log(error);
+        });
+      }
     })
-    .catch((error) => res.status(400).json({ error }));
+    .catch((error) => { return res.status(400).json({ error })});
+
 
   // METTRE A JOUR BASE DE DONNEES
   User.update(
@@ -130,6 +133,6 @@ exports.deleteUser = (req, res, next) => {
           .catch((error) => res.status(400).json({ error }));
       });
     })
-
+    
     .catch((error) => res.status(400).json({ error }));
 };

@@ -1,7 +1,6 @@
 const { Sequelize } = require("sequelize");
 const db = require("../config/sequelize");
 
-
 const User = db.define("user", {
   firstName: {
     type: Sequelize.STRING,
@@ -33,7 +32,11 @@ const User = db.define("user", {
     defaultValue: ""
   },
 
-  jobTitle: Sequelize.TEXT,
+  jobTitle: {
+    type: Sequelize.TEXT,
+    allowNull: true,
+    defaultValue: ""
+  },
 });
 
 module.exports = User;

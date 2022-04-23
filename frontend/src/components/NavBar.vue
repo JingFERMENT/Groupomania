@@ -1,7 +1,7 @@
 <template>
   <ul class="nav">
     <li class="nav-item">
-      <router-link to="/post" class="nav-link">Créer un post</router-link>
+      <router-link to="/post" title = "créer un post" class="nav-link">Créer un post</router-link>
     </li>
     <li class="nav-item">
       <router-link to="/list" title="Liste des posts" class="nav-link">Liste des posts</router-link>
@@ -10,19 +10,28 @@
       <router-link to="/profile" title="Mon profile" class="nav-link">Mon profile</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/logout" title="Déconnexion" class="nav-link">Déconnexion</router-link>
+      <router-link to="/" title="Déconnexion" class="nav-link" @click="logOut">Déconnexion
+      </router-link>
     </li>
   </ul>
 </template>
 
 <script>
+
 export default {
   name: "NavBar",
-  methods: {},
+  methods: {
+    logOut: function () {
+            localStorage.clear();
+            alert("Vous êtes maintenant déconnecté(e).");
+        }
+  },
 };
+
 </script>
 
 <style scoped>
+
 .nav {
   justify-content: space-around;
 }
@@ -32,5 +41,4 @@ export default {
   font-weight: 500;
   font-size: 15px;
 }
-
 </style>

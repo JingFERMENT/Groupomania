@@ -74,17 +74,20 @@ export default {
         if (response.status == 401 || response.status == 500) {
           this.status = "error_post";
         } else {
-          response.json().then((data) => {
-            this.title = data.title,
-            this.description = data.description,
-            this.imageUrl = data.imageUrl
-          });
+          response.json()
+            .then((data) => {
+              this.title = data.title,
+                this.description = data.description,
+                this.imageUrl = data.imageUrl
+            })
+            .catch((error) => console.log(error));
         }
       })
       .catch((error) => console.log(error));
   },
 
   methods: {
+
     onFileSelected: function (event) {
       this.imageToUpload = event.target.files[0];
     },
@@ -111,8 +114,8 @@ export default {
           } else {
             response.json().then((formData) => {
               this.imageUrl = formData.post.imageUrl,
-              this.imageToUpload = "",
-              this.status = "success_post";
+                this.imageToUpload = "",
+                this.status = "success_post";
               this.$router.push("/list")
             });
           }

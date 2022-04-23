@@ -20,8 +20,8 @@
         <!-- quand il n'y a pas d'image-->
         <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
         <p class="card-text">{{ post.description }}</p>
-        <router-link class="button" :to="{ name: 'modifyPost', params: { id: post.id } }">
-          Modifier
+        <router-link :to="{ name: 'modifyPost', params: { id: post.id } }">
+          <button class="button">Modifier</button>
         </router-link>
         <button @click="deletePost(post.id)" class="button">Supprimer</button>
       </div>
@@ -145,13 +145,20 @@ body {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%
 }
 
 .button {
   font-weight: 500;
   font-size: 12px;
-  width: 20%;
+  width: 30%;
   padding: 2px;
+  color: #ececec;
+  background-color: #8c8c8c;
+  margin: 2px;
+}
+
+.button:hover {
+  background-color: red;
+  color: white
 }
 </style>

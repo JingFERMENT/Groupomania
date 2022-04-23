@@ -61,7 +61,7 @@ exports.getAllPosts = (req, res, next) => {
 };
 
 // -----MIDDLEWARE pour afficher tous les posts d'un utilisateur------------
-exports.getAllPostsByUser = (req, res, next) => {
+/*exports.getAllPostsByUser = (req, res, next) => {
   Post.findAll({
     where: { userId: req.params.id },
     include: {
@@ -73,7 +73,7 @@ exports.getAllPostsByUser = (req, res, next) => {
   })
     .then((post) => res.status(200).json(post))
     .catch((error) => res.status(404).json({ error }));
-};
+};*/
 
 // -----MIDDLEWARE pour modifier un post -----------
 
@@ -89,10 +89,12 @@ exports.modifyPost = (req, res, next) => {
 
   Post.findOne({ where: { id: req.params.id } })
     .then((post) => {
-      const oldFilename = post.imageUrl.split("/images/")[1];
-      fs.unlink(`images/${oldFilename}`, (error) => {
-        console.log(error);
-      });
+      if (req.file) {
+        const oldFilename = post.imageUrl.split("/images/")[1];
+        fs.unlink(`images/${oldFilename}`, (error) => {
+          console.log(error);
+        });
+      }
     })
     .catch((error) => res.status(400).json({ error }));
 
