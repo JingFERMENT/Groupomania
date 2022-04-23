@@ -20,13 +20,22 @@
         <!-- quand il n'y a pas d'image-->
         <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
         <p class="card-text">{{ post.description }}</p>
+        <button class="button">
+          <font-awesome-icon :icon=faHeartIcon />
+        </button>
+        <button class="button">
+          <font-awesome-icon :icon=faCommentIcon />
+        </button>
         <router-link :to="{ name: 'modifyPost', params: { id: post.id } }">
-          <button class="button">Modifier</button>
+          <button v-if="post.userId === currentUserId" class="button">
+            <font-awesome-icon :icon=faEditIcon />
+          </button>
         </router-link>
-        <button @click="deletePost(post.id)" class="button">Supprimer</button>
+        <button v-if="post.userId === currentUserId" @click="deletePost(post.id)" class="button">
+          <font-awesome-icon :icon=faTrashCanIcon />
+        </button>
       </div>
     </div>
-    <!-- quand il n'y a pas de post-->
     <div v-show="noMessage">
       <p class="no-message-text">Pas de publication pour le moment.</p>
     </div>
@@ -35,22 +44,31 @@
 
 <script>
 import NavBar from "../components/NavBar.vue";
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faComments, faHeart, faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 export default {
   name: "ListOfPostsView",
   components: {
     NavBar,
+    FontAwesomeIcon
   },
   data: function () {
     return {
+      faCommentIcon: faComments,
+      faHeartIcon: faHeart,
+      faEditIcon: faEdit,
+      faTrashCanIcon: faTrashCan,
       noMessage: false,
       status: "",
       posts: [],
+      currentUserId: ""
     };
   },
 
   mounted: function () {
     const localStorageData = JSON.parse(localStorage.getItem("data"));
+    this.currentUserId = localStorageData.userId
     if (localStorageData === null) {
       this.$router.push("/");
       return;
@@ -75,6 +93,7 @@ export default {
             for (let i = 0; i < data.length; i++) {
               this.posts.push({
                 id: data[i].id,
+                userId: data[i].userId,
                 title: data[i].title,
                 firstName: data[i].user.firstName,
                 lastName: data[i].user.lastName,
@@ -105,6 +124,7 @@ export default {
           } else {
             console.log(response);
             this.status = "success_delete";
+            alert("Votre message a bien été supprimé !")
             window.location.reload();
           }
         })
@@ -158,7 +178,7 @@ body {
 }
 
 .button:hover {
-  background-color: red;
+  background-color: #1976d2;
   color: white
 }
 </style>
