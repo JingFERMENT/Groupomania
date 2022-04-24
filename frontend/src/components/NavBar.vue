@@ -7,7 +7,7 @@
       <router-link to="/list" title="Liste des posts" class="nav-link">Liste des posts</router-link>
     </li>
     <li class="nav-item">
-      <router-link to="/profile" title="Mon profile" class="nav-link">Mon profile</router-link>
+      <router-link to="/profile" title="Mon profil" class="nav-link">Mon profil</router-link>
     </li>
     <li class="nav-item">
       <router-link to="/" title="Déconnexion" class="nav-link" @click="logOut">Déconnexion

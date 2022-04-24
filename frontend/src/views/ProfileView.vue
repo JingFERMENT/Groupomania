@@ -6,7 +6,7 @@
       Une erreur est survenue !
     </div>
     <div class="successMessage" v-if="status == 'success_saveUserInfo'">
-      Profile bien à jour !
+      Profil bien à jour !
     </div>
     <img class="photo_default" :src="photoUrl" alt="Image du profil d'un utilisateur" />
     <!-- personnalisé le bouton "ajouter une photo" -->

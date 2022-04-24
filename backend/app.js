@@ -44,11 +44,15 @@ const userRoutes = require("./routes/user");
 //post routes
 const postRoutes = require("./routes/post");
 
+//comment routes
+const commentRoutes = require("./routes/comment")
+
 //gérer la ressource "images" de manière statique à chaque fois qu'elle reçoit une requête vers la route /images.
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 //enregistrement des routes
 app.use("/api/auth", userRoutes);
 app.use("/api/post", postRoutes);
+app.use("/api/comment", commentRoutes);
 
 module.exports = app;

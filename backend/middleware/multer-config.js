@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 
 const fileFilter = (req, file, callback) => {
   if (!(file.mimetype in MIME_TYPES)) {
-   callback(new Error("Le format de l'image n'est autorisé !"))
+   callback(new Error("Le format de l'image n'est pas autorisé !"))
   }
   callback(null, true)
 }

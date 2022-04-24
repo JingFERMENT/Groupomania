@@ -107,7 +107,7 @@ exports.modifyUser = (req, res, next) => {
     User.findOne({ where: { id: req.params.id } })
       .then((user) => {
         // RECUPERE USER A JOUR
-        res.status(200).json({ message: "Profile bien à jour !", user });
+        res.status(200).json({ message: "Profil bien à jour !", user });
       })
       .catch((error) => res.status(400).json(error))
   );
@@ -118,7 +118,7 @@ exports.deleteUser = (req, res, next) => {
   User.findOne({ where: { id: req.params.id } })
     .then((user) => {
       if (!user) {
-        return res.status(404).json({ error: "User non trouvée !" });
+        return res.status(404).json({ error: "Utilisateur non trouvé !" });
       }
 
       const filename = user.photoUrl.split("/images/")[1];
@@ -128,7 +128,7 @@ exports.deleteUser = (req, res, next) => {
         // on supprime l'utilisateur de la base de donnée en indiquant son id
         User.destroy({ where: { id: req.params.id } })
           .then((user) =>
-            res.status(200).json({ message: "Utilisateur supprimée !" })
+            res.status(200).json({ message: "Utilisateur supprimé !" })
           )
           .catch((error) => res.status(400).json({ error }));
       });

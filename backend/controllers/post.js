@@ -53,8 +53,9 @@ exports.getAllPosts = (req, res, next) => {
       model: User,
       attributes: {
         exclude: ["id", "password", "email", "createdAt", "updatedAt"],
-      },
+      },  
     },
+    order: [["createdAt", "DESC"]],
   })
     .then((post) => res.status(200).json(post))
     .catch((error) => res.status(404).json({ error }));
@@ -118,7 +119,7 @@ exports.deletePost = (req, res, next) => {
   Post.findOne({ where: { id: req.params.id } })
     .then((post) => {
       if (!post) {
-        return res.status(404).json({ error: "Post non trouvée !" });
+        return res.status(404).json({ error: "Post non trouvé !" });
       }
 
       const filename = post.imageUrl.split("/images/")[1];
