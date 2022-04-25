@@ -99,4 +99,11 @@ img {
 .successMessage {
   color: green;
 }
+
+.form-row {
+  display: flex;
+  margin: 16px 0px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
 </style>

@@ -1,17 +1,11 @@
 <template>
   <div class="card">
-    <img
-      id="logo"
-      alt="Logo de l'entreprise Groupomania"
-      src="../assets/logo.png"
-    />
+    <img id="logo" alt="Logo de l'entreprise Groupomania" src="../assets/logo.png" />
     <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
     <h1 class="card__title" v-else>Inscription</h1>
     <p class="card__subtitle" v-if="mode == 'login'">
       Vous n’avez pas de compte ?
-      <span class="card__action" @click="switchToSignUp()"
-        >Inscrivez-vous</span
-      >
+      <span class="card__action" @click="switchToSignUp()">Inscrivez-vous</span>
     </p>
     <p class="card__subtitle" v-else>
       Vous avez déjà un compte ?
@@ -30,67 +24,31 @@
       Votre mot de passe doit avoir au moins : 8 caractères, 1 majuscule, 1
       minuscule, 1 chiffre et 1 caractère spécial.
     </div>
-    <div
-      class="errorMessage"
-      v-if="mode == 'login' && errorStatus == 'error_login'"
-    >
+    <div class="errorMessage" v-if="mode == 'login' && errorStatus == 'error_login'">
       Email et/ou mot de passe invalide
     </div>
-    <div
-      class="errorMessage"
-      v-if="mode == 'signUp' && errorStatus == 'error_signUp'"
-    >
+    <div class="errorMessage" v-if="mode == 'signUp' && errorStatus == 'error_signUp'">
       Email déjà utilisé
     </div>
     <div class="form-row">
-      <input
-        v-model="email"
-        class="form-row__input"
-        type="text"
-        placeholder="Email"
-      />
+      <input v-model="email" class="form-row__input" type="text" placeholder="Email" />
     </div>
     <div class="form-row" v-if="mode == 'signUp'">
-      <input
-        v-model="prenom"
-        class="form-row__input"
-        type="text"
-        placeholder="Prénom"
-      />
-      <input
-        v-model="nom"
-        class="form-row__input"
-        type="text"
-        placeholder="Nom"
-      />
+      <input v-model="prenom" class="form-row__input" type="text" placeholder="Prénom" />
+      <input v-model="nom" class="form-row__input" type="text" placeholder="Nom" />
     </div>
     <div class="form-row">
-      <input
-        v-model="password"
-        class="form-row__input"
-        type="password"
-        placeholder="Mot de passe"
-      />
+      <input v-model="password" class="form-row__input" type="password" placeholder="Mot de passe" />
     </div>
     <div class="form-row">
-      <button
-        @click="login()"
-        class="button"
-        :class="{
-          'button--disabled': !validFields || !validPassword,
-        }"
-        v-if="mode == 'login'"
-      >
+      <button @click="login()" class="button" :class="{
+        'button--disabled': !validFields || !validPassword,
+      }" v-if="mode == 'login'">
         <span>Se connecter</span>
       </button>
-      <button
-        @click="signUp() && !validEmail"
-        class="button"
-        :class="{
-          'button--disabled': !validFields || !validPassword,
-        }"
-        v-else
-      >
+      <button @click="signUp() && !validEmail" class="button" :class="{
+        'button--disabled': !validFields || !validPassword,
+      }" v-else>
         <span>Créer mon compte</span>
       </button>
     </div>
@@ -174,6 +132,19 @@ export default {
       }
     },
   },
+
+  mounted: function () {
+    //pour se diriger directement vers la page list si c'est déjà connecté
+    const localStorageData = JSON.parse(localStorage.getItem("data"));
+
+    console.log(localStorageData);
+
+    if (localStorageData) {
+      this.$router.push("/list");
+      return;
+    }
+  },
+
   methods: {
     switchToSignUp: function () {
       this.mode = "signUp";
@@ -217,6 +188,7 @@ export default {
         firstName: this.prenom,
         lastName: this.nom,
       };
+
       const options = {
         method: "POST",
         headers: {
@@ -227,7 +199,7 @@ export default {
 
       fetch("http://localhost:3000/api/auth/signup", options)
         .then((response) => {
-          if (response.status == 401 || response.status == 500 ) {
+          if (response.status == 401 || response.status == 500) {
             this.errorStatus = "error_signUp";
           } else {
             this.login();
@@ -245,12 +217,7 @@ export default {
   margin-right: auto;
   width: 30%;
 }
-.form-row {
-  display: flex;
-  margin: 16px 0px;
-  gap: 16px;
-  flex-wrap: wrap;
-}
+
 .form-row__input {
   padding: 8px;
   border: none;
@@ -262,6 +229,7 @@ export default {
   min-width: 100px;
   color: black;
 }
+
 .form-row__input::placeholder {
   color: #aaaaaa;
 }

@@ -20,12 +20,6 @@
         <!-- quand il n'y a pas d'image-->
         <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
         <p class="card-text">{{ post.description }}</p>
-        <button class="button">
-          <font-awesome-icon :icon=faHeartIcon />
-        </button>
-        <button class="button">
-          <font-awesome-icon :icon=faCommentIcon />
-        </button>
         <router-link :to="{ name: 'modifyPost', params: { id: post.id } }">
           <button v-if="post.userId === currentUserId" class="button">
             <font-awesome-icon :icon=faEditIcon />
@@ -34,6 +28,7 @@
         <button v-if="post.userId === currentUserId" @click="deletePost(post.id)" class="button">
           <font-awesome-icon :icon=faTrashCanIcon />
         </button>
+        <AddComments :postId=post.id />
       </div>
     </div>
     <div v-show="noMessage">
@@ -46,15 +41,21 @@
 import NavBar from "../components/NavBar.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import { faComments, faHeart, faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import AddComments from "../components/AddComments.vue"
 
 export default {
   name: "ListOfPostsView",
+
   components: {
     NavBar,
-    FontAwesomeIcon
-  },
+    FontAwesomeIcon,
+    AddComments
+},
+
   data: function () {
     return {
+      iWantToComment: false,
+      myComment: '',
       faCommentIcon: faComments,
       faHeartIcon: faHeart,
       faEditIcon: faEdit,
@@ -109,6 +110,9 @@ export default {
   },
 
   methods: {
+    showComment: function () {
+      this.iWantToComment = true;
+    },
     deletePost: function (postId) {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 

@@ -1,8 +1,12 @@
 const Comment = require("../models/comment");
-const fs = require("fs");
+const User = require("../models/user");
 
 // -----MIDDLEWARE pour créer un commentaire ------------
 exports.createComment = (req, res, next) => {
+  if (!req.body.postId || !req.body.userId || !req.body.description) {
+    res.status(400).json({ message: "Champ vide !" });
+    return;
+  }
 
   Comment.create({
     postId: req.body.postId,
@@ -18,6 +22,9 @@ exports.createComment = (req, res, next) => {
 // -----MIDDLEWARE pour afficher tous les commentaires ------------
 exports.getAllCommentsByPost = (req, res, next) => {
   Comment.findAll({
+    where: {
+      postId: req.params.postid,
+    },
     include: {
       model: User,
       attributes: {
@@ -33,19 +40,16 @@ exports.getAllCommentsByPost = (req, res, next) => {
 // -----MIDDLEWARE pour supprimer un commentaire -----------
 exports.deleteComment = (req, res, next) => {
   Comment.findOne({ where: { id: req.params.id } })
-    .then((post) => {
-      if (!post) {
-        return res.status(404).json({ error: "Post non trouvée !" });
+    .then((comment) => {
+      if (!comment) {
+        return res.status(404).json({ error: "Commentaire non trouvé !" });
       }
 
-      const filename = post.imageUrl.split("/images/")[1];
-      console.log(filename);
-
-      fs.unlink(`images/${filename}`, () => {
-        Post.destroy({ where: { id: req.params.id } })
-          .then((user) => res.status(200).json({ message: "Post supprimé !" }))
-          .catch((error) => res.status(400).json({ error }));
-      });
+      Comment.destroy({ where: { id: req.params.id } })
+        .then((comment) =>
+          res.status(200).json({ message: "Commentaire supprimé !" })
+        )
+        .catch((error) => res.status(400).json({ error }));
     })
 
     .catch((error) => res.status(400).json({ error }));
