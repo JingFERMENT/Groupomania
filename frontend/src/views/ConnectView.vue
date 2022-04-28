@@ -175,7 +175,7 @@ export default {
           } else {
             response.json().then((data) => {
               localStorage.setItem("data", JSON.stringify(data));
-              this.$router.push("/profile");
+              this.$router.push("/list");
             });
           }
         })

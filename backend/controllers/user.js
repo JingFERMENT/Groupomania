@@ -87,7 +87,7 @@ exports.modifyUser = (req, res, next) => {
 
   User.findOne({ where: { id: req.params.id } })
     .then((user) => {
-      if (req.file) {
+      if ((user.photoUrl != "http://localhost:3000/images/avatar.png") && req.file) {
         const oldFilename = user.photoUrl.split("/images/")[1];
         fs.unlink(`images/${oldFilename}`, (error) => {
           console.log(error);
@@ -95,7 +95,6 @@ exports.modifyUser = (req, res, next) => {
       }
     })
     .catch((error) => { return res.status(400).json({ error })});
-
 
   // METTRE A JOUR BASE DE DONNEES
   User.update(

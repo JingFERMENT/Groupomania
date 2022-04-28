@@ -11,6 +11,5 @@ router.get("/:id", auth, postCtrl.getOnePost); //afficher un post par son id
 router.get("/", auth, postCtrl.getAllPosts); //afficher toutes les postes
 router.put("/:id", auth, multer, postCtrl.modifyPost); //modifier une post
 router.delete("/:id", auth, postCtrl.deletePost); //supprimer un post
-//router.get("/user/:id", auth, postCtrl.getAllPostsByUser); //afficher tous les posts d'un utilisateur
 
 module.exports = router;

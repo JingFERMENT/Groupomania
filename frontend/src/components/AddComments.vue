@@ -69,6 +69,7 @@ export default {
                     } else {
                         response.json().then(() => {
                             this.status = "success_comment";
+                            window.location.reload();
                             this.$router.push("/list")
                         });
                     }

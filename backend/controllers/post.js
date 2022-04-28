@@ -53,28 +53,13 @@ exports.getAllPosts = (req, res, next) => {
       model: User,
       attributes: {
         exclude: ["id", "password", "email", "createdAt", "updatedAt"],
-      },  
+      },
     },
     order: [["createdAt", "DESC"]],
   })
     .then((post) => res.status(200).json(post))
     .catch((error) => res.status(404).json({ error }));
 };
-
-// -----MIDDLEWARE pour afficher tous les posts d'un utilisateur------------
-/*exports.getAllPostsByUser = (req, res, next) => {
-  Post.findAll({
-    where: { userId: req.params.id },
-    include: {
-      model: User,
-      attributes: {
-        exclude: ["id", "password", "email", "createdAt", "updatedAt"],
-      },
-    },
-  })
-    .then((post) => res.status(200).json(post))
-    .catch((error) => res.status(404).json({ error }));
-};*/
 
 // -----MIDDLEWARE pour modifier un post -----------
 
@@ -96,22 +81,32 @@ exports.modifyPost = (req, res, next) => {
           console.log(error);
         });
       }
+
+      if (!post) {
+        return res.status(404).json({ error: "Post non trouvé !" });
+      }
+      //vérifier celui qui veut modifier le post est l'auteur du post
+      if (req.auth.userId != post.userId) {
+        return res.status(401).json({ error: "Modification non autorisée !" });
+      }
+
+      // METTRE A JOUR BASE DE DONNEES
+      Post.update(
+        { ...postObject, id: req.params.id },
+        { where: { id: req.params.id } }
+      )
+        .then((post) =>
+          // SI ENREGISTREMENT REUSSI
+          Post.findOne({ where: { id: req.params.id } })
+            .then((post) => {
+              // RECUPERE POST A JOUR
+              res.status(200).json({ message: "Post bien à jour !", post });
+            })
+            .catch((error) => res.status(400).json(error))
+        )
+        .catch((error) => res.status(400).json(error));
     })
     .catch((error) => res.status(400).json({ error }));
-
-  // METTRE A JOUR BASE DE DONNEES
-  Post.update(
-    { ...postObject, id: req.params.id },
-    { where: { id: req.params.id } }
-  ).then((post) =>
-    // SI ENREGISTREMENT REUSSI
-    Post.findOne({ where: { id: req.params.id } })
-      .then((post) => {
-        // RECUPERE POST A JOUR
-        res.status(200).json({ message: "Post bien à jour !", post });
-      })
-      .catch((error) => res.status(400).json(error))
-  );
 };
 
 // -----MIDDLEWARE pour supprimer un post -----------
@@ -122,8 +117,11 @@ exports.deletePost = (req, res, next) => {
         return res.status(404).json({ error: "Post non trouvé !" });
       }
 
+      if (req.auth.userId != post.userId) {
+        return res.status(401).json({ error: "Suppression non autorisée !" });
+      }
+
       const filename = post.imageUrl.split("/images/")[1];
-      console.log(filename);
 
       fs.unlink(`images/${filename}`, () => {
         Post.destroy({ where: { id: req.params.id } })

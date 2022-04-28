@@ -45,6 +45,10 @@ exports.deleteComment = (req, res, next) => {
         return res.status(404).json({ error: "Commentaire non trouvé !" });
       }
 
+      if (req.auth.userId != comment.userId) {
+        return res.status(401).json({ error: "Suppression non autorisée !" });
+      }
+
       Comment.destroy({ where: { id: req.params.id } })
         .then((comment) =>
           res.status(200).json({ message: "Commentaire supprimé !" })
