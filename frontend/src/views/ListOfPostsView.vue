@@ -11,24 +11,24 @@
       Post bien supprimé !
     </div>
     <div class="card gedf-card" v-for="post in posts" :key="post.id">
-      <div class="card-header">{{ post.title }}
+      <div class="card-header">
+        <img class="rounded-circle" alt="photo profile" :src="post.photoUrl">
+        {{ post.firstName }} {{ post.lastName }}, {{ post.createdAt }}
       </div>
       <div class="card-body">
         <div class="text-muted h7 mb-2">
-          Créé par {{ post.firstName }} {{ post.lastName }}, le {{ post.createdAt }}
+          {{ post.title }}
+          <p class="card-text">{{ post.description }}</p>
+          <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
         </div>
-        <!-- quand il n'y a pas d'image-->
-        <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
-        <p class="card-text">{{ post.description }}</p>
         <router-link :to="{ name: 'modifyPost', params: { id: post.id } }">
-          <button v-if="post.userId === currentUserId" class="button">
-            <font-awesome-icon :icon=faEditIcon />
-          </button>
+          <font-awesome-icon :icon=faEditIcon v-if="post.userId === currentUserId" class="button" />
         </router-link>
-        <button v-if="post.userId === currentUserId" @click="deletePost(post.id)" class="button">
-          <font-awesome-icon :icon=faTrashCanIcon />
-        </button>
+        <font-awesome-icon :icon=faTrashCanIcon v-if="post.userId === currentUserId" class="button"
+          @click="deletePost(post.id)" />
         <AddComments :postId=post.id />
+        <ListOfComments :postId=post.id />
+
       </div>
     </div>
     <div v-show="noMessage">
@@ -40,30 +40,28 @@
 <script>
 import NavBar from "../components/NavBar.vue";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faComments, faHeart, faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import AddComments from "../components/AddComments.vue"
+import ListOfComments from "@/components/ListOfComments.vue";
 
 export default {
   name: "ListOfPostsView",
 
   components: {
     NavBar,
+    AddComments,
+    ListOfComments,
     FontAwesomeIcon,
-    AddComments
-},
+  },
 
   data: function () {
     return {
-      iWantToComment: false,
-      myComment: '',
-      faCommentIcon: faComments,
-      faHeartIcon: faHeart,
-      faEditIcon: faEdit,
-      faTrashCanIcon: faTrashCan,
       noMessage: false,
       status: "",
       posts: [],
-      currentUserId: ""
+      currentUserId: "",
+      faEditIcon: faEdit,
+      faTrashCanIcon: faTrashCan
     };
   },
 
@@ -98,9 +96,10 @@ export default {
                 title: data[i].title,
                 firstName: data[i].user.firstName,
                 lastName: data[i].user.lastName,
-                createdAt: data[i].createdAt.split("T")[0],
+                createdAt: data[i].createdAt.slice(0, 10).split('-').reverse().join('/'),
                 description: data[i].description,
                 imageUrl: data[i].imageUrl,
+                photoUrl: data[i].user.photoUrl
               });
             }
           });
@@ -110,9 +109,6 @@ export default {
   },
 
   methods: {
-    showComment: function () {
-      this.iWantToComment = true;
-    },
     deletePost: function (postId) {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
@@ -149,12 +145,17 @@ body {
 }
 
 .h7 {
-  font-size: 0.8rem;
+  font-size: 1rem;
+  color: black;
 }
 
 .gedf-card {
   padding: 0rem;
   margin-bottom: 1rem;
+}
+
+.card-header {
+  font-size: 0.8rem;
 }
 
 .card-text {
@@ -175,14 +176,21 @@ body {
   font-weight: 500;
   font-size: 12px;
   width: 30%;
-  padding: 2px;
+  margin: 4px;
+  padding: 4px;
   color: #ececec;
   background-color: #8c8c8c;
-  margin: 2px;
 }
 
 .button:hover {
   background-color: #1976d2;
   color: white
+}
+
+.rounded-circle {
+  height: 7vh;
+  width: 3rem;
+  object-fit: cover;
+  margin-right: 1rem;
 }
 </style>

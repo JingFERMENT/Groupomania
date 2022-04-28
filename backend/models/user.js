@@ -29,14 +29,18 @@ const User = db.define("user", {
   photoUrl: {
     type: Sequelize.STRING,
     allowNull: true,
-    defaultValue: ""
   },
 
   jobTitle: {
     type: Sequelize.TEXT,
     allowNull: true,
-    defaultValue: ""
   },
+
+  isAdmin: {
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+}
+
 });
 
 module.exports = User;

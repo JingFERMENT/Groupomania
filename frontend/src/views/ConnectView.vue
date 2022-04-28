@@ -22,7 +22,7 @@
     </div>
     <div class="errorMessage" v-if="!validPassword">
       Votre mot de passe doit avoir au moins : 8 caractères, 1 majuscule, 1
-      minuscule, 1 chiffre et 1 caractère spécial.
+      minuscule, 1 chiffre et sans espace.
     </div>
     <div class="errorMessage" v-if="mode == 'login' && errorStatus == 'error_login'">
       Email et/ou mot de passe invalide
@@ -105,7 +105,7 @@ export default {
       }
 
       const passwordRegExp = new RegExp(
-        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$",
+        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=\\S+$).{8,20}$",
         "g"
       );
       return passwordRegExp.test(this.password);

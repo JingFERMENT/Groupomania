@@ -7,19 +7,18 @@
         <div class="successMessage" v-if="status == 'success_comment'">
             Commentaire bien envoyé !
         </div>
-        <div class="form-row">
-            <textarea v-model="description" class="form-row__input" type="text" placeholder="Ecrivez un commentaire..."
-                name="commentaire"></textarea>
-                  
-          <button @click="submitComment()" class="button">
-            Commenter
-          </button>
-        
-        </div>
+        <form class="form-row_comment">
+            <input v-model="description" class="form-row__input" type="text" placeholder="Un commentaire..."
+                name="commentaire">
+            <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" />
+        </form>
     </div>
 </template>
 
 <script>
+
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faPaperPlane } from "@fortawesome/free-regular-svg-icons";
 
 export default {
 
@@ -28,11 +27,17 @@ export default {
     props: {
         postId: Number
     },
+
+    components: {
+        FontAwesomeIcon,
+    },
+
     data: function () {
         return {
             description: "",
             status: "",
-            userId: ""
+            userId: "",
+            faPaperPlaneIcon: faPaperPlane
         };
     },
 
@@ -75,8 +80,9 @@ export default {
 </script>
 
 <style scoped>
+
 .form-row__input {
-    padding: 8px;
+    padding: 6px;
     border: none;
     border-radius: 8px;
     background: #f2f2f2;
@@ -94,5 +100,10 @@ export default {
     color: #ececec;
     background-color: #8c8c8c;
     margin: 2px;
+}
+
+.button:hover {
+    background-color: #1976d2;
+    color: white
 }
 </style>
