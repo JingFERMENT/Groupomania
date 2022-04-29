@@ -22,12 +22,13 @@
           <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
         </div>
         <router-link :to="{ name: 'modifyPost', params: { id: post.id } }">
-          <font-awesome-icon :icon=faEditIcon v-if="post.userId === currentUserId" class="button" />
+
+          <font-awesome-icon :icon=faEditIcon v-if="(post.userId === currentUserId)||(this.isAdmin == true)" class="button" />
         </router-link>
-        <font-awesome-icon :icon=faTrashCanIcon v-if="post.userId === currentUserId" class="button"
+        <font-awesome-icon :icon=faTrashCanIcon v-if="(post.userId === currentUserId)||(this.isAdmin == true)" class="button"
           @click="deletePost(post.id)" />
-        <AddComments :postId=post.id />
-        <ListOfComments :postId=post.id />
+        <AddComments :postId="post.id" />
+        <ListOfComments :postId="post.id" :isAdmin = "this.isAdmin"/>
 
       </div>
     </div>
@@ -61,7 +62,8 @@ export default {
       posts: [],
       currentUserId: "",
       faEditIcon: faEdit,
-      faTrashCanIcon: faTrashCan
+      faTrashCanIcon: faTrashCan,
+      isAdmin: false,
     };
   },
 
@@ -99,11 +101,25 @@ export default {
                 createdAt: data[i].createdAt.slice(0, 10).split('-').reverse().join('/'),
                 description: data[i].description,
                 imageUrl: data[i].imageUrl,
-                photoUrl: data[i].user.photoUrl
+                photoUrl: data[i].user.photoUrl,
               });
             }
           });
         }
+      })
+      .catch((error) => console.log(error));
+
+//chercher l'info isAdmin
+    const optionsUser = {
+      method: "GET",
+      headers: { Authorization: "Bearer " + localStorageData.token },
+    };
+
+    fetch(`http://localhost:3000/api/auth/profile/${this.currentUserId}`, optionsUser)
+      .then((response) => {
+        response.json().then((data) => {
+          this.isAdmin = data.isAdmin;
+        });
       })
       .catch((error) => console.log(error));
   },

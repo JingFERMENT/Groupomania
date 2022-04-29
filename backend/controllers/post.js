@@ -12,6 +12,11 @@ exports.createPost = (req, res, next) => {
     }`;
   }
 
+  if (!req.body.title || !req.body.userId || !req.body.description) {
+    res.status(400).json({ message: "Champ vide !" });
+    return;
+  }
+
   Post.create({
     title: req.body.title,
     userId: req.body.userId,

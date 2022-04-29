@@ -12,7 +12,7 @@
                 }}</p>
             <div class="comment_description">
                 <p>{{ comment.description }}</p>
-                <font-awesome-icon :icon=faTrashCanIcon v-if="comment.userId === currentUserId"
+                <font-awesome-icon :icon=faTrashCanIcon v-if="(comment.userId === currentUserId) || (isAdmin == true)"
                     @click="deleteComment(comment.id)"/>
             </div>
         </div>
@@ -27,7 +27,9 @@ import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 export default {
     name: "ListOfComments",
     props: {
-        postId: Number
+        postId: Number,
+        isAdmin:Boolean,
+
     },
     components: {
         FontAwesomeIcon,
