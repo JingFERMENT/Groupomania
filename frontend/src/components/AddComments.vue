@@ -10,7 +10,7 @@
         <form class="form-row_comment">
             <input v-model="description" class="form-row__input" type="text" placeholder="Un commentaire..."
                 name="commentaire">
-            <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" />
+            <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" class="icon_send" />
         </form>
     </div>
 </template>
@@ -81,6 +81,10 @@ export default {
 </script>
 
 <style scoped>
+.form-row_comment {
+    display: flex;
+    justify-content: space-between;
+}
 
 .form-row__input {
     padding: 6px;
@@ -93,18 +97,16 @@ export default {
     color: black;
 }
 
-.button {
-    font-weight: 500;
-    font-size: 12px;
-    width: 30%;
-    padding: 2px;
-    color: #ececec;
-    background-color: #8c8c8c;
-    margin: 2px;
+.icon_send {
+    padding: 0.5rem;
+    cursor: pointer;
 }
 
-.button:hover {
-    background-color: #1976d2;
-    color: white
+.icon_send:hover {
+    color:#2196f3
+}
+
+.bloc_comment {
+    margin-top:2rem
 }
 </style>

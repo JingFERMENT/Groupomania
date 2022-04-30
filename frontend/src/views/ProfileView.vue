@@ -81,6 +81,7 @@ export default {
   methods: {
     onFileSelected: function (event) {
       this.photoUrlToUpload = event.target.files[0];
+      alert("Votre photo a bien été uploadée.")
     },
 
     saveUserInfo: function () {

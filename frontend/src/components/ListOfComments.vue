@@ -1,5 +1,5 @@
 <template>
-    <div class="bloc_comment">
+    <div class="bloc_list_comment">
         <div class="errorMessage" v-if="status == 'error_comment'">
             Une erreur est survenue !
         </div>
@@ -13,7 +13,7 @@
             <div class="comment_description">
                 <p>{{ comment.description }}</p>
                 <font-awesome-icon :icon=faTrashCanIcon v-if="(comment.userId === currentUserId) || (isAdmin == true)"
-                    @click="deleteComment(comment.id)"/>
+                    @click="deleteComment(comment.id)" class="icon_delete"/>
             </div>
         </div>
     </div>
@@ -99,20 +99,11 @@ export default {
 </script>
 
 <style scoped>
-.button {
-    font-weight: 500;
-    font-size: 12px;
-    width: 30%;
-    margin: 4px;
-    padding: 4px;
-    color: #ececec;
-    background-color: #8c8c8c;
+
+.bloc_list_comment {
+    margin-top:2rem
 }
 
-.button:hover {
-    background-color: #1976d2;
-    color: white
-}
 
 .comment_header {
     color: black;
@@ -122,5 +113,20 @@ export default {
 .comment_description {
     display: flex;
     justify-content: space-between;
+}
+
+p {
+    overflow: hidden;
+    font-size: 0.8rem;
+    border-radius: 6px;
+}
+
+.icon_delete {
+    padding: 0.5rem;
+    cursor: pointer;
+}
+
+.icon_delete:hover {
+    color:red
 }
 </style>

@@ -134,3 +134,21 @@ exports.deleteUser = (req, res, next) => {
     
     .catch((error) => res.status(400).json({ error }));
 };
+
+//------------TRANSFORMER L'UTILISATEUR EN ADMINSTRATEUR------------
+exports.transformInAdmin = (req, res, next) => {
+
+// METTRE A JOUR BASE DE DONNEES
+User.update(
+  { isAdmin: true },
+  { where: { id: req.params.id } }
+).then((user) =>
+  // SI ENREGISTREMENT REUSSI
+  User.findOne({ where: { id: req.params.id } })
+    .then((user) => {
+      // RECUPERE USER A JOUR
+      res.status(200).json({ message: "Profil transformé en admin !", user });
+    })
+    .catch((error) => res.status(400).json(error))
+);
+};
