@@ -8,6 +8,11 @@ Pour installer ce projet, vous devez d'abord installer
 ```
 
 ## 2- Cloner le repo du projet
+```
+Dans votre terminal éxécutez les commandes :
+git clone https://github.com/JingZhangFerment/Groupomania
+cd Groupomania
+```
 
 ## 3- La base de données
 ```
@@ -19,9 +24,10 @@ Pour installer ce projet, vous devez d'abord installer
 ```
 1. Dans le terminal, se placer dans le dossier /backend/
 2. Installer npm en exécutant la commande => *npm install*
-5. Créez un fichier .env et y renseigner les variables d'environnement suivantes pour faire fonctionner l'application
-3. Installer nodemon en exécutant la commande => *npm install -g nodemon*
-4. Lancer le serveur de développement avec la commande => *nodemon server*
+3. Créez un fichier .env et y renseigner les variables d'environnement suivantes pour faire fonctionner l'application
+4. Installer nodemon en exécutant la commande => *npm install -g nodemon*
+5. Lancer le serveur de développement avec la commande => *nodemon server*
+6. Installer sequelize en exécutant la commande => *npm install --save sequelize*
 
 ```
 
