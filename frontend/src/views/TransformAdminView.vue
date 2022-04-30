@@ -1,5 +1,7 @@
 <template>
-
+    <div :class="{
+        'hidden-div': isNotSecure,
+    }">
     <div class="errorMessage" v-if="status == 'error_transformAdmin'">
         Une erreur est survenue !
     </div>
@@ -12,6 +14,7 @@
     <button @click="transformAdmin()" class="button" :class="{
         'button--disabled': isAdmin,
     }">Transformer en Admin</button>
+    </div>
 </template>
 
 <script>
@@ -20,11 +23,17 @@ export default {
     data: function () {
         return {
             status: "",
-            isAdmin: false
+            isAdmin: false,
+            isNotSecure: true,
         };
     },
 
     mounted: function () {
+
+            if (this.$route.query.key == 'ABCDEF') {
+                this.isNotSecure = false;
+            }
+
             const localStorageData = JSON.parse(localStorage.getItem("data"));
 
             const options = {
@@ -71,4 +80,5 @@ export default {
 };
 </script>
 <style scoped>
+    .hidden-div {display: none;}
 </style>

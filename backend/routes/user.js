@@ -17,7 +17,8 @@ const email = require("../middleware/email");
 //---------ROUTES DE CONNEXIONS --------------
 router.post("/signup", email, password, userCtrl.signup); //créer un compte
 router.post("/login", connexion, userCtrl.login); //se connecter sur un compte déjà créé
-router.post("/admin/:id",userCtrl.transformInAdmin); //transformer un compte en adminstrateur 
+router.post("/admin/:id",connexion, userCtrl.transformInAdmin); //transformer un compte en adminstrateur 
+
 
 //---------ROUTES DU PROFIL UTILISATEUR--------------
 router.get("/profile/:id", auth, userCtrl.getOneUser); //afficher un profil
