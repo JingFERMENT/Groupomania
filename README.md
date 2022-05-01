@@ -22,7 +22,7 @@ Node, Vuejs, SQL (base des données)
 - Transformer un utilisateur en administrateur
 - Modérer les contenus (réservé aux administrateurs)
 
-## DEMARRAGE
+## Installation
 
 ### 1- Prérequis
 ```
