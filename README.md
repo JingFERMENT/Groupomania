@@ -19,7 +19,8 @@ Node, Vuejs, SQL (base des données)
 
 ### Modération
 
-- Modération du contenu (réservé aux administrateurs)
+- Transformer un utilisateur en administrateur
+- Modérer les contenus (réservé aux administrateurs)
 
 ## DEMARRAGE
 
