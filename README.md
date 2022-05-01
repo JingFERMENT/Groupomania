@@ -27,16 +27,14 @@ cd Groupomania
 2. Installer npm en exécutant la commande => *npm install*
 3. Créer un dossier images en exécutant la commande => *mkdir images*
 4. Créer un fichier .env et y renseigner les variables d'environnement suivantes:
+
 PORT = ""
 DB_USER = "" (roor ou nom d'utilisateur)
 DB_PASSWORD = "" (mot de passe de base de données)
 DB_HOST = ""
 DB_NAME = "" (ex:groupomania)
-
-#Pour encoder des "token ou key" de connexion sécurisés :
-#renseignez une chaine de caratères complexe à la place de "" dans les deux variables suivantes:
-SECRET_TOKEN = ""
-SECRET_KEY = ""
+SECRET_TOKEN = "" (renseignez une chaine de caratères complexe à la place de "")
+SECRET_KEY = "" (renseignez une chaine de caratères complexe à la place de "")
 
 5. Installer nodemon en exécutant la commande => *npm install -g nodemon*
 6. Lancer le serveur de développement avec la commande => *nodemon server*
