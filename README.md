@@ -1,6 +1,29 @@
-# Groupomania - créer un réseau social d'entreprise
+# Groupomania
+Réseau social interne pour Groupomania, entreprise spécialisée dans la grande distribution (MVP).
 
-## 1- Prérequis
+## Tech Stack
+
+Vue, SQL, SEQUELIZE
+
+## Fonctionnalités
+
+### Authentification
+
+- Inscription, connexion, désinscription
+
+### Social
+
+- Partage de publications
+- Ajout de commentaires 
+- Création d'un profil personnel
+
+### Modération
+
+- Modération du contenu (réservé aux administrateurs)
+
+## DEMARRAGE
+
+### 1- Prérequis
 ```
 Pour installer ce projet, vous devez d'abord installer
 -Node.js
@@ -8,20 +31,20 @@ Pour installer ce projet, vous devez d'abord installer
 -Vuejs 3
 ```
 
-## 2- Cloner le repo du projet
+### 2- Cloner le repo du projet
 ```
 Dans votre terminal éxécutez les commandes :
 git clone https://github.com/JingZhangFerment/Groupomania
 cd Groupomania
 ```
 
-## 3- La base de données
+### 3- La base de données
 ```
 1. Ouvrir la console MySQL et créer un compte ou se connecter si vous en avez déjà un
 2- Créer une base de données nommée "groupomania"
 ```
 
-## 4- Installer le backend
+### 4- Installer le backend
 ```
 1. Exécutez la commande => *cd backend*
 2. Installer npm  => *npm install*
@@ -34,7 +57,7 @@ cd Groupomania
 
 ```
 
-## 5- Installer le frontend
+### 5- Installer le frontend
 ```
 1. Exécutez la commande => *cd frontend*
 2. Installer npm  => *npm install*
