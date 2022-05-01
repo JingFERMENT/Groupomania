@@ -23,21 +23,20 @@ cd Groupomania
 
 ## 4- Installation du Backend
 ```
-1. Dans le terminal, se placer dans le dossier /backend/
-2. Installer npm en exécutant la commande => *npm install*
-3. Créer un dossier images en exécutant la commande => *mkdir images*
-4. Créer un fichier .env et y renseigner les variables d'environnement dans env.exemple:
-5. Installer nodemon en exécutant la commande => *npm install -g nodemon*
-6. Lancer le serveur de développement avec la commande => *nodemon server*
-7. Installer sequelize en exécutant la commande => *npm install --save sequelize*
-8. Pour transformer un utilisateur en Administrateur 
-=> utiliser le lien http://localhost:8080/admin?key="SECRET_KEY"
+1. Exécutez la commande : `cd backend`
+2. Installer npm  => *npm install*
+3. Créer un dossier images => *mkdir images*
+4. Créer un fichier .env et y renseigner les variables d'environnement comme dans le fichier env.exemple
+5. Installer sequelize => *npm install --save sequelize*
+6. Installer nodemon  => *npm install -g nodemon*
+7. Lancer le serveur backend => *nodemon server*
+8. Transformer un utilisateur en Administrateur => utiliser le lien http://localhost:8080/admin?key="SECRET_KEY"
 
 ```
 
 ## 5- Instalation du Frontend
 ```
-1. Dans le terminal, se placer dans le dossier /frontend/
-2. Installer npm en exécutant la commande => *npm install*
-3. Lancer la construction du Frontend avec la commande => *npm run serve*
+1. Exécutez la commande : `cd backend`
+2. Installer npm  => *npm install*
+3. Lancer le serveur frontend => *npm run serve*
 ```
