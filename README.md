@@ -27,7 +27,6 @@ cd Groupomania
 2. Installer npm en exécutant la commande => *npm install*
 3. Créer un dossier images en exécutant la commande => *mkdir images*
 4. Créer un fichier .env et y renseigner les variables d'environnement suivantes:
-```
 PORT = ""
 DB_USER = "" (roor ou nom d'utilisateur)
 DB_PASSWORD = "" (mot de passe de base de données)
@@ -38,7 +37,7 @@ DB_NAME = "" (ex:groupomania)
 #renseignez une chaine de caratères complexe à la place de "" dans les deux variables suivantes:
 SECRET_TOKEN = ""
 SECRET_KEY = ""
-```
+
 5. Installer nodemon en exécutant la commande => *npm install -g nodemon*
 6. Lancer le serveur de développement avec la commande => *nodemon server*
 7. Installer sequelize en exécutant la commande => *npm install --save sequelize*
