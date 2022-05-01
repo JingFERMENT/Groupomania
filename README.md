@@ -21,7 +21,7 @@ cd Groupomania
 2- Créer une base de données nommée "groupomania"
 ```
 
-## 4- Installer du Backend
+## 4- Installer le backend
 ```
 1. Exécutez la commande : `cd backend`
 2. Installer npm  => *npm install*
@@ -34,7 +34,7 @@ cd Groupomania
 
 ```
 
-## 5- Installer du Frontend
+## 5- Installer le frontend
 ```
 1. Exécutez la commande : `cd backend`
 2. Installer npm  => *npm install*
