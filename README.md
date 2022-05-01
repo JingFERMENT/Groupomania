@@ -1,27 +1,6 @@
 # Groupomania
 Réseau social interne pour Groupomania, entreprise spécialisée dans la grande distribution (MVP).
 
-## Technologies utilisées
-
-Node, Vuejs, SQL (base des données)
-
-## Fonctionnalités
-
-### Authentification
-
-- Inscription, connexion, déconnexion, désinscription, 
-
-### Social
-
-- Partage de publications
-- Ajout de commentaires 
-- Création d'un profil personnel
-
-### Modération
-
-- Transformer un utilisateur en administrateur
-- Modérer les contenus (réservé aux administrateurs)
-
 ## Installation
 
 ### 1- Prérequis
@@ -64,3 +43,23 @@ cd Groupomania
 2. Installer npm  => *npm install*
 3. Lancer le serveur frontend => *npm run serve*
 ```
+## Technologies utilisées
+
+Node, Vuejs, SQL (base des données)
+
+## Fonctionnalités
+
+### Authentification
+
+- Inscription, connexion, déconnexion, désinscription, 
+
+### Social
+
+- Partage de publications
+- Ajout de commentaires 
+- Création d'un profil personnel
+
+### Modération
+
+- Transformer un utilisateur en administrateur
+- Modérer les contenus (réservé aux administrateurs)
