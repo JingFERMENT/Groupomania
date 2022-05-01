@@ -1,4 +1,4 @@
-// CONNEXTION l'API A LA BASE DES DONNEES SQL
+// CONNEXTION l'API A LA BASE DES DONNEES SQL AVEC SEQUELIZE
 
 const { Sequelize } = require("sequelize");
 const dotenv = require("dotenv");

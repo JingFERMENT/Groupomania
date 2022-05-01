@@ -17,12 +17,13 @@ const email = require("../middleware/email");
 //---------ROUTES DE CONNEXIONS --------------
 router.post("/signup", email, password, userCtrl.signup); //créer un compte
 router.post("/login", connexion, userCtrl.login); //se connecter sur un compte déjà créé
-router.post("/admin/:id",connexion, userCtrl.transformInAdmin); //transformer un compte en adminstrateur 
-
 
 //---------ROUTES DU PROFIL UTILISATEUR--------------
 router.get("/profile/:id", auth, userCtrl.getOneUser); //afficher un profil
 router.put("/profile/:id", auth, multer, userCtrl.modifyUser); //modifier un profil
 router.delete ("/profile/:id", auth, userCtrl.deleteUser); //supprimer un profil
+
+router.post("/admin/:id",auth, userCtrl.transformInAdmin); //transformer un compte en adminstrateur 
+router.post("/verify", auth, userCtrl.verifyAdmin); //vérifier la clé de sécurité dans le lien administrateur
 
 module.exports = router;

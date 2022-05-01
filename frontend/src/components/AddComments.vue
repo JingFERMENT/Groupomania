@@ -10,7 +10,7 @@
         <form class="form-row_comment">
             <input v-model="description" class="form-row__input" type="text" placeholder="Un commentaire..."
                 name="commentaire">
-            <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" class="icon_send" />
+            <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" class="icon_send" title="Envoyer" />
         </form>
     </div>
 </template>
@@ -103,10 +103,12 @@ export default {
 }
 
 .icon_send:hover {
-    color:#2196f3
+    color: #2196f3;
+    background-color: #f2f2f2;
+    border-radius: 50%
 }
 
 .bloc_comment {
-    margin-top:2rem
+    margin-top: 2rem
 }
 </style>

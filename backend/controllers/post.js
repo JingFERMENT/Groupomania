@@ -60,6 +60,7 @@ exports.getAllPosts = (req, res, next) => {
         exclude: ["id", "password", "email", "createdAt", "updatedAt"],
       },
     },
+    //trier par la date du plus récent au moins récent
     order: [["createdAt", "DESC"]],
   })
     .then((post) => res.status(200).json(post))
@@ -95,16 +96,16 @@ exports.modifyPost = (req, res, next) => {
         return res.status(401).json({ error: "Modification non autorisée !" });
       }
 
-      // METTRE A JOUR BASE DE DONNEES
+      // mettre à jour la base des donnée
       Post.update(
         { ...postObject, id: req.params.id },
         { where: { id: req.params.id } }
       )
         .then((post) =>
-          // SI ENREGISTREMENT REUSSI
+          // si l'enregistrement réussi
           Post.findOne({ where: { id: req.params.id } })
             .then((post) => {
-              // RECUPERE POST A JOUR
+              // récupérer "post" à jour
               res.status(200).json({ message: "Post bien à jour !", post });
             })
             .catch((error) => res.status(400).json(error))
@@ -128,7 +129,9 @@ exports.deletePost = (req, res, next) => {
 
       const filename = post.imageUrl.split("/images/")[1];
 
+      // 1er arg: chemin du fichier, 2e arg: la callback=ce qu'il faut faire une fois l'image supprimée
       fs.unlink(`images/${filename}`, () => {
+        // on supprime l'utilisateur de la base de donnée en indiquant son id
         Post.destroy({ where: { id: req.params.id } })
           .then((user) => res.status(200).json({ message: "Post supprimé !" }))
           .catch((error) => res.status(400).json({ error }));

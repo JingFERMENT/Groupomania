@@ -2,6 +2,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 const fs = require("fs");
+const dotenv = require("dotenv");
+dotenv.config();
 
 //--------------INSCRIPTION DES UTILISATEURS----------------
 exports.signup = (req, res, next) => {
@@ -87,24 +89,30 @@ exports.modifyUser = (req, res, next) => {
 
   User.findOne({ where: { id: req.params.id } })
     .then((user) => {
-      if ((user.photoUrl != "http://localhost:3000/images/avatar.png") && req.file) {
+      //supprimer l'ancien fichier dans le cas où un nouveau fichier est différent de l'image "avatar.png"
+      if (
+        user.photoUrl != "http://localhost:3000/images/avatar.png" &&
+        req.file
+      ) {
         const oldFilename = user.photoUrl.split("/images/")[1];
         fs.unlink(`images/${oldFilename}`, (error) => {
           console.log(error);
         });
       }
     })
-    .catch((error) => { return res.status(400).json({ error })});
+    .catch((error) => {
+      return res.status(400).json({ error });
+    });
 
-  // METTRE A JOUR BASE DE DONNEES
+  // mettre à jour la base des donnée
   User.update(
     { ...userObject, id: req.params.id },
     { where: { id: req.params.id } }
   ).then((user) =>
-    // SI ENREGISTREMENT REUSSI
+    // si l'enregistrement réussi
     User.findOne({ where: { id: req.params.id } })
       .then((user) => {
-        // RECUPERE USER A JOUR
+        // récupérer "user" à jour
         res.status(200).json({ message: "Profil bien à jour !", user });
       })
       .catch((error) => res.status(400).json(error))
@@ -131,24 +139,36 @@ exports.deleteUser = (req, res, next) => {
           .catch((error) => res.status(400).json({ error }));
       });
     })
-    
     .catch((error) => res.status(400).json({ error }));
+};
+
+//---VERIFIER LA CLE DE SECURITE DANS LE LIEN ADMINISTRATEUR--------
+exports.verifyAdmin = (req, res, next) => {
+  //comparer le paramètre "key" avec le "secret_key" stocké
+  if (req.body.key === process.env.SECRET_KEY) {
+    res.status(200).json({ valid: true });
+  } else {
+    //renvoyer une réponse "false"
+    res.status(200).json({ valid: false });
+  }
 };
 
 //------------TRANSFORMER L'UTILISATEUR EN ADMINSTRATEUR------------
 exports.transformInAdmin = (req, res, next) => {
+  
+  //vérification (même si le bouton est cachée dans le frontend)
+  if (req.body.key !== process.env.SECRET_KEY) {
+    return res.status(400).json({ error: "Clé non valide !" });
+  }
 
-// METTRE A JOUR BASE DE DONNEES
-User.update(
-  { isAdmin: true },
-  { where: { id: req.params.id } }
-).then((user) =>
-  // SI ENREGISTREMENT REUSSI
-  User.findOne({ where: { id: req.params.id } })
-    .then((user) => {
-      // RECUPERE USER A JOUR
-      res.status(200).json({ message: "Profil transformé en admin !", user });
-    })
-    .catch((error) => res.status(400).json(error))
-);
+  User.update({ isAdmin: true }, { where: { id: req.params.id } }).then(
+    (user) =>
+      User.findOne({ where: { id: req.params.id } })
+        .then((user) => {
+          res
+            .status(200)
+            .json({ message: "Profil transformé en Admin !", user });
+        })
+        .catch((error) => res.status(400).json(error))
+  );
 };

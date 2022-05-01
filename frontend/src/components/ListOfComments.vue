@@ -13,7 +13,7 @@
             <div class="comment_description">
                 <p>{{ comment.description }}</p>
                 <font-awesome-icon :icon=faTrashCanIcon v-if="(comment.userId === currentUserId) || (isAdmin == true)"
-                    @click="deleteComment(comment.id)" class="icon_delete"/>
+                    @click="deleteComment(comment.id)" class="icon_delete" title = "Supprimer" />
             </div>
         </div>
     </div>
@@ -127,6 +127,8 @@ p {
 }
 
 .icon_delete:hover {
-    color:red
+    color:red;
+    background-color: #f2f2f2;
+    border-radius: 50%
 }
 </style>
