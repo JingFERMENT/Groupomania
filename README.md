@@ -23,7 +23,7 @@ cd Groupomania
 
 ## 4- Installer le backend
 ```
-1. Exécutez la commande : `cd backend`
+1. Exécutez la commande => *cd backend*
 2. Installer npm  => *npm install*
 3. Créer un dossier images => *mkdir images*
 4. Créer un fichier .env et y renseigner les variables d'environnement comme dans le fichier env.exemple
@@ -36,7 +36,7 @@ cd Groupomania
 
 ## 5- Installer le frontend
 ```
-1. Exécutez la commande : `cd backend`
+1. Exécutez la commande => *cd frontend*
 2. Installer npm  => *npm install*
 3. Lancer le serveur frontend => *npm run serve*
 ```
