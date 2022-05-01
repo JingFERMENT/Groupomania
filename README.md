@@ -1,15 +1,15 @@
 # Groupomania
 Réseau social interne pour Groupomania, entreprise spécialisée dans la grande distribution (MVP).
 
-## Tech Stack
+## Technologies utilisées
 
-Vue, SQL, SEQUELIZE
+Node, Vuejs, SQL (base des données)
 
 ## Fonctionnalités
 
 ### Authentification
 
-- Inscription, connexion, désinscription
+- Inscription, connexion, déconnexion, désinscription, 
 
 ### Social
 
