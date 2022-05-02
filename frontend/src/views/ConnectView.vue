@@ -49,12 +49,13 @@
     </div>
     <!--Champs uniquement pour signup: prénom & nom -->
     <div class="form-row" v-if="mode == 'signUp'">
-      <input v-model="prenom" class="form-row__input" type="text" name = "prenom" placeholder="Prénom" />
-      <input v-model="nom" class="form-row__input" type="text" name = "nom" placeholder="Nom" />
+      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom" />
+      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" />
     </div>
     <!--Champ mot de passe -->
     <div class="form-row">
-      <input v-model="password" class="form-row__input" type="password" name = "mot de passe" placeholder="Mot de passe" />
+      <input v-model="password" class="form-row__input" type="password" name="mot de passe"
+        placeholder="Mot de passe" />
     </div>
 
     <!--Deux boutons de validations: signup ou login -->

@@ -4,7 +4,7 @@ const User = require("../models/user");
 // -----MIDDLEWARE pour créer un commentaire ------------
 exports.createComment = (req, res, next) => {
   if (!req.body.postId || !req.body.userId || !req.body.description) {
-    res.status(400).json({ message: "Champ vide !" });
+    res.status(400).json({ message: "Merci de bien vérifier si les champs sont tous remplis !" });
     return;
   }
 

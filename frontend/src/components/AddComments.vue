@@ -6,6 +6,9 @@
         <div class="errorMessage" v-if="status == 'error_comment'">
             Une erreur est survenue !
         </div>
+        <div class="errorMessage" v-if="status == 'error_send'">
+            Merci de bien renseigner le commentaire !
+        </div>
         <div class="successMessage" v-if="status == 'success_comment'">
             Commentaire bien envoyé !
         </div>
@@ -69,9 +72,12 @@ export default {
 
             fetch("http://localhost:3000/api/comment/", options)
                 .then((response) => {
-                    if (response.status == 401 || response.status == 400 || response.status == 404) {
+                    if (response.status == 401 || response.status == 404) {
                         this.status = "error_comment";
-                    } else {
+                    } else if (response.status == 400) {
+                        this.status = "error_send";
+                    }
+                    else {
                         response.json().then(() => {
                             this.status = "success_comment";
                             window.location.reload();

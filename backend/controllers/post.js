@@ -13,7 +13,7 @@ exports.createPost = (req, res, next) => {
   }
 
   if (!req.body.title || !req.body.userId || !req.body.description) {
-    res.status(400).json({ message: "Champ vide !" });
+    res.status(400).json({ message:  "Merci de bien vérifier si les champs sont tous remplis !" });
     return;
   }
 
@@ -94,6 +94,11 @@ exports.modifyPost = (req, res, next) => {
       //vérifier celui qui veut modifier le post est l'auteur du post
       if (req.auth.userId != post.userId) {
         return res.status(401).json({ error: "Modification non autorisée !" });
+      }
+
+      if (!req.body.title || !req.body.userId || !req.body.description) {
+        res.status(400).json({ message:  "Merci de bien vérifier si les champs sont tous remplis !" });
+        return;
       }
 
       // mettre à jour la base des donnée
