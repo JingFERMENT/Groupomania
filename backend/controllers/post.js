@@ -70,6 +70,12 @@ exports.getAllPosts = (req, res, next) => {
 // -----MIDDLEWARE pour modifier un post -----------
 
 exports.modifyPost = (req, res, next) => {
+
+  if (!req.body.title || !req.body.description) {
+    res.status(400).json({ message:  "Merci de bien vérifier si les champs sont tous remplis !" });
+    return;
+  }
+
   const postObject = req.file
     ? {
         ...req.body,
@@ -96,10 +102,7 @@ exports.modifyPost = (req, res, next) => {
         return res.status(401).json({ error: "Modification non autorisée !" });
       }
 
-      if (!req.body.title || !req.body.userId || !req.body.description) {
-        res.status(400).json({ message:  "Merci de bien vérifier si les champs sont tous remplis !" });
-        return;
-      }
+      
 
       // mettre à jour la base des donnée
       Post.update(

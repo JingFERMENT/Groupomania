@@ -78,6 +78,8 @@ export default {
   methods: {
     onFileSelected: function (event) {
       this.imageToUpload = event.target.files[0];
+      alert("Votre image a bien été uploadée.")
+
     },
 
     sendPost: function () {

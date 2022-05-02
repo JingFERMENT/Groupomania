@@ -4,6 +4,11 @@
     <section :class="{
         'hidden-div': !isSecure,
     }">
+
+        <!-- lien de retour sur la liste des posts -->
+        <router-link to="/list" title="retour sur la liste des posts" class="nav-link">Retour sur la liste des posts
+        </router-link>
+
         <!-- message info -->
         <div class="errorMessage" v-if="status == 'error_transformAdmin'">
             Une erreur est survenue !
@@ -23,6 +28,7 @@
 </template>
 
 <script>
+
 export default {
     name: "TransformAdminView",
     data: function () {
@@ -50,7 +56,7 @@ export default {
                 });
             })
             .catch((error) => console.log(error));
-        
+
         //vérifier la clé de sécurité sur le lien Admin
         const verifyOptions = {
             method: "POST",
@@ -107,6 +113,12 @@ export default {
 </script>
 
 <style scoped>
+.nav-link {
+    font-weight: 500;
+    font-size: 20px;
+    text-decoration: underline;
+}
+
 .hidden-div {
     display: none;
 }
