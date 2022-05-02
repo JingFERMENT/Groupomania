@@ -1,37 +1,51 @@
 <template>
+  <!--Barre de navigation-->
   <NavBar />
   <div class="card">
     <h1 class="card__title">Dernières publications</h1>
-    <!-- message d'erreur-->
+
+    <!--Message d'erreur pour valider les posts-->
     <div class="errorMessage" v-if="status == 'error_post'">
       Une erreur est survenue !
     </div>
-    <!-- message prise en compte des suppressions-->
     <div class="successMessage" v-if="status == 'success_delete'">
       Post bien supprimé !
     </div>
+
+    <!--structure pour un post-->
     <div class="card gedf-card" v-for="post in posts" :key="post.id">
+
+      <!--entête du post-->
       <div class="card-header">
         <img class="rounded-circle" alt="photo profile" :src="post.photoUrl">
         {{ post.firstName }} {{ post.lastName }}, {{ post.createdAt }}
       </div>
+
+      <!--corps du post-->
       <div class="card-body">
         <div class="text-muted h7 mb-2">
           {{ post.title }}
           <p class="card-text">{{ post.description }}</p>
           <img v-show="post.imageUrl != ''" class="image_post" :src="post.imageUrl" alt="image du post" />
         </div>
+
+        <!--Modification d'un post: affichage de ce post dans ModifyPostView-->
         <router-link :to="{ name: 'modifyPost', params: { id: post.id } }">
-
-          <font-awesome-icon :icon=faEditIcon v-if="(post.userId === currentUserId)||(this.isAdmin == true)" class="button" />
+          <font-awesome-icon :icon=faEditIcon v-if="(post.userId === currentUserId) || (this.isAdmin == true)"
+            class="button" />
         </router-link>
-        <font-awesome-icon :icon=faTrashCanIcon v-if="(post.userId === currentUserId)||(this.isAdmin == true)" class="button"
-          @click="deletePost(post.id)" />
-        <AddComments :postId="post.id" />
-        <ListOfComments :postId="post.id" :isAdmin = "this.isAdmin"/>
 
+        <!--Suppression d'un post-->
+        <font-awesome-icon :icon=faTrashCanIcon v-if="(post.userId === currentUserId) || (this.isAdmin == true)"
+          class="button" @click="deletePost(post.id)" />
+
+        <!--Ajout d'un commentaire-->
+        <AddComments :postId="post.id" />
+        <!--Affichage de tous les commentaires-->
+        <ListOfComments :postId="post.id" :isAdmin="this.isAdmin" />
       </div>
     </div>
+    <!--Quand il n'y a pas d'affichage message-->
     <div v-show="noMessage">
       <p class="no-message-text">Pas de publication pour le moment.</p>
     </div>
@@ -39,11 +53,14 @@
 </template>
 
 <script>
+//import des différents composants
 import NavBar from "../components/NavBar.vue";
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
-import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
 import AddComments from "../components/AddComments.vue"
 import ListOfComments from "@/components/ListOfComments.vue";
+//import des icons FontAwesome
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faEdit, faTrashCan } from "@fortawesome/free-regular-svg-icons";
+
 
 export default {
   name: "ListOfPostsView",
@@ -57,19 +74,21 @@ export default {
 
   data: function () {
     return {
-      noMessage: false,
       status: "",
       posts: [],
       currentUserId: "",
       faEditIcon: faEdit,
       faTrashCanIcon: faTrashCan,
       isAdmin: false,
+      noMessage: false,
     };
   },
 
+  //le moment durant lequel le composant va être rendu sur la page
   mounted: function () {
     const localStorageData = JSON.parse(localStorage.getItem("data"));
     this.currentUserId = localStorageData.userId
+    //pas de token, renvoyer vers la page "connect"
     if (localStorageData === null) {
       this.$router.push("/");
       return;
@@ -80,9 +99,9 @@ export default {
       headers: { Authorization: "Bearer " + localStorageData.token },
     };
 
+    //afficher les posts
     fetch("http://localhost:3000/api/post/", options)
       .then((response) => {
-        //dans le cas des erreurs 
         if (response.status == 401 || response.status == 500) {
           this.status = "error_post";
         } else {
@@ -109,7 +128,7 @@ export default {
       })
       .catch((error) => console.log(error));
 
-//chercher l'info isAdmin
+    //Affichage de l'info sur l'administrateur
     const optionsUser = {
       method: "GET",
       headers: { Authorization: "Bearer " + localStorageData.token },
@@ -125,6 +144,7 @@ export default {
   },
 
   methods: {
+    //supprimer d'un post
     deletePost: function (postId) {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
@@ -152,10 +172,6 @@ export default {
 </script>
 
 <style scoped>
-body {
-  background-color: #eeeeee;
-}
-
 .card__title {
   padding: 1rem;
 }
@@ -200,7 +216,6 @@ body {
 
 .button:hover {
   background-color: #1976d2;
-  color: white
 }
 
 .rounded-circle {

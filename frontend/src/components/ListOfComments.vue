@@ -1,22 +1,29 @@
 <template>
-    <div class="bloc_list_comment">
+    <!-- page : liste des commentaires -->
+
+    <section class="bloc__commentlist">
+        <!-- message info-->
         <div class="errorMessage" v-if="status == 'error_comment'">
             Une erreur est survenue !
         </div>
         <div class="successMessage" v-if="status == 'success_comment'">
             Commentaire bien supprimé !
         </div>
-        <div class="comment_header" v-for="comment in comments" :key="comment.id">
+
+        <!-- entête d'un commentaire-->
+        <div class="comment__header" v-for="comment in comments" :key="comment.id">
             <p>{{ comment.user.firstName }} {{ comment.user.lastName }},
                 {{ comment.createdAt.slice(0, 10).split('-').reverse().join('/')
                 }}</p>
-            <div class="comment_description">
+            <!-- description d'un commentaire-->
+            <div class="comment__description">
                 <p>{{ comment.description }}</p>
+                <!-- bouton supprimer commentaire -->
                 <font-awesome-icon :icon=faTrashCanIcon v-if="(comment.userId === currentUserId) || (isAdmin == true)"
-                    @click="deleteComment(comment.id)" class="icon_delete" title = "Supprimer" />
+                    @click="deleteComment(comment.id)" class="icon__delete" title="Supprimer" />
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -28,7 +35,7 @@ export default {
     name: "ListOfComments",
     props: {
         postId: Number,
-        isAdmin:Boolean,
+        isAdmin: Boolean,
 
     },
     components: {
@@ -46,7 +53,7 @@ export default {
     mounted: function () {
         const localStorageData = JSON.parse(localStorage.getItem("data"));
         this.currentUserId = localStorageData.userId
-
+        //pas de token, renvoyer vers la page "connect"
         if (localStorageData === null) {
             this.$router.push("/");
             return;
@@ -57,6 +64,7 @@ export default {
             headers: { Authorization: "Bearer " + localStorageData.token },
         };
 
+        //récupérer des commentaires
         let postId = this.postId
         fetch(`http://localhost:3000/api/comment//allcomments/${postId}`, options)
             .then((response) => {
@@ -72,6 +80,7 @@ export default {
     },
 
     methods: {
+        //supprimer un commentaire
         deleteComment: function (commentId) {
             const localStorageData = JSON.parse(localStorage.getItem("data"));
 
@@ -99,18 +108,16 @@ export default {
 </script>
 
 <style scoped>
-
-.bloc_list_comment {
-    margin-top:2rem
+.bloc__commentlist {
+    margin-top: 2rem
 }
 
-
-.comment_header {
+.comment__header {
     color: black;
     font-size: 14px;
 }
 
-.comment_description {
+.comment__description {
     display: flex;
     justify-content: space-between;
 }
@@ -121,13 +128,13 @@ p {
     border-radius: 6px;
 }
 
-.icon_delete {
+.icon__delete {
     padding: 0.5rem;
     cursor: pointer;
 }
 
-.icon_delete:hover {
-    color:red;
+.icon__delete:hover {
+    color: red;
     background-color: #f2f2f2;
     border-radius: 50%
 }

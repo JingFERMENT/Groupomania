@@ -1,8 +1,13 @@
 <template>
   <div class="card">
+    <!--Logo-->
     <img id="logo" alt="Logo de l'entreprise Groupomania" src="../assets/logo.png" />
+
+    <!--Affichage des titres selon 2 modes : login & signup-->
     <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
     <h1 class="card__title" v-else>Inscription</h1>
+
+    <!--Affichage des liens selon 2 modes: login & signup-->
     <p class="card__subtitle" v-if="mode == 'login'">
       Vous n’avez pas de compte ?
       <span class="card__action" @click="switchToSignUp()">Inscrivez-vous</span>
@@ -11,6 +16,8 @@
       Vous avez déjà un compte ?
       <span class="card__action" @click="switchToLogin()">Se connecter</span>
     </p>
+
+    <!--Message d'erreur pour la validation des champs-->
     <div class="errorMessage" v-if="!validEmail">
       Merci de respecter le format email.
     </div>
@@ -30,26 +37,39 @@
     <div class="errorMessage" v-if="mode == 'signUp' && errorStatus == 'error_signUp'">
       Email déjà utilisé
     </div>
+    <div class="errorMessage" v-if="errorStatus == 'error_tooManyRequest'">
+      Votre compte est bloqué temporairement, veuillez réessayer dans quelques
+      minutes.
+    </div>
+
+    <!--------------------------Formulaire de remplissage------------------------------>
+    <!--Champ Email -->
     <div class="form-row">
       <input v-model="email" class="form-row__input" type="text" placeholder="Email" />
     </div>
+    <!--Champs uniquement pour signup: prénom & nom -->
     <div class="form-row" v-if="mode == 'signUp'">
-      <input v-model="prenom" class="form-row__input" type="text" placeholder="Prénom" />
-      <input v-model="nom" class="form-row__input" type="text" placeholder="Nom" />
+      <input v-model="prenom" class="form-row__input" type="text" name = "prenom" placeholder="Prénom" />
+      <input v-model="nom" class="form-row__input" type="text" name = "nom" placeholder="Nom" />
     </div>
+    <!--Champ mot de passe -->
     <div class="form-row">
-      <input v-model="password" class="form-row__input" type="password" placeholder="Mot de passe" />
+      <input v-model="password" class="form-row__input" type="password" name = "mot de passe" placeholder="Mot de passe" />
     </div>
+
+    <!--Deux boutons de validations: signup ou login -->
     <div class="form-row">
       <button @click="login()" class="button" :class="{
         'button--disabled': !validFields || !validPassword,
       }" v-if="mode == 'login'">
         <span>Se connecter</span>
+        <!--Bouton connexion -->
       </button>
       <button @click="signUp() && !validEmail" class="button" :class="{
         'button--disabled': !validFields || !validPassword,
       }" v-else>
         <span>Créer mon compte</span>
+        <!--Bouton signup -->
       </button>
     </div>
   </div>
@@ -68,50 +88,12 @@ export default {
       errorStatus: "",
     };
   },
+
+  //Mis en cache et recalculé uniquement si les champs changent
   computed: {
-    validEmail: function () {
-      if (this.email == "") {
-        return true;
-      }
-
-      const emailRegExp = new RegExp(
-        "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$",
-        "g"
-      );
-      return emailRegExp.test(this.email);
-    },
-
-    validFirstName: function () {
-      if (this.prenom == "") {
-        return true;
-      }
-
-      const firstNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
-      return firstNameRegExp.test(this.prenom);
-    },
-
-    validLastName: function () {
-      if (this.nom == "") {
-        return true;
-      }
-
-      const lastNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
-      return lastNameRegExp.test(this.nom);
-    },
-
-    validPassword: function () {
-      if (this.password == "") {
-        return true;
-      }
-
-      const passwordRegExp = new RegExp(
-        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=\\S+$).{8,20}$",
-        "g"
-      );
-      return passwordRegExp.test(this.password);
-    },
-
+    //vérifier si tous les champs sont bien remplis
     validFields: function () {
+      //1er cas: inscription
       if (this.mode == "signUp") {
         if (
           this.email != "" &&
@@ -123,6 +105,7 @@ export default {
         } else {
           return false;
         }
+        //2ème cas: connexion
       } else {
         if (this.email != "" && this.password != "") {
           return true;
@@ -131,56 +114,77 @@ export default {
         }
       }
     },
+
+    //Valider le format "email"
+    validEmail: function () {
+      if (this.email == "") {
+        return true;
+      }
+      const emailRegExp = new RegExp(
+        "^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$",
+        "g"
+      );
+      return emailRegExp.test(this.email);
+    },
+
+    //Valider le format "prénom"
+    validFirstName: function () {
+      if (this.prenom == "") {
+        return true;
+      }
+
+      const firstNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
+      return firstNameRegExp.test(this.prenom);
+    },
+
+    //Valider le format "nom"
+    validLastName: function () {
+      if (this.nom == "") {
+        return true;
+      }
+
+      const lastNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
+      return lastNameRegExp.test(this.nom);
+    },
+
+    //Valider le format "mot de passe"
+    validPassword: function () {
+      if (this.password == "") {
+        return true;
+      }
+
+      const passwordRegExp = new RegExp(
+        "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=\\S+$).{8,20}$",
+        "g"
+      );
+      return passwordRegExp.test(this.password);
+    },
   },
 
+  //le moment durant lequel le composant va être rendu sur la page
   mounted: function () {
-    //pour se diriger directement vers la page list si c'est déjà connecté
+
+    //si l'utilisateur est déjà connecté, aller directement sur la page "list" 
     const localStorageData = JSON.parse(localStorage.getItem("data"));
-
-    console.log(localStorageData);
-
     if (localStorageData) {
       this.$router.push("/list");
       return;
     }
   },
 
+  //recalculées à chaque appel de rendu de la page
   methods: {
+    //basculer vers l'inscription
     switchToSignUp: function () {
       this.mode = "signUp";
     },
 
+    //basculer vers la connexion 
     switchToLogin: function () {
       this.mode = "login";
     },
 
-    login: function () {
-      const data = {
-        email: this.email,
-        password: this.password,
-      };
-
-      const options = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      };
-
-      fetch("http://localhost:3000/api/auth/login", options)
-        .then((response) => {
-          if (response.status == 401) {
-            this.errorStatus = "error_login";
-          } else {
-            response.json().then((data) => {
-              localStorage.setItem("data", JSON.stringify(data));
-              this.$router.push("/list");
-            });
-          }
-        })
-        .catch((error) => console.log(error));
-    },
+    //inscription
     signUp: function () {
       const data = {
         email: this.email,
@@ -200,9 +204,46 @@ export default {
       fetch("http://localhost:3000/api/auth/signup", options)
         .then((response) => {
           if (response.status == 401 || response.status == 500) {
-            this.errorStatus = "error_signUp";
+            this.errorStatus = "error_signUp";//email déjà utilisé
+          } else if (response.status == 429) {
+            //trop de tentatives de connexions échouées
+            this.errorStatus = "error_tooManyRequest";
           } else {
+            //basculer vers le login
             this.login();
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+
+    //connexion
+    login: function () {
+      const data = {
+        email: this.email,
+        password: this.password,
+      };
+
+      const options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      };
+
+      fetch("http://localhost:3000/api/auth/login", options)
+        .then((response) => {
+          if (response.status == 401) {
+            this.errorStatus = "error_login";//email ou mot de passe invalide
+          } else if (response.status == 429) {
+            //trop de tentatives de connexions échouées
+            this.errorStatus = "error_tooManyRequest";
+          } else {
+            response.json().then((data) => {
+              localStorage.setItem("data", JSON.stringify(data));
+              //une fois connecté, aller sur la page "list"
+              this.$router.push("/list");
+            });
           }
         })
         .catch((error) => console.log(error));
@@ -216,26 +257,6 @@ export default {
   margin-left: auto;
   margin-right: auto;
   width: 30%;
-}
-
-.form-row__input {
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  background: #f2f2f2;
-  font-weight: 500;
-  font-size: 16px;
-  flex: 1;
-  min-width: 100px;
-  color: black;
-}
-
-.form-row__input::placeholder {
-  color: #aaaaaa;
-}
-
-.errorMessage {
-  color: red;
 }
 </style>
 >

@@ -1,35 +1,51 @@
 <template>
+  <NavBar />
   <!-- modifier un post-->
   <div class="card">
     <h1 class="card__title">Modifier le post</h1>
-    <div class="errorMessage" v-if="status == 'error_post'">
+
+    <!--Message d'erreur lors de modification d'un post-->
+    <div class="errorM
+    essage" v-if="status == 'error_post'">
       Une erreur est survenue !
     </div>
     <div class="successMessage" v-if="status == 'success_post'">
       Mise à jour réussie !
     </div>
+
+    <!--------------------------Formulaire de modification------------------------------>
     <div class="form-row">
+      <!--Titre de post-->
       <input v-model="title" class="form-row__input" type="text" name="title" />
     </div>
     <div class="form-row">
+      <!--Description de post-->
       <textarea v-model="description" class="form-row__input" type="text" name="description"></textarea>
     </div>
+    <!--Image de post-->
     <img v-if="imageUrl != ''" class="image_post" :src="imageUrl" alt="image d'un post" />
-    <!-- personnalisé le bouton "ajouter une photo" -->
+    <!--Bouton "modifier l'image" -->
     <label for="file-upload" class="custom-file-upload">
       Modifier l'image ...
       <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
     </label>
+    <!--Bouton "enregistrer" -->
     <button @click="modifyPost()" class="button" :class="{
       'button--disabled': !validFields,
-    }">Modifier le post</button>
+    }">Enregistrer</button>
   </div>
 </template>
 
 <script>
+import NavBar from "../components/NavBar.vue";
 
 export default {
   name: "ModifyPostView",
+
+  components: {
+    NavBar,
+  },
+
   data: function () {
     return {
       userId: "",
@@ -42,7 +58,9 @@ export default {
     };
   },
 
+  //Mis en cache et recalculé uniquement si les champs changent
   computed: {
+    //vérifier si les champs obligatoires sont bien remplis
     validFields: function () {
       if (
         this.title != "" &&
@@ -55,8 +73,11 @@ export default {
     }
   },
 
+  //le moment durant lequel le composant va être rendu sur la page
   mounted: function () {
     const localStorageData = JSON.parse(localStorage.getItem("data"));
+
+    //pas de token, renvoyer vers la page "connect"
     if (localStorageData === null) {
       this.$router.push("/");
       return;
@@ -67,6 +88,7 @@ export default {
       headers: { Authorization: "Bearer " + localStorageData.token },
     };
 
+    //afficher le post à modifier
     let postId = this.$route.params.id
     fetch(`http://localhost:3000/api/post/${postId}`, options)
       .then((response) => {
@@ -87,14 +109,18 @@ export default {
   },
 
   methods: {
-
+    //sélectionner un fichier à uploader
     onFileSelected: function (event) {
+      //console.log(event) => trouver le fichier uploader dans event.target.files
       this.imageToUpload = event.target.files[0];
+      alert("Votre image a bien été uploadée.")
     },
 
+    //modifier un post
     modifyPost: function () {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
+      //construire et envoyer plus facilement les données avec FormData
       const formData = new FormData();
       formData.append("image", this.imageToUpload);
       formData.append("title", this.title);
@@ -116,7 +142,7 @@ export default {
               this.imageUrl = formData.post.imageUrl,
                 this.imageToUpload = "",
                 this.status = "success_post";
-              this.$router.push("/list")
+              this.$router.push("/list");
             });
           }
         })
@@ -127,51 +153,7 @@ export default {
 </script>
 
 <style scoped>
-#file-upload {
-  display: none;
-}
-
 .custom-file-upload {
-  border-radius: 8px;
-  border: 1px solid grey;
-  padding: 6px 12px;
   margin: 8px auto 20px 0px;
-}
-
-.custom-file-upload:hover {
-  cursor: pointer;
-  background: grey;
-  color: white;
-}
-
-.form-row {
-  display: flex;
-  margin: 16px 0px;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.form-row__input {
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  background: #f2f2f2;
-  font-weight: 500;
-  font-size: 16px;
-  flex: 1;
-  min-width: 100px;
-  color: black;
-}
-
-.form-row__input::placeholder {
-  color: #aaaaaa;
-}
-
-.errorMessage {
-  color: red;
-}
-
-.successMessage {
-  color: green;
 }
 </style>

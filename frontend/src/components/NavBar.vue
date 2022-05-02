@@ -1,4 +1,5 @@
 <template>
+<!-- barre de navigation -->
   <ul class="nav">
     <li class="nav-item">
       <router-link to="/post" title = "créer un post" class="nav-link">Créer un post</router-link>
@@ -21,6 +22,7 @@
 export default {
   name: "NavBar",
   methods: {
+    //déconnexion d'un compte
     logOut: function () {
             localStorage.clear();
             alert("Vous êtes maintenant déconnecté(e).");
@@ -31,7 +33,6 @@ export default {
 </script>
 
 <style scoped>
-
 .nav {
   justify-content: space-around;
 }

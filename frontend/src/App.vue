@@ -106,4 +106,36 @@ img {
   gap: 16px;
   flex-wrap: wrap;
 }
+
+.form-row__input::placeholder {
+  color: #aaaaaa;
+}
+
+.form-row__input {
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  background: #f2f2f2;
+  font-weight: 500;
+  font-size: 16px;
+  flex: 1;
+  min-width: 100px;
+  color: black;
+}
+
+#file-upload {
+  display: none;
+}
+
+.custom-file-upload {
+  border-radius: 8px;
+  border: 1px solid grey;
+  padding: 6px 12px;
+}
+
+.custom-file-upload:hover {
+  cursor: pointer;
+  background: grey;
+  color: white;
+}
 </style>

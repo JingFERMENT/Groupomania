@@ -1,18 +1,22 @@
 <template>
-    <div class="bloc_comment">
-        <!-- message d'erreur-->
+<!-- page : ajouter un commentaire-->
+
+    <section class="bloc__comment">
+        <!-- message info-->
         <div class="errorMessage" v-if="status == 'error_comment'">
             Une erreur est survenue !
         </div>
         <div class="successMessage" v-if="status == 'success_comment'">
             Commentaire bien envoyé !
         </div>
-        <form class="form-row_comment">
+        <!-- formulaire de commentaire-->
+        <form class="form-row__comment">
             <input v-model="description" class="form-row__input" type="text" placeholder="Un commentaire..."
                 name="commentaire">
-            <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" class="icon_send" title="Envoyer" />
+            <!-- bouton envoyer commentaire-->
+            <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" class="icon__send" title="Envoyer" />
         </form>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -24,6 +28,7 @@ export default {
 
     name: "AddComments",
 
+    // pour pouvoir passer les propriétaires
     props: {
         postId: Number
     },
@@ -42,7 +47,7 @@ export default {
     },
 
     methods: {
-
+        //envoyer les commentaires
         submitComment: function () {
             const localStorageData = JSON.parse(localStorage.getItem("data"));
             this.userId = localStorageData.userId
@@ -81,34 +86,28 @@ export default {
 </script>
 
 <style scoped>
-.form-row_comment {
+.form-row__comment {
     display: flex;
     justify-content: space-between;
 }
 
 .form-row__input {
     padding: 6px;
-    border: none;
-    border-radius: 8px;
-    background: #f2f2f2;
     font-size: 0.8rem;
-    flex: 1;
-    min-width: 100px;
-    color: black;
 }
 
-.icon_send {
+.icon__send {
     padding: 0.5rem;
     cursor: pointer;
 }
 
-.icon_send:hover {
+.icon__send:hover {
     color: #2196f3;
     background-color: #f2f2f2;
     border-radius: 50%
 }
 
-.bloc_comment {
+.bloc__comment {
     margin-top: 2rem
 }
 </style>

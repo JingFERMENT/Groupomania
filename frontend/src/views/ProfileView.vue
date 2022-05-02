@@ -1,29 +1,45 @@
 <template>
+  <!-- mon profil-->
+
   <NavBar />
   <div class="card">
     <h1 class="card__title">Mon profil</h1>
+
+    <!--Message d'erreur pour la validation des champs-->
     <div class="errorMessage" v-if="status == 'error_saveUserInfo'">
       Une erreur est survenue !
     </div>
     <div class="successMessage" v-if="status == 'success_saveUserInfo'">
       Profil bien à jour !
     </div>
+
+    <!--Message d'info pour l'administrateur-->
+    <div class="successMessage" v-if="status == 'success_transformAdmin'">
+      Vous êtes administrateur .
+    </div>
+
+    <!--Image profile de l'utilisateur -->
     <img class="photo_default" :src="photoUrl" alt="Image du profil d'un utilisateur" />
-    <!-- personnalisé le bouton "ajouter une photo" -->
+    <!--Bouton "ajouter une photo" -->
     <label for="file-upload" class="custom-file-upload">
       Ajouter une photo ...
       <input id="file-upload" type="file" name="image" @change="onFileSelected($event)" />
     </label>
-    <div class="form-row">
-      <input v-model="prenom" class="form-row__input" type="text" placeholder="Prénom" />
-      <input v-model="nom" class="form-row__input" type="text" placeholder="Nom" />
-    </div>
-    <div class="form-row">
-      <input v-model="jobTitle" class="form-row__input" type="text" placeholder="Profession" />
-    </div>
 
+    <!---------------Formulaire de remplissage profile------------------->
     <div class="form-row">
+      <!----nom & Prenom---->
+      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom" />
+      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" />
+    </div>
+    <div class="form-row">
+      <!----Profession---->
+      <input v-model="jobTitle" class="form-row__input" type="text" name="profession" placeholder="Profession" />
+    </div>
+    <div class="form-row">
+      <!----Bouton enregistrer---->
       <button @click="saveUserInfo()" class="button">Enregister</button>
+      <!--Suppression d'un compte-->
       <span class="card__action--delete" @click="deleteAccount()">Supprimer le compte</span>
     </div>
   </div>
@@ -35,9 +51,11 @@ import NavBar from '../components/NavBar.vue';
 
 export default {
   name: "ProfileView",
+
   components: {
     NavBar,
   },
+
   data: function () {
     return {
       prenom: "",
@@ -45,6 +63,7 @@ export default {
       photoUrl: photoDefaultUrl,
       photoUrlToUpload: "",
       jobTitle: "",
+      isAdmin: false,
       status: "",
     };
   },
@@ -63,6 +82,7 @@ export default {
       headers: { Authorization: "Bearer " + localStorageData.token },
     };
 
+    //récupérer les infos du profil
     let userId = localStorageData.userId;
     fetch(`http://localhost:3000/api/auth/profile/${userId}`, options)
       .then((response) => {
@@ -70,6 +90,12 @@ export default {
           this.prenom = data.firstName;
           this.nom = data.lastName;
           this.jobTitle = data.jobTitle;
+          this.isAdmin = data.isAdmin;
+          // dans le cas où il y a une nouvelle image
+          if(data.isAdmin == true) {
+             this.status = "success_transformAdmin";
+          }
+          //indiquer l'utilisateur son rôle (s'il est Admin)
           if (data.photoUrl != "") {
             this.photoUrl = data.photoUrl;
           }
@@ -79,11 +105,13 @@ export default {
   },
 
   methods: {
+    //sélectionner un fichier à uploader
     onFileSelected: function (event) {
       this.photoUrlToUpload = event.target.files[0];
       alert("Votre photo a bien été uploadée.")
     },
 
+    //enregistrer les infos du profil
     saveUserInfo: function () {
       const formData = new FormData();
       formData.append("image", this.photoUrlToUpload);
@@ -100,7 +128,6 @@ export default {
       };
 
       const userId = localStorageData.userId;
-
       fetch(`http://localhost:3000/api/auth/profile/${userId}`, options)
         .then((response) => {
           if (response.status == 401) {
@@ -118,6 +145,7 @@ export default {
         .catch((error) => console.log(error));
     },
 
+    //supprimer le compte profile
     deleteAccount: function () {
       const localStorageData = JSON.parse(localStorage.getItem("data"));
 
@@ -139,6 +167,7 @@ export default {
           } else {
             localStorage.clear();
             alert("Votre compte a bien été supprimé !");
+            // après suppression, se diriger vers la page "connect"
             this.$router.push("/");
           }
         })
@@ -155,53 +184,17 @@ export default {
   margin-right: auto;
 }
 
-.form-row {
-  display: flex;
-  margin: 16px 0px;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.form-row__input {
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  background: #f2f2f2;
-  font-weight: 500;
-  font-size: 16px;
-  flex: 1;
-  min-width: 100px;
-  color: black;
-}
-
-.form-row__input::placeholder {
-  color: #aaaaaa;
-}
-
 .card__action--delete {
-  color: red;
   text-decoration: underline;
   font-style: italic;
 }
 
 .card__action--delete:hover {
   cursor: pointer;
-}
-
-#file-upload {
-  display: none;
+  color: red;
 }
 
 .custom-file-upload {
-  border-radius: 8px;
-  border: 1px solid grey;
-  padding: 6px 12px;
   margin: 15px auto 0px auto;
-}
-
-.custom-file-upload:hover {
-  cursor: pointer;
-  background: grey;
-  color: white;
 }
 </style>

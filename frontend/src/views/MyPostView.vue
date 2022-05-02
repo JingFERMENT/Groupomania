@@ -3,25 +3,38 @@
   <NavBar />
   <div class="card">
     <h1 class="card__title">Quoi de neuf ?</h1>
+
+    <!--Message d'erreur lors de création d'un post-->
     <div class="errorMessage" v-if="status == 'error_sendPost'">
       Une erreur est survenue !
     </div>
     <div class="successMessage" v-if="status == 'success_sendPost'">
       Publication réussie !
     </div>
+
+    <!----------------------Formulaire de création d'un post------------------------>
+
+    <!-----Title d'un post----->
     <div class="form-row">
-      <input v-model="title" class="form-row__input" type="text" name="title" placeholder="Titre" />
+      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" />
     </div>
+
+    <!-----Description d'un post----->
     <div class="form-row">
-      <textarea v-model="description" class="form-row__input" type="text" placeholder="Ecrivez quelques choses ..."
-        name="description"></textarea>
+      <textarea v-model="description" class="form-row__input" type="text" name="description"
+        placeholder="Ecrivez quelques choses ..."></textarea>
     </div>
+
+    <!-----Image d'un post----->
     <img class="image_post" :src="imageUrl" />
-    <!-- personnalisé le bouton "ajouter une photo" -->
+
+    <!--Bouton "ajouter l'image" -->
     <label for="file-upload" class="custom-file-upload">
       Ajouter une image ...
       <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
     </label>
+
+    <!--Bouton "publier le post" -->
     <button @click="sendPost()" class="button" :class="{
       'button--disabled': !validFields,
     }">Publier le post</button>
@@ -33,9 +46,11 @@ import NavBar from '../components/NavBar.vue';
 
 export default {
   name: "MyPostView",
+
   components: {
     NavBar,
   },
+
   data: function () {
     return {
       userId: "",
@@ -48,7 +63,6 @@ export default {
   },
 
   computed: {
-
     validFields: function () {
       if (
         this.title != "" &&
@@ -102,51 +116,7 @@ export default {
 </script>
 
 <style scoped>
-#file-upload {
-  display: none;
-}
-
 .custom-file-upload {
-  border-radius: 8px;
-  border: 1px solid grey;
-  padding: 6px 12px;
   margin: 8px auto 20px 0px;
-}
-
-.custom-file-upload:hover {
-  cursor: pointer;
-  background: grey;
-  color: white;
-}
-
-.form-row {
-  display: flex;
-  margin: 16px 0px;
-  gap: 16px;
-  flex-wrap: wrap;
-}
-
-.form-row__input {
-  padding: 8px;
-  border: none;
-  border-radius: 8px;
-  background: #f2f2f2;
-  font-weight: 500;
-  font-size: 16px;
-  flex: 1;
-  min-width: 100px;
-  color: black;
-}
-
-.form-row__input::placeholder {
-  color: #aaaaaa;
-}
-
-.errorMessage {
-  color: red;
-}
-
-.successMessage {
-  color: green;
 }
 </style>

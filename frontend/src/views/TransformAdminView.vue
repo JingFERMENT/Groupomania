@@ -1,7 +1,10 @@
 <template>
-    <div :class="{
+    <!-- transformer l'utilisateur en administrateur -->
+
+    <section :class="{
         'hidden-div': !isSecure,
     }">
+        <!-- message info -->
         <div class="errorMessage" v-if="status == 'error_transformAdmin'">
             Une erreur est survenue !
         </div>
@@ -11,10 +14,12 @@
         <div class="errorMessage" v-if="isAdmin && status != 'success_transformAdmin'">
             Vous êtes déjà Admin !
         </div>
+
+        <!-- bouton transformation -->
         <button @click="transformAdmin()" class="button" :class="{
             'button--disabled': isAdmin,
         }">Transformer en Admin</button>
-    </div>
+    </section>
 </template>
 
 <script>
@@ -29,7 +34,7 @@ export default {
     },
 
     mounted: function () {
-
+        //récupérer le status Admin dans le backend 
         const localStorageData = JSON.parse(localStorage.getItem("data"));
 
         const userOptions = {
@@ -38,7 +43,6 @@ export default {
         };
 
         let userId = localStorageData.userId;
-        //récupérer le status Admin dans le backend 
         fetch(`http://localhost:3000/api/auth/profile/${userId}`, userOptions)
             .then((response) => {
                 response.json().then((data) => {
@@ -46,9 +50,11 @@ export default {
                 });
             })
             .catch((error) => console.log(error));
-
+        
+        //vérifier la clé de sécurité sur le lien Admin
         const verifyOptions = {
             method: "POST",
+            // route.query => requête dans l'URL
             body: JSON.stringify({ key: this.$route.query.key }),
             headers: {
                 Authorization: "Bearer " + localStorageData.token,
@@ -57,7 +63,6 @@ export default {
             },
         };
 
-        //vérifier la clé de sécurité sur le lien Admin
         fetch(`http://localhost:3000/api/auth/verify`, verifyOptions)
             .then((response) => {
                 response.json().then((data) => {
@@ -65,9 +70,9 @@ export default {
                 });
             })
             .catch((error) => console.log(error));
-
         return false;
     },
+
     methods: {
 
         //transformer le profil utilisateur en administrateur 
@@ -102,7 +107,6 @@ export default {
 </script>
 
 <style scoped>
-
 .hidden-div {
     display: none;
 }
