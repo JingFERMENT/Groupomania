@@ -22,6 +22,7 @@ cd Groupomania
 ```
 1. Ouvrir la console MySQL et créer un compte ou se connecter si vous en avez déjà un
 2- Créer une base de données nommée "groupomania"
+3- Importer le fichier "Base_des_données_Groupomania.sql" dans le repo du projet
 ```
 
 ### 4- Installer le backend
@@ -30,9 +31,7 @@ cd Groupomania
 2. Installer npm  => npm install
 3. Créer un dossier images => mkdir images
 4. Créer un fichier .env et y renseigner les variables comme indiqué dans le fichier env.exemple
-5. Installer sequelize => npm install --save sequelize
-6. Installer nodemon  => npm install -g nodemon
-7. Lancer le serveur backend => nodemon server
+5. Lancer le serveur backend => npm start ou nodemon server (si nodemon est installé)
 
 ```
 
@@ -62,4 +61,6 @@ Node, Vuejs, SQL (base des données)
 
 - Transformer un utilisateur en administrateur en utilisant le lien suivant :
    http://localhost:8080/admin?key="SECRET_KEY"
+   
+   SECRET_KEY est un variable que vous définissez à votre choix dans le fichier env.exemple avant de transmettre aux personnes concernées.
 - Modérer les contenus (réservé aux administrateurs)
