@@ -59,8 +59,7 @@ Node, Vuejs, SQL (base des données)
 
 ### Modération
 
-- Transformer un utilisateur en administrateur en utilisant le lien suivant :
-   http://localhost:8080/admin?key="SECRET_KEY"
+- Transformer un utilisateur en administrateur en utilisant le lien suivant: http://localhost:8080/admin?key="SECRET_KEY"
    
    SECRET_KEY est un variable que vous définissez à votre choix dans le fichier env.exemple avant de transmettre aux personnes concernées.
 - Modérer les contenus (réservé aux administrateurs)
