@@ -45,7 +45,7 @@
     <!--------------------------Formulaire de remplissage------------------------------>
     <!--Champ Email -->
     <div class="form-row">
-      <input v-model="email" class="form-row__input" type="text" placeholder="Email" />
+      <input v-model="email" class="form-row__input" type="text" name = "email" placeholder="Email" />
     </div>
     <!--Champs uniquement pour signup: prénom & nom -->
     <div class="form-row" v-if="mode == 'signUp'">

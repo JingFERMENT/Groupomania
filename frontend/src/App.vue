@@ -69,7 +69,7 @@ img {
 }
 
 .card__action {
-  color: #2196f3;
+  color: #1976d2;
   text-decoration: underline;
 }
 

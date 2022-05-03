@@ -40,20 +40,26 @@
       <!----Bouton enregistrer---->
       <button @click="saveUserInfo()" class="button">Enregister</button>
       <!--Suppression d'un compte-->
-      <span class="card__action--delete" @click="deleteAccount()">Supprimer le compte</span>
+      <div class="card__action--delete" @click="deleteAccount()">
+        <font-awesome-icon :icon=faTrashCanIcon />
+        <span class="delete_text">Supprimer le compte</span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import photoDefaultUrl from "../assets/avatar.png";
+import photoDefaultUrl from "../assets/avatar_default.png";
 import NavBar from '../components/NavBar.vue';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
 
 export default {
   name: "ProfileView",
 
   components: {
     NavBar,
+    FontAwesomeIcon,
   },
 
   data: function () {
@@ -65,6 +71,7 @@ export default {
       jobTitle: "",
       isAdmin: false,
       status: "",
+      faTrashCanIcon: faTrashCan,
     };
   },
 
@@ -92,8 +99,8 @@ export default {
           this.jobTitle = data.jobTitle;
           this.isAdmin = data.isAdmin;
           // dans le cas où il y a une nouvelle image
-          if(data.isAdmin == true) {
-             this.status = "success_transformAdmin";
+          if (data.isAdmin == true) {
+            this.status = "success_transformAdmin";
           }
           //indiquer l'utilisateur son rôle (s'il est Admin)
           if (data.photoUrl != "") {
@@ -157,7 +164,6 @@ export default {
       const userId = localStorageData.userId;
       fetch(`http://localhost:3000/api/auth/profile/${userId}`, options)
         .then((response) => {
-          console.log(response);
           if (
             response.status == 400 ||
             response.status == 404 ||
@@ -185,14 +191,18 @@ export default {
 }
 
 .card__action--delete {
-  text-decoration: underline;
-  font-style: italic;
+  color: black;
 }
 
 .card__action--delete:hover {
   cursor: pointer;
   color: red;
 }
+
+.delete_text {
+  margin-left: 0.5rem;
+}
+
 
 .custom-file-upload {
   margin: 15px auto 0px auto;

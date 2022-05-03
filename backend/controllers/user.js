@@ -128,16 +128,21 @@ exports.deleteUser = (req, res, next) => {
       }
 
       const filename = user.photoUrl.split("/images/")[1];
+      if (user.photoUrl != "http://localhost:3000/images/avatar.png") {
+        // supprimer l'image uniquement s'il est différent de l'image avatar_default.png
+        fs.unlink(`images/${filename}`, (error) => {
+          if (error) {
+            console.log(error);
+          }
+        });
+      }
 
-      // 1er arg: chemin du fichier, 2e arg: la callback=ce qu'il faut faire une fois la photo supprimée
-      fs.unlink(`images/${filename}`, () => {
-        // on supprime l'utilisateur de la base de donnée en indiquant son id
-        User.destroy({ where: { id: req.params.id } })
-          .then((user) =>
-            res.status(200).json({ message: "Utilisateur supprimé !" })
-          )
-          .catch((error) => res.status(400).json({ error }));
-      });
+      // on supprime l'utilisateur de la base de donnée en indiquant son id
+      User.destroy({ where: { id: req.params.id } })
+        .then((user) =>
+          res.status(200).json({ message: "Utilisateur supprimé !" })
+        )
+        .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(400).json({ error }));
 };
@@ -155,7 +160,6 @@ exports.verifyAdmin = (req, res, next) => {
 
 //------------TRANSFORMER L'UTILISATEUR EN ADMINSTRATEUR------------
 exports.transformInAdmin = (req, res, next) => {
-  
   //vérification (même si le bouton est cachée dans le frontend)
   if (req.body.key !== process.env.SECRET_KEY) {
     return res.status(400).json({ error: "Clé non valide !" });
