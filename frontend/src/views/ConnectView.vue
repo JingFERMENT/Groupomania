@@ -1,5 +1,5 @@
 <template>
-  <div class="card">
+  <section class="card">
     <!--Logo-->
     <img id="logo" alt="Logo de l'entreprise Groupomania" src="../assets/logo.png" />
 
@@ -10,11 +10,11 @@
     <!--Affichage des liens selon 2 modes: login & signup-->
     <p class="card__subtitle" v-if="mode == 'login'">
       Vous n’avez pas de compte ?
-      <span class="card__action" @click="switchToSignUp()">Inscrivez-vous</span>
+      <a @click="switchToSignUp()" class="card__action">Inscrivez-vous</a>
     </p>
     <p class="card__subtitle" v-else>
       Vous avez déjà un compte ?
-      <span class="card__action" @click="switchToLogin()">Se connecter</span>
+      <a @click="switchToLogin()" class="card__action">Se connecter</a>
     </p>
 
     <!--Message d'erreur pour la validation des champs-->
@@ -45,17 +45,18 @@
     <!--------------------------Formulaire de remplissage------------------------------>
     <!--Champ Email -->
     <div class="form-row">
-      <input v-model="email" class="form-row__input" type="text" name = "email" placeholder="Email" />
+      <input v-model="email" class="form-row__input" type="email" name="email" placeholder="Email" aria-label="Email" required/>
     </div>
     <!--Champs uniquement pour signup: prénom & nom -->
     <div class="form-row" v-if="mode == 'signUp'">
-      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom" />
-      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" />
+      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
+        aria-label="Prénom" required/>
+      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required/>
     </div>
     <!--Champ mot de passe -->
     <div class="form-row">
-      <input v-model="password" class="form-row__input" type="password" name="mot de passe"
-        placeholder="Mot de passe" />
+      <input v-model="password" class="form-row__input" type="password" name="mot de passe" placeholder="Mot de passe"
+        aria-label="Mot de passe" required/>
     </div>
 
     <!--Deux boutons de validations: signup ou login -->
@@ -73,7 +74,7 @@
         <!--Bouton signup -->
       </button>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -258,6 +259,10 @@ export default {
   margin-left: auto;
   margin-right: auto;
   width: 30%;
+}
+
+a {
+  text-decoration: underline;
 }
 </style>
 >

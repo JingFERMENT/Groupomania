@@ -20,6 +20,7 @@
 
     <!--Image profile de l'utilisateur -->
     <img class="photo_default" :src="photoUrl" alt="Image du profil d'un utilisateur" />
+
     <!--Bouton "ajouter une photo" -->
     <label for="file-upload" class="custom-file-upload">
       Ajouter une photo ...
@@ -29,12 +30,14 @@
     <!---------------Formulaire de remplissage profile------------------->
     <div class="form-row">
       <!----nom & Prenom---->
-      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom" />
-      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" />
+      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
+        aria-label="Prénom" />
+      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" />
     </div>
     <div class="form-row">
       <!----Profession---->
-      <input v-model="jobTitle" class="form-row__input" type="text" name="profession" placeholder="Profession" />
+      <input v-model="jobTitle" class="form-row__input" type="text" name="profession" placeholder="Profession"
+        aria-label="Profession" />
     </div>
     <div class="form-row">
       <!----Bouton enregistrer---->
@@ -202,7 +205,6 @@ export default {
 .delete_text {
   margin-left: 0.5rem;
 }
-
 
 .custom-file-upload {
   margin: 15px auto 0px auto;

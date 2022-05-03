@@ -57,7 +57,7 @@ img {
 }
 
 .button {
-  background: #2196f3;
+  background: #1976d2;
   color: white;
   border-radius: 8px;
   font-weight: 800;
@@ -68,18 +68,9 @@ img {
   transition: 0.4s background-color;
 }
 
-.card__action {
-  color: #1976d2;
-  text-decoration: underline;
-}
-
-.card__action:hover {
-  cursor: pointer;
-}
-
 .button:hover {
   cursor: pointer;
-  background: #1976d2;
+  background: #0e4f91;
 }
 
 .button--disabled {
@@ -90,6 +81,14 @@ img {
 .button--disabled:hover {
   cursor: not-allowed;
   background: #cecece;
+}
+
+.card__action {
+  color: #1976d2;
+}
+
+.card__action:hover {
+  cursor: pointer;
 }
 
 .errorMessage {

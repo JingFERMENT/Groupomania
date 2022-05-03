@@ -15,7 +15,7 @@
         <!-- formulaire de commentaire-->
         <form class="form-row__comment">
             <input v-model="description" class="form-row__input" type="text" placeholder="Un commentaire..."
-                name="commentaire">
+                name="commentaire" aria-label="commentaire">
             <!-- bouton envoyer commentaire-->
             <font-awesome-icon :icon=faPaperPlaneIcon @click="submitComment()" class="icon__send" title="Envoyer" />
         </form>

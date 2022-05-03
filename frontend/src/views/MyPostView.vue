@@ -16,17 +16,17 @@
 
     <!-----Title d'un post----->
     <div class="form-row">
-      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" />
+      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre"/>
     </div>
 
     <!-----Description d'un post----->
     <div class="form-row">
       <textarea v-model="description" class="form-row__input" type="text" name="description"
-        placeholder="Ecrivez quelques choses ..."></textarea>
+        placeholder="Ecrivez quelques choses ..." aria-label="Description"></textarea>
     </div>
 
     <!-----Image d'un post----->
-    <img class="image_post" :src="imageUrl" />
+    <img class="image_post" :src="imageUrl" alt = "image d'un post"/>
 
     <!--Bouton "ajouter l'image" -->
     <label for="file-upload" class="custom-file-upload">
@@ -120,5 +120,9 @@ export default {
 <style scoped>
 .custom-file-upload {
   margin: 8px auto 20px 0px;
+}
+
+.image_post {
+  display: none;
 }
 </style>
