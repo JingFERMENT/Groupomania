@@ -71,7 +71,9 @@ exports.login = (req, res, next) => {
 
 //------------AFFICHER LE PROFILE D'UN UTILISATEUR------------
 exports.getOneUser = (req, res, next) => {
-  User.findOne({ where: { id: req.params.id } })
+  User.findOne({ where: { id: req.params.id }, attributes: {
+    exclude: ["id", "password", "email", "createdAt", "updatedAt"],
+  } }) // ne pas envoyer le mot de passe pour la sécurité
     .then((user) => res.status(200).json(user))
     .catch((error) => res.status(404).json({ error }));
 };

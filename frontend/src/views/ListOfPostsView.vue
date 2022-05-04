@@ -224,4 +224,9 @@ export default {
   object-fit: cover;
   margin-right: 1rem;
 }
+
+/* pour afficher correctement les sauts de ligne */
+.card-text {
+  white-space: pre;
+}
 </style>
