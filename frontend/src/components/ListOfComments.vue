@@ -120,12 +120,15 @@ export default {
 .comment__description {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 p {
     overflow: hidden;
     font-size: 0.8rem;
     border-radius: 6px;
+    margin-bottom: 0rem;
 }
 
 .icon__delete {
