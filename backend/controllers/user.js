@@ -89,9 +89,9 @@ exports.modifyUser = (req, res, next) => {
 
   User.findOne({ where: { id: req.params.id } })
     .then((user) => {
-      //supprimer l'ancien fichier dans le cas où un nouveau fichier est différent de l'image "avatar.png"
+      //supprimer l'ancien fichier dans le cas où un nouveau fichier est différent de l'image "avatar_default.png"
       if (
-        user.photoUrl != "http://localhost:3000/images/avatar.png" &&
+        user.photoUrl != "http://localhost:3000/images/avatar_default.png" &&
         req.file
       ) {
         const oldFilename = user.photoUrl.split("/images/")[1];
@@ -128,7 +128,7 @@ exports.deleteUser = (req, res, next) => {
       }
 
       const filename = user.photoUrl.split("/images/")[1];
-      if (user.photoUrl != "http://localhost:3000/images/avatar.png") {
+      if (user.photoUrl != "http://localhost:3000/images/avatar_default.png") {
         // supprimer l'image uniquement s'il est différent de l'image avatar_default.png
         fs.unlink(`images/${filename}`, (error) => {
           if (error) {
