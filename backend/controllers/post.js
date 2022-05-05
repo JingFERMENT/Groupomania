@@ -13,7 +13,11 @@ exports.createPost = (req, res, next) => {
   }
 
   if (!req.body.title || !req.body.userId || !req.body.description) {
-    res.status(400).json({ message:  "Merci de bien vérifier si les champs sont tous remplis !" });
+    res
+      .status(400)
+      .json({
+        message: "Merci de bien vérifier si les champs sont tous remplis !",
+      });
     return;
   }
 
@@ -70,9 +74,12 @@ exports.getAllPosts = (req, res, next) => {
 // -----MIDDLEWARE pour modifier un post -----------
 
 exports.modifyPost = (req, res, next) => {
-
   if (!req.body.title || !req.body.description) {
-    res.status(400).json({ message:  "Merci de bien vérifier si les champs sont tous remplis !" });
+    res
+      .status(400)
+      .json({
+        message: "Merci de bien vérifier si les champs sont tous remplis !",
+      });
     return;
   }
 
@@ -97,12 +104,16 @@ exports.modifyPost = (req, res, next) => {
       if (!post) {
         return res.status(404).json({ error: "Post non trouvé !" });
       }
-      //vérifier celui qui veut modifier le post est l'auteur du post
-      if (req.auth.userId != post.userId) {
-        return res.status(401).json({ error: "Modification non autorisée !" });
-      }
-
-      
+      //vérifier celui qui veut modifier le post est bien l'auteur du post ou l'administrateur
+      User.findOne({ where: { id: req.auth.userId } })
+        .then((user) => {
+          if (!user.isAdmin && req.auth.userId != post.userId) {
+            return res
+              .status(401)
+              .json({ error: "Modification non autorisée !" });
+          }
+        })
+        .catch((error) => res.status(400).json({ error }));
 
       // mettre à jour la base des donnée
       Post.update(
@@ -131,9 +142,17 @@ exports.deletePost = (req, res, next) => {
         return res.status(404).json({ error: "Post non trouvé !" });
       }
 
-      if (req.auth.userId != post.userId) {
-        return res.status(401).json({ error: "Suppression non autorisée !" });
-      }
+
+      //vérifier celui qui veut supprimer le post est bien l'auteur du post ou l'administrateur
+      User.findOne({ where: { id: req.auth.userId } })
+        .then((user) => {
+          if (!user.isAdmin && req.auth.userId != post.userId) {
+            return res
+              .status(401)
+              .json({ error: "Suppression non autorisée !" });
+          }
+        })
+        .catch((error) => res.status(400).json({ error }));
 
       const filename = post.imageUrl.split("/images/")[1];
 

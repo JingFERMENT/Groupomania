@@ -3,15 +3,15 @@
 
     <section class="bloc__comment">
         <!-- message info-->
-        <div class="errorMessage" v-if="status == 'error_comment'">
+        <p class="errorMessage" v-if="status == 'error_comment'">
             Une erreur est survenue !
-        </div>
-        <div class="errorMessage" v-if="status == 'error_send'">
+        </p>
+        <p class="errorMessage" v-if="status == 'error_send'">
             Merci de bien renseigner le commentaire !
-        </div>
-        <div class="successMessage" v-if="status == 'success_comment'">
+        </p>
+        <p class="successMessage" v-if="status == 'success_comment'">
             Commentaire bien envoyé !
-        </div>
+        </p>
         <!-- formulaire de commentaire-->
         <form class="form-row__comment">
             <input v-model="description" class="form-row__input" type="text" placeholder="Un commentaire..."

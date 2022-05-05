@@ -1,16 +1,16 @@
 <template>
   <!--Barre de navigation-->
   <NavBar />
-  <div class="card">
+  <section class="card">
     <h1 class="card__title">Dernières publications</h1>
 
     <!--Message d'erreur pour valider les posts-->
-    <div class="errorMessage" v-if="status == 'error_post'">
+    <p class="errorMessage" v-if="status == 'error_post'">
       Une erreur est survenue !
-    </div>
-    <div class="successMessage" v-if="status == 'success_delete'">
+    </p>
+    <p class="successMessage" v-if="status == 'success_delete'">
       Post bien supprimé !
-    </div>
+    </p>
 
     <!--structure pour un post-->
     <div class="card gedf-card" v-for="post in posts" :key="post.id">
@@ -30,14 +30,14 @@
         </div>
 
         <!--Modification d'un post: affichage de ce post dans ModifyPostView-->
-        <router-link :to="{ name: 'modifyPost', params: { id: post.id } }">
+        <router-link :to="{ name: 'modifyPost', params: { id: post.id } }" title="modifier">
           <font-awesome-icon :icon=faEditIcon v-if="(post.userId === currentUserId) || (this.isAdmin == true)"
             class="button" />
         </router-link>
 
         <!--Suppression d'un post-->
         <font-awesome-icon :icon=faTrashCanIcon v-if="(post.userId === currentUserId) || (this.isAdmin == true)"
-          class="button" @click="deletePost(post.id)" />
+          class="button" @click="deletePost(post.id)" title="supprimer" />
 
         <!--Ajout d'un commentaire-->
         <AddComments :postId="post.id" />
@@ -46,10 +46,8 @@
       </div>
     </div>
     <!--Quand il n'y a pas d'affichage message-->
-    <div v-show="noMessage">
-      <p class="no-message-text">Pas de publication pour le moment.</p>
-    </div>
-  </div>
+    <p v-show="noMessage" class="no-message-text">Pas de publication pour le moment.</p>
+  </section>
 </template>
 
 <script>

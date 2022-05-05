@@ -45,9 +45,16 @@ exports.deleteComment = (req, res, next) => {
         return res.status(404).json({ error: "Commentaire non trouvé !" });
       }
 
-      if (req.auth.userId != comment.userId) {
-        return res.status(401).json({ error: "Suppression non autorisée !" });
-      }
+       //vérifier celui qui veut modifier le post est bien l'auteur du post ou l'administrateur
+       User.findOne({ where: { id: req.auth.userId } })
+       .then((user) => {
+         if (!user.isAdmin && req.auth.userId != comment.userId) {
+           return res
+             .status(401)
+             .json({ error: "Suppression non autorisée !" });
+         }
+       })
+       .catch((error) => res.status(400).json({ error }));
 
       Comment.destroy({ where: { id: req.params.id } })
         .then(() =>

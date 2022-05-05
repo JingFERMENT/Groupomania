@@ -75,7 +75,7 @@ img {
 
 .button--disabled {
   background: #cecece;
-  color: #ececec;
+  color: black;
 }
 
 .button--disabled:hover {
@@ -123,18 +123,7 @@ img {
 }
 
 #file-upload {
-  display: none;
-}
-
-.custom-file-upload {
-  border-radius: 8px;
-  border: 1px solid grey;
-  padding: 6px 12px;
-}
-
-.custom-file-upload:hover {
-  cursor: pointer;
-  background: grey;
-  color: white;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
 }
 </style>

@@ -2,45 +2,42 @@
   <!-- mon profil-->
 
   <NavBar />
-  <div class="card">
+  <section class="card">
     <h1 class="card__title">Mon profil</h1>
 
     <!--Message d'erreur pour la validation des champs-->
-    <div class="errorMessage" v-if="status == 'error_saveUserInfo'">
+    <p class="errorMessage" v-if="status == 'error_saveUserInfo'">
       Une erreur est survenue !
-    </div>
-    <div class="successMessage" v-if="status == 'success_saveUserInfo'">
+    </p>
+    <p class="successMessage" v-if="status == 'success_saveUserInfo'">
       Profil bien à jour !
-    </div>
+    </p>
 
     <!--Message d'info pour l'administrateur-->
-    <div class="successMessage" v-if="status == 'success_transformAdmin'">
+    <p class="successMessage" v-if="status == 'success_transformAdmin'">
       Vous êtes administrateur .
-    </div>
+    </p>
 
     <!--Image profile de l'utilisateur -->
     <img class="photo_default" :src="photoUrl" alt="Image du profil d'un utilisateur" />
 
     <!--Bouton "ajouter une photo" -->
-    <label for="file-upload" class="custom-file-upload">
-      Ajouter une photo ...
-      <input id="file-upload" type="file" name="image" @change="onFileSelected($event)" />
-    </label>
-
-    <!---------------Formulaire de remplissage profile------------------->
-    <div class="form-row">
-      <!----nom & Prenom---->
+    <input id="file-upload" type="file" name="image" @change="onFileSelected($event)" />
+    
+    <!--Formulaire de remplissage profile-->
+    <form class="form-row">
+      <!--nom & Prenom-->
       <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
         aria-label="Prénom" />
       <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" />
-    </div>
-    <div class="form-row">
-      <!----Profession---->
+    </form>
+    <form class="form-row">
+      <!--Profession-->
       <input v-model="jobTitle" class="form-row__input" type="text" name="profession" placeholder="Profession"
         aria-label="Profession" />
-    </div>
+    </form>
     <div class="form-row">
-      <!----Bouton enregistrer---->
+      <!--Bouton enregistrer-->
       <button @click="saveUserInfo()" class="button">Enregister</button>
       <!--Suppression d'un compte-->
       <div class="card__action--delete" @click="deleteAccount()">
@@ -48,7 +45,7 @@
         <span class="delete_text">Supprimer le compte</span>
       </div>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -118,7 +115,6 @@ export default {
     //sélectionner un fichier à uploader
     onFileSelected: function (event) {
       this.photoUrlToUpload = event.target.files[0];
-      alert("Votre photo a bien été uploadée.")
     },
 
     //enregistrer les infos du profil
@@ -206,7 +202,7 @@ export default {
   margin-left: 0.5rem;
 }
 
-.custom-file-upload {
-  margin: 15px auto 0px auto;
+#file-upload {
+  margin: 1rem auto 0 auto;
 }
 </style>

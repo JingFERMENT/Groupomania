@@ -13,17 +13,19 @@ const password = require("../middleware/password");
 //import du middleware pour contrôler les emails
 const email = require("../middleware/email");
 
+//import du middleware pour admin
+const admin = require("../middleware/admin");
+
 
 //---------ROUTES DE CONNEXIONS --------------
 router.post("/signup", email, password, userCtrl.signup); //créer un compte
+router.post("/admin-signup", email, password, admin, userCtrl.signup); //créer un compte admin
+
 router.post("/login", connexion, userCtrl.login); //se connecter sur un compte déjà créé
 
 //---------ROUTES DU PROFIL UTILISATEUR--------------
 router.get("/profile/:id", auth, userCtrl.getOneUser); //afficher un profil
 router.put("/profile/:id", auth, multer, userCtrl.modifyUser); //modifier un profil
 router.delete ("/profile/:id", auth, userCtrl.deleteUser); //supprimer un profil
-
-router.post("/admin/:id",auth, userCtrl.transformInAdmin); //transformer un compte en adminstrateur 
-router.post("/verify", auth, userCtrl.verifyAdmin); //vérifier la clé de sécurité dans le lien administrateur
 
 module.exports = router;

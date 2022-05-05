@@ -3,25 +3,13 @@
     <!--Logo-->
     <img id="logo" alt="Logo de l'entreprise Groupomania" src="../assets/logo.png" />
 
-    <!--Affichage des titres selon 2 modes : login & signup-->
-    <h1 class="card__title" v-if="mode == 'login'">Connexion</h1>
-    <h1 class="card__title" v-else>Inscription</h1>
-
-    <!--Affichage des liens selon 2 modes: login & signup-->
-    <p class="card__subtitle" v-if="mode == 'login'">
-      Vous n’avez pas de compte ?
-      <a @click="switchToSignUp()" class="card__action">Inscrivez-vous</a>
-    </p>
-    <p class="card__subtitle" v-else>
-      Vous avez déjà un compte ?
-      <a @click="switchToLogin()" class="card__action">Se connecter</a>
-    </p>
+    <h1 class="card__title">Inscription ADMIN</h1>
 
     <!--Message d'erreur pour la validation des champs-->
     <p class="errorMessage" v-if="!validEmail">
       Merci de respecter le format email.
     </p>
-    <p class="errorMessage" v-if="mode == 'signUp' && !validFirstName">
+    <p class="errorMessage" v-if="!validFirstName">
       Votre prénom doit avoir minimum 2 caractères, lettres uniquement.
     </p>
     <p class="errorMessage" v-if="!validLastName">
@@ -31,10 +19,7 @@
       Votre mot de passe doit avoir au moins : 8 caractères, 1 majuscule, 1
       minuscule, 1 chiffre et sans espace.
     </p>
-    <p class="errorMessage" v-if="mode == 'login' && errorStatus == 'error_login'">
-      Email et/ou mot de passe invalide
-    </p>
-    <p class="errorMessage" v-if="mode == 'signUp' && errorStatus == 'error_signUp'">
+    <p class="errorMessage" v-if="errorStatus == 'error_signUp'">
       Email déjà utilisé
     </p>
     <p class="errorMessage" v-if="errorStatus == 'error_tooManyRequest'">
@@ -42,46 +27,37 @@
       minutes.
     </p>
 
-    <!--Champ Email -->
+    <!--Champ email -->
     <form class="form-row">
-      <input v-model="email" class="form-row__input" type="email" name="email" placeholder="Email" aria-label="Email" required/>
+      <input v-model="email" class="form-row__input" type="email" name="email" placeholder="Email" aria-label="Email"
+        required />
     </form>
-    <!--Champs uniquement pour signup: prénom & nom -->
-    <form class="form-row" v-if="mode == 'signUp'">
-      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
-        aria-label="Prénom" required/>
-      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required/>
+    <!--Champs: prénom & nom -->
+    <form class="form-row">
+      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom" aria-label="Prénom"
+        required />
+      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required />
     </form>
     <!--Champ mot de passe -->
     <form class="form-row">
       <input v-model="password" class="form-row__input" type="password" name="mot de passe" placeholder="Mot de passe"
-        aria-label="Mot de passe" required/>
+        aria-label="Mot de passe" required />
     </form>
 
-    <!--Deux boutons de validations: signup ou login -->
-    <div class="form-row">
-      <button @click="login()" class="button" :class="{
-        'button--disabled': !validFields || !validPassword,
-      }" v-if="mode == 'login'">
-        <span>Se connecter</span>
-        <!--Bouton connexion -->
-      </button>
-      <button @click="signUp() && !validEmail" class="button" :class="{
-        'button--disabled': !validFields || !validPassword,
-      }" v-else>
-        <span>Créer mon compte</span>
-        <!--Bouton signup -->
-      </button>
-    </div>
+    <!--Bouton signup Admin-->
+    <button @click="signUp() && !validEmail" class="button" :class="{
+      'button--disabled': !validFields || !validPassword,
+    }">
+      <span>Créer mon compte ADMIN</span>
+    </button>
   </section>
 </template>
 
 <script>
 export default {
-  name: "ConnectView",
+  name: "AdminView",
   data: function () {
     return {
-      mode: "login",
       email: "",
       prenom: "",
       nom: "",
@@ -95,24 +71,15 @@ export default {
     //vérifier si tous les champs sont bien remplis
     validFields: function () {
       //1er cas: inscription
-      if (this.mode == "signUp") {
-        if (
-          this.email != "" &&
-          this.prenom != "" &&
-          this.nom != "" &&
-          this.password != ""
-        ) {
-          return true;
-        } else {
-          return false;
-        }
-        //2ème cas: connexion
+      if (
+        this.email != "" &&
+        this.prenom != "" &&
+        this.nom != "" &&
+        this.password != ""
+      ) {
+        return true;
       } else {
-        if (this.email != "" && this.password != "") {
-          return true;
-        } else {
-          return false;
-        }
+        return false;
       }
     },
 
@@ -175,16 +142,6 @@ export default {
 
   //recalculées à chaque appel de rendu de la page
   methods: {
-    //basculer vers l'inscription
-    switchToSignUp: function () {
-      this.mode = "signUp";
-    },
-
-    //basculer vers la connexion 
-    switchToLogin: function () {
-      this.mode = "login";
-    },
-
     //inscription
     signUp: function () {
       const data = {
@@ -202,7 +159,7 @@ export default {
         body: JSON.stringify(data),
       };
 
-      fetch("http://localhost:3000/api/auth/signup", options)
+      fetch("http://localhost:3000/api/auth/admin-signup", options)
         .then((response) => {
           if (response.status == 401 || response.status == 500) {
             this.errorStatus = "error_signUp";//email déjà utilisé

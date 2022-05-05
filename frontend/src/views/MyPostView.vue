@@ -1,44 +1,39 @@
 <template>
   <!-- créer un post-->
   <NavBar />
-  <div class="card">
+  <section class="card">
     <h1 class="card__title">Quoi de neuf ?</h1>
 
     <!--Message d'erreur lors de création d'un post-->
-    <div class="errorMessage" v-if="status == 'error_sendPost'">
+    <p class="errorMessage" v-if="status == 'error_sendPost'">
       Une erreur est survenue !
-    </div>
-    <div class="successMessage" v-if="status == 'success_sendPost'">
+    </p>
+    <p class="successMessage" v-if="status == 'success_sendPost'">
       Publication réussie !
-    </div>
+    </p>
 
-    <!----------------------Formulaire de création d'un post------------------------>
-
-    <!-----Title d'un post----->
-    <div class="form-row">
+    <!--Title d'un post-->
+    <form class="form-row">
       <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre"/>
-    </div>
+    </form>
 
-    <!-----Description d'un post----->
-    <div class="form-row">
+    <!--Description d'un post-->
+    <form class="form-row">
       <textarea v-model="description" class="form-row__input" type="text" name="description"
         placeholder="Ecrivez quelques choses ..." aria-label="Description"></textarea>
-    </div>
+    </form>
 
-    <!-----Image d'un post----->
+    <!--Image d'un post-->
     <img class="image_post" :src="imageUrl" alt = "image d'un post"/>
 
     <!--Bouton "ajouter l'image" -->
-    <label for="file-upload" class="custom-file-upload">
-      Ajouter une image ...
       <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
-    </label>
 
     <!--Bouton "publier le post" -->
     <button @click="sendPost()" class="button" :class="{
       'button--disabled': !validFields,
     }">Publier le post</button>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -118,10 +113,6 @@ export default {
 </script>
 
 <style scoped>
-.custom-file-upload {
-  margin: 8px auto 20px 0px;
-}
-
 .image_post {
   display: none;
 }

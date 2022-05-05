@@ -10,12 +10,19 @@ exports.signup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
+      
+      let createAsAdmin = false;
+      //créer le compte Admin
+      if (req.admin && req.admin == true) {
+        createAsAdmin = true;
+      }
+
       User.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         password: hash,
-        isAdmin: false,
+        isAdmin: createAsAdmin,
       })
 
         .then((User) =>
@@ -147,34 +154,4 @@ exports.deleteUser = (req, res, next) => {
         .catch((error) => res.status(400).json({ error }));
     })
     .catch((error) => res.status(400).json({ error }));
-};
-
-//---VERIFIER LA CLE DE SECURITE DANS LE LIEN ADMINISTRATEUR--------
-exports.verifyAdmin = (req, res, next) => {
-  //comparer le paramètre "key" avec le "secret_key" stocké
-  if (req.body.key === process.env.SECRET_KEY) {
-    res.status(200).json({ valid: true });
-  } else {
-    //renvoyer une réponse "false"
-    res.status(200).json({ valid: false });
-  }
-};
-
-//------------TRANSFORMER L'UTILISATEUR EN ADMINSTRATEUR------------
-exports.transformInAdmin = (req, res, next) => {
-  //vérification (même si le bouton est cachée dans le frontend)
-  if (req.body.key !== process.env.SECRET_KEY) {
-    return res.status(400).json({ error: "Clé non valide !" });
-  }
-
-  User.update({ isAdmin: true }, { where: { id: req.params.id } }).then(
-    (user) =>
-      User.findOne({ where: { id: req.params.id } })
-        .then((user) => {
-          res
-            .status(200)
-            .json({ message: "Profil transformé en Admin !", user });
-        })
-        .catch((error) => res.status(400).json(error))
-  );
 };

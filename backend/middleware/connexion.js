@@ -3,8 +3,8 @@
 const limit = require ("express-rate-limit");
 
 const connexionLimit = limit({
-    windowMs: 10 * 60 * 1000, // 15 minutes: en ms
-	max: 10, // limiter chaque ID à 8 tentatives
+    windowMs: 15 * 60 * 1000, // 15 minutes: en ms
+	max: 10, // limiter chaque ID à 10 tentatives
     message: "Votre compte est bloqué pendant quelques minutes suite aux tentatives de connexion échoués."
 });
 

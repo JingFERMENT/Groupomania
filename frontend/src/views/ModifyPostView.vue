@@ -1,39 +1,35 @@
 <template>
   <NavBar />
   <!-- modifier un post-->
-  <div class="card">
+  <section class="card">
     <h1 class="card__title">Modifier le post</h1>
 
     <!--Message d'erreur lors de modification d'un post-->
-    <div class="errorM
+    <p class="errorM
     essage" v-if="status == 'error_post'">
       Une erreur est survenue !
-    </div>
-    <div class="successMessage" v-if="status == 'success_post'">
+    </p>
+    <p class="successMessage" v-if="status == 'success_post'">
       Mise à jour réussie !
-    </div>
+    </p>
 
-    <!--------------------------Formulaire de modification------------------------------>
-    <div class="form-row">
+    <form class="form-row">
       <!--Titre de post-->
       <input v-model="title" class="form-row__input" type="text" name="title" />
-    </div>
-    <div class="form-row">
+    </form>
+    <form class="form-row">
       <!--Description de post-->
       <textarea v-model="description" class="form-row__input" type="text" name="description"></textarea>
-    </div>
+    </form>
     <!--Image de post-->
     <img v-if="imageUrl != ''" class="image_post" :src="imageUrl" alt="image d'un post" />
     <!--Bouton "modifier l'image" -->
-    <label for="file-upload" class="custom-file-upload">
-      Modifier l'image ...
-      <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
-    </label>
+    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
     <!--Bouton "enregistrer" -->
     <button @click="modifyPost()" class="button" :class="{
       'button--disabled': !validFields,
     }">Enregistrer</button>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -113,7 +109,6 @@ export default {
     onFileSelected: function (event) {
       //console.log(event) => trouver le fichier uploader dans event.target.files
       this.imageToUpload = event.target.files[0];
-      alert("Votre image a bien été uploadée.")
     },
 
     //modifier un post
@@ -153,7 +148,4 @@ export default {
 </script>
 
 <style scoped>
-.custom-file-upload {
-  margin: 8px auto 20px 0px;
-}
 </style>

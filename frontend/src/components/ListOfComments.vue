@@ -3,12 +3,12 @@
 
     <section class="bloc__commentlist">
         <!-- message info-->
-        <div class="errorMessage" v-if="status == 'error_comment'">
+        <p class="errorMessage" v-if="status == 'error_comment'">
             Une erreur est survenue !
-        </div>
-        <div class="successMessage" v-if="status == 'success_comment'">
+        </p>
+        <p class="successMessage" v-if="status == 'success_comment'">
             Commentaire bien supprimé !
-        </div>
+        </p>
 
         <!-- entête d'un commentaire-->
         <div class="comment__header" v-for="comment in comments" :key="comment.id">

@@ -4,14 +4,23 @@ import ProfileView from "@/views/ProfileView.vue";
 import MyPostView from "@/views/MyPostView.vue";
 import ListOfPostsView from "@/views/ListOfPostsView.vue";
 import ModifyPostView from "@/views/ModifyPostView.vue";
-import TransformAdminView from "@/views/TransformAdminView.vue";
+import AdminView from "@/views/AdminView.vue";
+
 
 const routes = [
+  //route pour inscription ou se connecter
   {
     name: "connect",
     path: "/",
     component: ConnectView,
   },
+
+  //route pour inscription admin
+    {
+      name: "signup-admin",
+      path: "/signup-admin",
+      component: AdminView,
+    },
 
   {
     name: "profile",
@@ -35,12 +44,6 @@ const routes = [
     name: "modifyPost",
     path: "/post/:id",
     component: ModifyPostView,
-  },
-
-  {
-    name: "transformAdmin",
-    path: "/admin",
-    component: TransformAdminView,
   },
 ];
 
