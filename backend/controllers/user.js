@@ -18,18 +18,12 @@ exports.signup = (req, res, next) => {
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
-      let createAsAdmin = false;
-      //créer le compte Admin
-      if (req.admin && req.admin == true) {
-        createAsAdmin = true;
-      }
-
       User.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         password: hash,
-        isAdmin: createAsAdmin,
+        isAdmin: false,
       })
         .then((User) =>
           res.status(201).json({ message: "Utilisateur créé et sauvegardé !" })

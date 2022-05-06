@@ -13,16 +13,12 @@ const password = require("../middleware/password");
 //import du middleware pour contrôler les emails
 const email = require("../middleware/email");
 
-//import du middleware pour admin
-const admin = require("../middleware/admin");
-
 //import du middleware pour contrôler les champs nom/prénom;
 const name = require("../middleware/name");
 
 
 //---------ROUTES DE CONNEXIONS --------------
 router.post("/signup", email, password, name, userCtrl.signup); //créer un compte
-router.post("/admin-signup", email, password, admin, name, userCtrl.signup); //créer un compte admin
 
 router.post("/login", connexion, userCtrl.login); //se connecter sur un compte déjà créé
 
