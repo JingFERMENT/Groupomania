@@ -234,7 +234,9 @@ export default {
 
       fetch("http://localhost:3000/api/auth/login", options)
         .then((response) => {
-          if (response.status == 429) {
+          if (response.status == 401) {
+            this.errorStatus = "error_login";//email ou mot de passe invalide
+          } else if (response.status == 429) {
             //trop de tentatives de connexions échouées
             this.errorStatus = "error_tooManyRequest";
           } else {

@@ -171,7 +171,7 @@ export default {
             this.status = "error_saveUserInfo";
           } else {
             localStorage.clear();
-            alert("Votre compte a bien été supprimé !");
+            alert("Votre compte sera supprimé !");
             // après suppression, se diriger vers la page "connect"
             this.$router.push("/");
           }

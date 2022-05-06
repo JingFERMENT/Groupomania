@@ -14,7 +14,7 @@
 
     <!--Title d'un post-->
     <form class="form-row">
-      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre"/>
+      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre" />
     </form>
 
     <!--Description d'un post-->
@@ -24,10 +24,10 @@
     </form>
 
     <!--Image d'un post-->
-    <img class="image_post" :src="imageUrl" alt = "image d'un post"/>
+    <img class="image_post" :src="imageUrl" alt="image d'un post" />
 
     <!--Bouton "ajouter l'image" -->
-      <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
+    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
 
     <!--Bouton "publier le post" -->
     <button @click="sendPost()" class="button" :class="{
@@ -73,8 +73,6 @@ export default {
   methods: {
     onFileSelected: function (event) {
       this.imageToUpload = event.target.files[0];
-      alert("Votre image a bien été uploadée.")
-
     },
 
     sendPost: function () {
