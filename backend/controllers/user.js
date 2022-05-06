@@ -7,10 +7,17 @@ dotenv.config();
 
 //--------------INSCRIPTION DES UTILISATEURS----------------
 exports.signup = (req, res, next) => {
+  //contrôle des validations des champs
+  if (!req.body.firstName || !req.body.lastName) {
+    res.status(400).json({
+      message: "Merci de bien vérifier si les champs sont tous remplis !",
+    });
+    return;
+  }
+
   bcrypt
     .hash(req.body.password, 10)
     .then((hash) => {
-      
       let createAsAdmin = false;
       //créer le compte Admin
       if (req.admin && req.admin == true) {
@@ -24,12 +31,10 @@ exports.signup = (req, res, next) => {
         password: hash,
         isAdmin: createAsAdmin,
       })
-
         .then((User) =>
           res.status(201).json({ message: "Utilisateur créé et sauvegardé !" })
         )
         .catch((error) => {
-          console.log(error);
           res.status(500).json({ error });
         });
     })
@@ -78,9 +83,12 @@ exports.login = (req, res, next) => {
 
 //------------AFFICHER LE PROFILE D'UN UTILISATEUR------------
 exports.getOneUser = (req, res, next) => {
-  User.findOne({ where: { id: req.params.id }, attributes: {
-    exclude: ["id", "password", "email", "createdAt", "updatedAt"],
-  } }) // ne pas envoyer le mot de passe pour la sécurité
+  User.findOne({
+    where: { id: req.params.id },
+    attributes: {
+      exclude: ["id", "password", "email", "createdAt", "updatedAt"],
+    },
+  }) // ne pas envoyer le mot de passe pour la sécurité
     .then((user) => res.status(200).json(user))
     .catch((error) => res.status(404).json({ error }));
 };

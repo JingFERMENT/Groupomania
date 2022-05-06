@@ -12,12 +12,11 @@ exports.createPost = (req, res, next) => {
     }`;
   }
 
+  //contrôle des validations des champs
   if (!req.body.title || !req.body.userId || !req.body.description) {
-    res
-      .status(400)
-      .json({
-        message: "Merci de bien vérifier si les champs sont tous remplis !",
-      });
+    res.status(400).json({
+      message: "Merci de bien vérifier si les champs sont tous remplis !",
+    });
     return;
   }
 
@@ -74,15 +73,6 @@ exports.getAllPosts = (req, res, next) => {
 // -----MIDDLEWARE pour modifier un post -----------
 
 exports.modifyPost = (req, res, next) => {
-  if (!req.body.title || !req.body.description) {
-    res
-      .status(400)
-      .json({
-        message: "Merci de bien vérifier si les champs sont tous remplis !",
-      });
-    return;
-  }
-
   const postObject = req.file
     ? {
         ...req.body,
@@ -101,34 +91,44 @@ exports.modifyPost = (req, res, next) => {
         });
       }
 
+      //validation existance post
       if (!post) {
         return res.status(404).json({ error: "Post non trouvé !" });
       }
-      //vérifier celui qui veut modifier le post est bien l'auteur du post ou l'administrateur
+
+      //validation des champs
+      if (!req.body.title || !req.body.description) {
+        res.status(400).json({
+          message: "Merci de bien vérifier si les champs sont tous remplis !",
+        });
+        return;
+      }
+
       User.findOne({ where: { id: req.auth.userId } })
         .then((user) => {
-          if (!user.isAdmin && req.auth.userId != post.userId) {
-            return res
-              .status(401)
-              .json({ error: "Modification non autorisée !" });
+          //vérifier celui qui veut modifier le post est bien l'auteur du post ou l'administrateur
+          if (user.isAdmin || req.auth.userId === post.userId) {
+            // mettre à jour la base des donnée
+            Post.update(
+              { ...postObject, id: req.params.id },
+              { where: { id: req.params.id } }
+            )
+              .then((post) =>
+                // si l'enregistrement réussi
+                Post.findOne({ where: { id: req.params.id } })
+                  .then((post) => {
+                    // récupérer "post" à jour
+                    res
+                      .status(200)
+                      .json({ message: "Post bien à jour !", post });
+                  })
+                  .catch((error) => res.status(400).json(error))
+              )
+              .catch((error) => res.status(400).json(error));
+          } else {
+            return res.status(401).json({ error: "Modification non autorisée !" });
           }
         })
-        .catch((error) => res.status(400).json({ error }));
-
-      // mettre à jour la base des donnée
-      Post.update(
-        { ...postObject, id: req.params.id },
-        { where: { id: req.params.id } }
-      )
-        .then((post) =>
-          // si l'enregistrement réussi
-          Post.findOne({ where: { id: req.params.id } })
-            .then((post) => {
-              // récupérer "post" à jour
-              res.status(200).json({ message: "Post bien à jour !", post });
-            })
-            .catch((error) => res.status(400).json(error))
-        )
         .catch((error) => res.status(400).json(error));
     })
     .catch((error) => res.status(400).json({ error }));
@@ -141,7 +141,6 @@ exports.deletePost = (req, res, next) => {
       if (!post) {
         return res.status(404).json({ error: "Post non trouvé !" });
       }
-
 
       //vérifier celui qui veut supprimer le post est bien l'auteur du post ou l'administrateur
       User.findOne({ where: { id: req.auth.userId } })

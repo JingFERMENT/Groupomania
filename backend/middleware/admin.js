@@ -1,4 +1,4 @@
-//Ce fichier permets de savoir que la requete est admin
+//Ce fichier permet de savoir que la requete est admin
 
 //vérifier si l'email est valide
 module.exports = (req, res, next) => {
