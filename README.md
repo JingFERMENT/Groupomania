@@ -22,7 +22,7 @@ cd Groupomania
 ```
 1. Ouvrir la console MySQL et créer un compte ou se connecter si vous en avez déjà un
 2- Créer une base de données nommée "groupomania"
-3- Importer le fichier "Base_des_données_Groupomania.sql" dans le repo du projet
+3- Importer le fichier "Groupomania_base_données.sql" dans le repo du projet
 ```
 
 ### 4- Installer le backend
@@ -59,5 +59,10 @@ Node, Vuejs, SQL (base des données)
 
 ### Modération
 
-- Inscription administateur pour créer les comptes admin : http://localhost:8080/signup-admin
+- Un compte Admin a été créé. Vous pouvez modifier les données par défaut après connexion :
+```
+#Informations de connexion de l'admin
+email: 'admin@groupomania.com' 
+password: 'Admin2022@'
+```
 - Modérer les contenus (réservé aux administrateurs)
