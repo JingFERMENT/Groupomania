@@ -96,7 +96,7 @@ export default {
                     } else {
                         console.log(response);
                         this.status = "success_comment";
-                        alert("Votre commentaire a bien été supprimé !")
+                        alert("Votre commentaire sera supprimé !")
                         window.location.reload();
                     }
                 })
