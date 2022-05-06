@@ -49,7 +49,7 @@ Node, Vuejs, SQL (base des données)
 
 ### Authentification
 
-- Inscription (utilisateur/admin), connexion, déconnexion, désinscription, 
+- Inscription, connexion, déconnexion, désinscription, 
 
 ### Social
 
