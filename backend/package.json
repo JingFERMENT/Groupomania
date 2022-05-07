@@ -20,6 +20,7 @@
     "nodemon": "^2.0.16",
     "password-validator": "^5.2.1",
     "sequelize": "^6.18.0",
+    "sql-sanitizer": "^1.0.0",
     "validator": "^13.7.0"
   }
 }

@@ -4,6 +4,9 @@ const app = express(); //faire appel au module "Express" avec sa fonction
 // sécuriser les en-tête http de l'application express
 const helmet = require("helmet");
 
+//nettoyer les données fournies par l'utilisateur pour empêcher l'injection.
+const sqlSanitizer = require("sql-sanitizer");
+
 //donner accès au chemin de fichiers
 const path = require("path");
 
@@ -37,6 +40,8 @@ app.use((req, res, next) => {
 
 //protèger l'appli de certaines vulnerabilités en configurant les en-têtes
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
+app.use(sqlSanitizer);
 
 //user routes
 const userRoutes = require("./routes/user");
