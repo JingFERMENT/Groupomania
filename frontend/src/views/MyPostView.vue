@@ -14,13 +14,13 @@
 
     <!--Title d'un post-->
     <form class="form-row">
-      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre" />
+      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre" required/>
     </form>
 
     <!--Description d'un post-->
     <form class="form-row">
       <textarea v-model="description" class="form-row__input" type="text" name="description"
-        placeholder="Ecrivez quelques choses ..." aria-label="Description"></textarea>
+        placeholder="Ecrivez quelques choses ..." aria-label="Description" required></textarea>
     </form>
 
     <!--Image d'un post-->

@@ -15,11 +15,11 @@
 
     <form class="form-row">
       <!--Titre de post-->
-      <input v-model="title" class="form-row__input" type="text" name="title" />
+      <input v-model="title" class="form-row__input" type="text" name="title" required/>
     </form>
     <form class="form-row">
       <!--Description de post-->
-      <textarea v-model="description" class="form-row__input" type="text" name="description"></textarea>
+      <textarea v-model="description" class="form-row__input" type="text" name="description" required></textarea>
     </form>
     <!--Image de post-->
     <img v-if="imageUrl != ''" class="image_post" :src="imageUrl" alt="image d'un post" />

@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 //protèger l'appli de certaines vulnerabilités en configurant les en-têtes
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 
-// user routes
+//user routes
 const userRoutes = require("./routes/user");
 
 //post routes

@@ -28,8 +28,8 @@
     <form class="form-row">
       <!--nom & Prenom-->
       <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
-        aria-label="Prénom" />
-      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" />
+        aria-label="Prénom" required/>
+      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required />
     </form>
     <form class="form-row">
       <!--Profession-->

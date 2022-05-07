@@ -19,7 +19,6 @@ const name = require("../middleware/name");
 
 //---------ROUTES DE CONNEXIONS --------------
 router.post("/signup", email, password, name, userCtrl.signup); //créer un compte
-
 router.post("/login", connexion, userCtrl.login); //se connecter sur un compte déjà créé
 
 //---------ROUTES DU PROFIL UTILISATEUR--------------
