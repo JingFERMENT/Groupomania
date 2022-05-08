@@ -1,5 +1,6 @@
 # Groupomania
-Réseau social interne pour Groupomania, entreprise spécialisée dans la grande distribution (Minimum Viable Product).
+Réseau social interne pour Groupomania, entreprise spécialisée dans la grande distribution.
+La version actuelle est une MVP (Minimum Viable Product).
 
 ## Installation
 
@@ -33,7 +34,7 @@ cd Groupomania
 4. Lancer le serveur backend => npm start ou nodemon server (si nodemon est installé)
 ```
 
-Il est important pour ce MVP d'utiliser le port 3000.
+Il est important pour ce MVP (Minimum Viable Product) d'utiliser le port 3000.
 
 ### 5- Installer le frontend
 ```
