@@ -22,7 +22,7 @@ cd Groupomania
 ```
 1. Ouvrir la console MySQL et créer un compte ou se connecter si vous en avez déjà un
 2- Créer une base de données nommée "groupomania"
-3- Importer le fichier "Groupomania_base_données.sql" dans le repo du projet
+3- Importer le fichier "Groupomania_base_données.sql"  qui se trouve à la racine du repo du projet
 ```
 
 ### 4- Installer le backend
@@ -32,8 +32,9 @@ cd Groupomania
 3. Créer un dossier images => mkdir images
 4. Créer un fichier .env et y renseigner les variables comme indiqué dans le fichier env.exemple
 5. Lancer le serveur backend => npm start ou nodemon server (si nodemon est installé)
-
 ```
+
+Il est important pour ce MVP d'utiliser le port 3000.
 
 ### 5- Installer le frontend
 ```
@@ -41,6 +42,15 @@ cd Groupomania
 2. Installer npm  => npm install
 3. Lancer le serveur frontend => npm run serve
 ```
+
+Dans le terminal les liens pour accéder à l'application sont affichés.
+
+Si vous rencontrez l'erreur 'Module not found Can't resolve @popperjs/core'
+Lancez
+```
+npm install @popperjs/core
+```
+
 ## Technologies utilisées
 
 Node, Vuejs, SQL (base des données)
