@@ -24,7 +24,7 @@
     <!--Image de post-->
     <img v-if="imageUrl != ''" class="image_post" :src="imageUrl" alt="image d'un post" />
     <!--Bouton "modifier l'image" -->
-    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
+    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" aria-label= "choisir une photo"/>
     <!--Bouton "enregistrer" -->
     <button @click="modifyPost()" class="button" :class="{
       'button--disabled': !validFields,

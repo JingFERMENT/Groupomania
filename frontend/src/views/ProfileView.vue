@@ -22,7 +22,7 @@
     <img class="photo_default" :src="photoUrl" alt="Image du profil d'un utilisateur" />
 
     <!--Bouton "ajouter une photo" -->
-    <input id="file-upload" type="file" name="image" @change="onFileSelected($event)" />
+    <input id="file-upload" type="file" name="image" @change="onFileSelected($event)" aria-label="choisir une image" />
     
     <!--Formulaire de remplissage profile-->
     <form class="form-row">

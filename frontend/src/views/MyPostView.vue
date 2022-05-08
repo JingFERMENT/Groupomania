@@ -27,7 +27,7 @@
     <img class="image_post" :src="imageUrl" alt="image d'un post" />
 
     <!--Bouton "ajouter l'image" -->
-    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" />
+    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" aria-label="Choisir une image"/>
 
     <!--Bouton "publier le post" -->
     <button @click="sendPost()" class="button" :class="{
