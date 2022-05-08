@@ -29,9 +29,8 @@ cd Groupomania
 ```
 1. Exécutez la commande => cd backend
 2. Installer npm  => npm install
-3. Créer un dossier images => mkdir images
-4. Créer un fichier .env et y renseigner les variables comme indiqué dans le fichier env.exemple
-5. Lancer le serveur backend => npm start ou nodemon server (si nodemon est installé)
+3. Créer un fichier .env et y renseigner les variables comme indiqué dans le fichier env.exemple
+4. Lancer le serveur backend => npm start ou nodemon server (si nodemon est installé)
 ```
 
 Il est important pour ce MVP d'utiliser le port 3000.
@@ -43,12 +42,14 @@ Il est important pour ce MVP d'utiliser le port 3000.
 3. Lancer le serveur frontend => npm run serve
 ```
 
-Dans le terminal les liens pour accéder à l'application sont affichés.
-
 Si vous rencontrez l'erreur 'Module not found Can't resolve @popperjs/core'
 Lancez
 ```
 npm install @popperjs/core
+```
+### 6- Lancer l'application
+```
+Ouvrir l'application en cliquant sur "http://localhost:8080/"
 ```
 
 ## Technologies utilisées
