@@ -1,5 +1,5 @@
 # Groupomania
-Réseau social interne pour Groupomania, entreprise spécialisée dans la grande distribution. ####
+Réseau social interne pour Groupomania, entreprise spécialisée dans la grande distribution.<br/>
 La version actuelle est une MVP (Minimum Viable Product).
 
 ## Installation
