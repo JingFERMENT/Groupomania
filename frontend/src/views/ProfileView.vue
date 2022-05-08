@@ -98,11 +98,11 @@ export default {
           this.nom = data.lastName;
           this.jobTitle = data.jobTitle;
           this.isAdmin = data.isAdmin;
-          // dans le cas où il y a une nouvelle image
+          //indiquer l'utilisateur son rôle (s'il est Admin)
           if (data.isAdmin == true) {
             this.status = "success_transformAdmin";
           }
-          //indiquer l'utilisateur son rôle (s'il est Admin)
+          // dans le cas où il y a une nouvelle image
           if (data.photoUrl != "") {
             this.photoUrl = data.photoUrl;
           }
