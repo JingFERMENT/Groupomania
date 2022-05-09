@@ -101,11 +101,6 @@ export default {
               this.title = data.title,
                 this.description = data.description,
                 this.imageUrl = data.imageUrl
-              //éviter le contournement d'accès
-              if (data.userId != localStorageData.userId) {
-                this.$router.push("/");
-                return;
-              }
             })
             .catch((error) => console.log(error));
         }
