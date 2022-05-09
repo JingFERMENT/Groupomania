@@ -12,6 +12,12 @@
     <p class="successMessage" v-if="status == 'success_saveUserInfo'">
       Profil bien à jour !
     </p>
+    <p class="errorMessage" v-if="!validFirstName">
+      Votre prénom doit avoir minimum 2 caractères, lettres uniquement.
+    </p>
+    <p class="errorMessage" v-if="!validLastName">
+      Votre nom doit avoir minimum 2 caractères, lettres uniquement.
+    </p>
 
     <!--Message d'info pour l'administrateur-->
     <p class="successMessage" v-if="status == 'success_transformAdmin'">
@@ -23,7 +29,7 @@
 
     <!--Bouton "ajouter une photo" -->
     <input id="file-upload" type="file" name="image" @change="onFileSelected($event)" aria-label="choisir une image" />
-    
+
     <!--Formulaire de remplissage profile-->
     <form class="form-row">
       <!--nom & Prenom-->
@@ -39,7 +45,8 @@
     <div class="form-row">
       <!--Bouton enregistrer-->
       <button @click="saveUserInfo()" class="button" :class="{
-      'button--disabled': !validFields}">Enregister</button>
+        'button--disabled': !validFields || !validFirstName || !validLastName
+      }">Enregister</button>
       <!--Suppression d'un compte-->
       <div class="card__action--delete" @click="deleteAccount()">
         <font-awesome-icon :icon=faTrashCanIcon />
@@ -76,7 +83,7 @@ export default {
     };
   },
 
-   computed: {
+  computed: {
     validFields: function () {
       if (
         this.prenom != "" &&
@@ -86,7 +93,27 @@ export default {
       } else {
         return false;
       }
-    }
+    },
+
+        //Valider le format "prénom"
+    validFirstName: function () {
+      if (this.prenom == "") {
+        return true;
+      }
+
+      const firstNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
+      return firstNameRegExp.test(this.prenom);
+    },
+
+    //Valider le format "nom"
+    validLastName: function () {
+      if (this.nom == "") {
+        return true;
+      }
+
+      const lastNameRegExp = new RegExp("^[a-zA-ZÀ-ÿ ,.'-]{2,}$", "g");
+      return lastNameRegExp.test(this.nom);
+    },
   },
 
   mounted: function () {

@@ -21,7 +21,7 @@
     <p class="errorMessage" v-if="!validEmail">
       Merci de respecter le format email.
     </p>
-    <p class="errorMessage" v-if="mode == 'signUp' && !validFirstName">
+    <p class="errorMessage" v-if="!validFirstName">
       Votre prénom doit avoir minimum 2 caractères, lettres uniquement.
     </p>
     <p class="errorMessage" v-if="!validLastName">

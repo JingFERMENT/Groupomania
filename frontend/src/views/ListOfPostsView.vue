@@ -85,7 +85,7 @@ export default {
   //le moment durant lequel le composant va être rendu sur la page
   mounted: function () {
     const localStorageData = JSON.parse(localStorage.getItem("data"));
-    this.currentUserId = localStorageData.userId
+    
     //pas de token, renvoyer vers la page "connect"
     if (localStorageData === null) {
       this.$router.push("/");
@@ -132,6 +132,7 @@ export default {
       headers: { Authorization: "Bearer " + localStorageData.token },
     };
 
+    this.currentUserId = localStorageData.userId;
     fetch(`http://localhost:3000/api/auth/profile/${this.currentUserId}`, optionsUser)
       .then((response) => {
         response.json().then((data) => {
