@@ -9,22 +9,26 @@
     essage" v-if="status == 'error_post'">
       Une erreur est survenue !
     </p>
+    <p class="errorMessage" v-if="status == 'error_emptyPost'">
+      Merci de renseigner le titre et la description du post !
+    </p>
     <p class="successMessage" v-if="status == 'success_post'">
       Mise à jour réussie !
     </p>
 
     <form class="form-row">
       <!--Titre de post-->
-      <input v-model="title" class="form-row__input" type="text" name="title" required/>
+      <input v-model.trim="title" class="form-row__input" type="text" name="title" required />
     </form>
     <form class="form-row">
       <!--Description de post-->
-      <textarea v-model="description" class="form-row__input" type="text" name="description" required></textarea>
+      <textarea v-model.trim="description" class="form-row__input" type="text" name="description" required></textarea>
     </form>
     <!--Image de post-->
     <img v-if="imageUrl != ''" class="image_post" :src="imageUrl" alt="image d'un post" />
     <!--Bouton "modifier l'image" -->
-    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" aria-label= "choisir une photo"/>
+    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)"
+      aria-label="choisir une photo" />
     <!--Bouton "enregistrer" -->
     <button @click="modifyPost()" class="button" :class="{
       'button--disabled': !validFields,
@@ -130,9 +134,12 @@ export default {
       let postId = this.$route.params.id
       fetch(`http://localhost:3000/api/post/${postId}`, options)
         .then((response) => {
-          if (response.status == 401 || response.status == 400 || response.status == 404) {
+          if (response.status == 401 || response.status == 404) {
             this.status = "error_sendPost";
-          } else {
+          } else if (response.status == 400) {
+            this.status = "error_emptyPost"
+          }
+          else {
             response.json().then((formData) => {
               this.imageUrl = formData.post.imageUrl,
                 this.imageToUpload = "",

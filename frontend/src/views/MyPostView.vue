@@ -8,18 +8,22 @@
     <p class="errorMessage" v-if="status == 'error_sendPost'">
       Une erreur est survenue !
     </p>
+    <p class="errorMessage" v-if="status == 'error_emptyPost'">
+      Merci de renseigner le titre et la description du post !
+    </p>
     <p class="successMessage" v-if="status == 'success_sendPost'">
       Publication réussie !
     </p>
 
     <!--Title d'un post-->
     <form class="form-row">
-      <input v-model="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre" required/>
+      <input v-model.trim="title" class="form-row__input" type="text" name="titre" placeholder="Titre" aria-label="Titre"
+        required />
     </form>
 
     <!--Description d'un post-->
     <form class="form-row">
-      <textarea v-model="description" class="form-row__input" type="text" name="description"
+      <textarea v-model.trim="description" class="form-row__input" type="text" name="description"
         placeholder="Ecrivez quelques choses ..." aria-label="Description" required></textarea>
     </form>
 
@@ -27,7 +31,8 @@
     <img class="image_post" :src="imageUrl" alt="image d'un post" />
 
     <!--Bouton "ajouter l'image" -->
-    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)" aria-label="Choisir une image"/>
+    <input id="file-upload" type="file" name="imageToUpload" @change="onFileSelected($event)"
+      aria-label="Choisir une image" />
 
     <!--Bouton "publier le post" -->
     <button @click="sendPost()" class="button" :class="{
@@ -92,8 +97,10 @@ export default {
 
       fetch("http://localhost:3000/api/post/", options)
         .then((response) => {
-          if (response.status == 401 || response.status == 400 || response.status == 404) {
+          if (response.status == 401 || response.status == 404) {
             this.status = "error_sendPost";
+          } else if (response.status == 400) {
+            this.status = "error_emptyPost"
           } else {
             response.json().then((formData) => {
               this.imageUrl = formData.post.imageUrl,

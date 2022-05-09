@@ -48,9 +48,9 @@
     </form>
     <!--Champs uniquement pour signup: prénom & nom -->
     <form class="form-row" v-if="mode == 'signUp'">
-      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
+      <input v-model.trim="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
         aria-label="Prénom" required/>
-      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required/>
+      <input v-model.trim="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required/>
     </form>
     <!--Champ mot de passe -->
     <form class="form-row">

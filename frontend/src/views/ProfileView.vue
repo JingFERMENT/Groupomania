@@ -27,18 +27,19 @@
     <!--Formulaire de remplissage profile-->
     <form class="form-row">
       <!--nom & Prenom-->
-      <input v-model="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
+      <input v-model.trim="prenom" class="form-row__input" type="text" name="prenom" placeholder="Prénom"
         aria-label="Prénom" required/>
-      <input v-model="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required />
+      <input v-model.trim="nom" class="form-row__input" type="text" name="nom" placeholder="Nom" aria-label="Nom" required />
     </form>
     <form class="form-row">
       <!--Profession-->
-      <input v-model="jobTitle" class="form-row__input" type="text" name="profession" placeholder="Profession"
+      <input v-model.trim="jobTitle" class="form-row__input" type="text" name="profession" placeholder="Profession"
         aria-label="Profession" />
     </form>
     <div class="form-row">
       <!--Bouton enregistrer-->
-      <button @click="saveUserInfo()" class="button">Enregister</button>
+      <button @click="saveUserInfo()" class="button" :class="{
+      'button--disabled': !validFields}">Enregister</button>
       <!--Suppression d'un compte-->
       <div class="card__action--delete" @click="deleteAccount()">
         <font-awesome-icon :icon=faTrashCanIcon />
@@ -73,6 +74,19 @@ export default {
       status: "",
       faTrashCanIcon: faTrashCan,
     };
+  },
+
+   computed: {
+    validFields: function () {
+      if (
+        this.prenom != "" &&
+        this.nom != ""
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    }
   },
 
   mounted: function () {
